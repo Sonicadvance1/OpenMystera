@@ -5,8 +5,7 @@
 
 mysqlDB::mysqlDB()
 {
-	pConnection=0;
-	res=0;
+	db = 0;
 }
 
 void mysqlDB::runScript(char *filename)
@@ -34,85 +33,51 @@ void mysqlDB::runScript(char *filename)
 
 int mysqlDB::connect()
 {
-	pConnection = mysql_init(NULL); 
-	if(!pConnection) //error, quit the program 
-		return 0;
-	// Make SQL Connection
-	if(mysql_real_connect(pConnection,0,0,0,"mlegends",0,0,0) == NULL)
-	{
-		//create ml db
-		if(mysql_real_connect(pConnection,0,0,0,0,0,0,0) == NULL) //error, quit the program 
-			return 0; 
-		mysql_query(pConnection,"CREATE DATABASE IF NOT EXISTS mlegends");
-		mysql_query(pConnection,"USE mlegends");
-		
-		runScript("serverdata/mlegends.sql");
-		
-		mysql_close(pConnection); 
-		pConnection = mysql_init(NULL); 
-		if(mysql_real_connect(pConnection,0,0,0,"mlegends",0,0,0) == NULL) //error, quit the program 
-			return 0;
-	}
-	return 1;
+	int rc;
+	rc = sqlite3_open_v2("mldb", &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
+	if (rc)
+		return false;
+	runScript("serverdata/mlegends.sql");
+	return true;
 }
 
 void mysqlDB::disconnect()
 {
-	mysql_close(pConnection); 
-	pConnection=0;
-	res=0;
+	sqlite_close(db);
+	db = 0;
 }
 
 int mysqlDB::createAccount(char *id,char *pass,char *email,char *ip)
 {
-	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"INSERT INTO accounts (accid,pass,email,ip) VALUES ('%s','%s','%s','%s')",
-		id,
-		pass,
-		email,
-        ip);
-	mysql_query(pConnection,query);
+	char *zSQL = sqlite3_mprintf("INSERT INTO accounts (accid, pass, email, ip) VALUES ('%s', '%s', '%s', '%s'", id, pass, email, ip);
+	sqlite3_exec(db, zSQL, 0, 0, 0);
+	sqlite3_free(zSQL);
 	return 1;
 }
 
 int mysqlDB::emailExists(char *email)
 {
-	char query[1024];
-	sprintf(query, "SELECT * FROM accounts WHERE email='%s'",email);
-
-	if(mysql_query(pConnection, query) != 0)
-		return 0;
-
-	res = mysql_store_result(pConnection);
-
-	int num= (int)mysql_num_rows(res);
-	mysql_free_result(res);
-	if(num>0)
-		return 1;
-	return 0;
+	int numRows;
+	char *zSQL = sqlite3_mprintf("SELECT * FROM accounts WHERE email = '%s'", email);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+	
+	return (numRows > 0);
 }
 
 int mysqlDB::accountExists(char *id)
 {
-	char query[1024];
-	sprintf(query, "SELECT * FROM accounts WHERE accid='%s'",id);
-
-	if(mysql_query(pConnection, query) != 0)
-		return 0;
-
-	res = mysql_store_result(pConnection);
-
-	int num= (int)mysql_num_rows(res);
-	mysql_free_result(res);
-	if(num>0)
-		return 1;
-	return 0;
+	int numRows;
+	char *zSQL = sqlite3_mprintf("SELECT * FROM accounts WHERE accid='%s'",id);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+	
+	return (numRows > 0);
 }
 
 int mysqlDB::createPlayer(char *name,int body,int clothes,int hair,int access,int map,int x,int y,int *player_id)
 {
-	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"INSERT INTO players (name,body,clothes,hair,sprite,access,create_date,origin_map,origin_x,origin_y) VALUES ('%s',%d,%d,%d,%d,%d,NOW(),%d,%d,%d)",
+	char *zSQL = sqlite3_mprintf("INSERT INTO players (name,body,clothes,hair,sprite,access,create_date,origin_map,origin_x,origin_y) VALUES ('%s',%d,%d,%d,%d,%d,NOW(),%d,%d,%d)",
 		name,
 		body,
         clothes, 
@@ -121,34 +86,47 @@ int mysqlDB::createPlayer(char *name,int body,int clothes,int hair,int access,in
 		access,
 		map,
 		x,
-		y	);
-	mysql_query(pConnection,query);
+		y);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
 
-	*player_id=(long)mysql_insert_id(pConnection);
+	*player_id = (int)sqlite3_last_insert_rowid(db);
 	return 1;
 }
 
 void mysqlDB::deletePlayer(int id)//STRUCTUREFLAG
 {
-	char query[5000];
-	sprintf(query,"DELETE FROM players WHERE id='%d'",id);
-	mysql_query(pConnection,query);
-	sprintf(query,"DELETE FROM items WHERE owner='%d'",id);
-	mysql_query(pConnection,query);
-	sprintf(query,"UPDATE accounts SET char1=-1 WHERE char1=%d",id);
-	mysql_query(pConnection,query);
-	sprintf(query,"UPDATE accounts SET char2=-1 WHERE char2=%d",id);
-	mysql_query(pConnection,query);
-	sprintf(query,"UPDATE accounts SET char3=-1 WHERE char3=%d",id);
-	mysql_query(pConnection,query);
-	sprintf(query,"UPDATE accounts SET char4=-1 WHERE char4=%d",id);
-	mysql_query(pConnection,query);
+	char *zSQL;
+
+	sqlite3_mprintf("DELETE FROM players WHERE id='%d'",id);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+
+	sqlite3_mprintf("DELETE FROM items WHERE owner='%d'",id);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+
+	sqlite3_mprintf("UPDATE accounts SET char1=-1 WHERE char1=%d",id);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+
+	sqlite3_mprintf("UPDATE accounts SET char2=-1 WHERE char2=%d",id);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+
+	sqlite3_mprintf("UPDATE accounts SET char3=-1 WHERE char3=%d",id);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+
+	sqlite3_mprintf("UPDATE accounts SET char4=-1 WHERE char4=%d",id);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+
 }
 
 void mysqlDB::updatePlayer(const cPlayer *player)
 {
-	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"UPDATE players SET x=%d,y=%d,map=%d,direction=%d,type=%d,state=%d,range=%d,str=%d,dex=%d,con=%d,itl=%d,wis=%d,access=%d,eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d,level=%d,template=%d,sprite=%d,body=%d,hair=%d,clothes=%d,worth=%d,atk=%d,def=%d,train=%d,hp=%d,mhp=%d,mp=%d,mmp=%d,target=%d,target_at=%d,chat_script=%d,move_script=%d,exp=%d,flags=%d,origin_x=%d,origin_y=%d,origin_map=%d,name='%s',title='%s',boot_time=%d,serenity=%d,unknown=%d,logout_date=NOW() WHERE id=%d",
+	sqlite3_mprintf("UPDATE players SET x=%d,y=%d,map=%d,direction=%d,type=%d,state=%d,range=%d,str=%d,dex=%d,con=%d,itl=%d,wis=%d,access=%d,eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d,level=%d,template=%d,sprite=%d,body=%d,hair=%d,clothes=%d,worth=%d,atk=%d,def=%d,train=%d,hp=%d,mhp=%d,mp=%d,mmp=%d,target=%d,target_at=%d,chat_script=%d,move_script=%d,exp=%d,flags=%d,origin_x=%d,origin_y=%d,origin_map=%d,name='%s',title='%s',boot_time=%d,serenity=%d,unknown=%d,logout_date=NOW() WHERE id=%d",
 		player->x,
 		player->y,
 		player->map,
@@ -196,13 +174,15 @@ void mysqlDB::updatePlayer(const cPlayer *player)
 		player->serenity,
 		player->unknown,
 		player->id);
-	mysql_query(pConnection,query);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+
 }
 
 void mysqlDB::updateCorePlayer(const cPlayer *player)
 {
 	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"UPDATE players SET x=%d,y=%d,map=%d,direction=%d,hp=%d,mp=%d,exp=%d,logout_date=NOW(),total_time=(total_time+10) WHERE id=%d",
+	sqlite3_mprintf("UPDATE players SET x=%d,y=%d,map=%d,direction=%d,hp=%d,mp=%d,exp=%d,logout_date=NOW(),total_time=(total_time+10) WHERE id=%d",
 		player->x,
 		player->y,
 		player->map,
@@ -211,68 +191,48 @@ void mysqlDB::updateCorePlayer(const cPlayer *player)
 		player->mp,
 		player->exp,
 		player->id);
-	mysql_query(pConnection,query);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+
 }
 
 void mysqlDB::updateEquipPlayer(const cPlayer *player)
 {
-	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"UPDATE players SET eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d WHERE id=%d",
+	sqlite3_mprintf("UPDATE players SET eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d WHERE id=%d",
 		player->eLeft,
 		player->eRight,
 		player->eHead,
 		player->eBody,
 		player->eSpecial,
 		player->id);
-	mysql_query(pConnection,query);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
 }
 
 int mysqlDB::nameExists(char *name)
 {
-	char query[1024];
-	sprintf(query, "SELECT id FROM players WHERE name='%s'",name);
-
-	if(mysql_query(pConnection, query) != 0)
-		return 0;
-
-	res = mysql_store_result(pConnection);
-
-	int num=(int)mysql_num_rows(res);
+	int numRows;
+	char *zSQL = sqlite3_mprintf("SELECT id FROM players WHERE name='%s'",name);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
 	
-	mysql_free_result(res);
-	if(num>0)
-		return 1;
-	return 0;
+	return (numRows > 0);
 }
 
 int mysqlDB::numPlayerAccounts()
 {
-	char query[1024];
-	sprintf(query, "SELECT * FROM players");
-
-	if(mysql_query(pConnection, query) != 0)
-		return 0;
-
-	res = mysql_store_result(pConnection);
-
-	int num= (int)mysql_num_rows(res);
-	mysql_free_result(res);
-	return num;
+	int numRows;
+	sqlite3_get_table(db, "SELECT * FROM players", NULL, &numRows, NULL, NULL);
+	
+	return numRows;
 }
 
 int mysqlDB::numAccounts()
 {
-	char query[1024];
-	sprintf(query, "SELECT * FROM accounts");
-
-	if(mysql_query(pConnection, query) != 0)
-		return 0;
-
-	res = mysql_store_result(pConnection);
-
-	int num= (int)mysql_num_rows(res);
-	mysql_free_result(res);
-	return num;
+	int numRows;
+	sqlite3_get_table(db, "SELECT * FROM accounts", NULL, &numRows, NULL, NULL);
+	
+	return numRows;
 }
 
 void mysqlDB::updateItem(cItem *item)
@@ -282,8 +242,7 @@ void mysqlDB::updateItem(cItem *item)
 		removeItem(item->id);
 		return;
 	}
-	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"UPDATE items SET life=%d,quantity=%d,graphic=%d,name='%s',map=%d,x=%d,y=%d,owner=%d,slot=%d,type=%d,stack=%d,flags=%d,uses=%d,use_script=%d,equip_script=%d,unequip_script=%d,pickup_script=%d,drop_script=%d,lose_script=%d,atk=%d,def=%d,template=%d,bonus=%d,bonus2=%d,userdata=%d,userdata2=%d,total_cooldown=%d,weight = %f WHERE id=%d",
+	char *zSQL = sqlite3_mprintf("UPDATE items SET life=%d,quantity=%d,graphic=%d,name='%s',map=%d,x=%d,y=%d,owner=%d,slot=%d,type=%d,stack=%d,flags=%d,uses=%d,use_script=%d,equip_script=%d,unequip_script=%d,pickup_script=%d,drop_script=%d,lose_script=%d,atk=%d,def=%d,template=%d,bonus=%d,bonus2=%d,userdata=%d,userdata2=%d,total_cooldown=%d,weight = %f WHERE id=%d",
 	 	item->life,
 		item->qty,
 		item->graphic,
@@ -313,53 +272,87 @@ void mysqlDB::updateItem(cItem *item)
 		item->total_cooldown,
 		item->weight,
 		item->id);
-	mysql_query(pConnection,query);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
 }
 
 void mysqlDB::removeItem(int permid)
 {
-	char query[5000];
-	sprintf(query,"DELETE FROM items WHERE id='%d'",permid);
-	mysql_query(pConnection,query);
+	int numRows;
+	char *zSQL = sqlite3_mprintf("DELETE FROM items WHERE id='%d'",permid);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
 }
 
 void mysqlDB::insertItem(cItem *item,int perm_owner)
 {
-	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"INSERT INTO items () VALUES ()");
-	mysql_query(pConnection,query);
-
-	item->id = (long)mysql_insert_id(pConnection);
 	int old = item->owner;
 	item->owner=perm_owner;
-	updateItem(item);
+
+	if(item->qty==0)
+		return;
+	char *zSQL = sqlite3_mprintf("INSERT INTO items(life, quantity, graphics, name, map, x, y, owner, slot, type, stack, flags, uses, use_script,
+	equip_script, unequip_script, pickup_script, drop_script, lose_script, atk, def, template, bonus, bonus2, userdata, userdata2, total_cooldown,
+	weight) VALUES(%d,%d,%d,'%s',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f)",
+	 	item->life,
+		item->qty,
+		item->graphic,
+		item->name,
+		item->map,
+		item->x,
+		item->y,
+		item->owner,
+		item->slot,
+		item->type,
+		item->stack,
+		item->flags,
+		item->uses,
+		item->use_script,
+		item->equip_script,
+		item->unequip_script,
+		item->pickup_script,
+		item->drop_script,
+		item->lose_script,
+		item->atk,
+		item->def,
+		item->item_template,
+		item->bonus,
+		item->bonus2,
+		item->userdata,
+		item->userdata2,
+		item->total_cooldown,
+		item->weight,
+		item->id);
+	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	sqlite3_free(zSQL);
+
 	item->owner=old;
 }
 
 void mysqlDB::updateGlobal(char *name,char *value)
 {
-	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"UPDATE globals SET value='%s' WHERE name='%s'",value,name);
-	mysql_query(pConnection,query);
+	char *zSQL = sqlite3_mprintf("UPDATE globals SET value='%s' WHERE name='%s'",value,name);
+	sqlite3_exec(db, zSQL, 0, 0, 0);
+	sqlite3_free(zSQL);
 }
 
 void mysqlDB::insertGlobal(char *name,char *value)
 {
-	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"INSERT INTO globals (name,value) VALUES ('%s','%s')",name,value);
-	mysql_query(pConnection,query);
+	char *zSQL = sqlite3_mprintf("INSERT INTO globals (name,value) VALUES ('%s','%s')",name,value);
+	sqlite3_exec(db, zSQL, 0, 0, 0);
+	sqlite3_free(zSQL);
 }
 
 void mysqlDB::deleteGlobal(char *name)
 {
-	char query[5000];//STRUCTUREFLAG
-	sprintf(query,"DELETE FROM globals WHERE name='%s'",name);
-	mysql_query(pConnection,query);
+	char *zSQL = sqlite3_mprintf("DELETE FROM globals WHERE name='%s'",name);
+	sqlite3_exec(db, zSQL, 0, 0, 0);
+	sqlite3_free(zSQL);
 }
 
 char *mysqlDB::selectGlobal(char *name)
 {
-	char query[1024];
+/*	char query[1024];
 	strcpy(mystring,"");
 	sprintf(query, "SELECT value FROM globals WHERE name='%s'",name);
 	if(mysql_query(pConnection, query) != 0)
@@ -370,12 +363,12 @@ char *mysqlDB::selectGlobal(char *name)
 	row=mysql_fetch_row(res);
 	strcpy(mystring,row[0]);
 	mysql_free_result(res);
-	return mystring;
+	return mystring;*/ 
 }
 
 bool mysqlDB::isGlobal(char *name)
 {
-	char query[1024];
+	/*char query[1024];
 	sprintf(query, "SELECT id FROM globals WHERE name='%s'",name);
 
 	if(mysql_query(pConnection, query) != 0)
@@ -388,12 +381,12 @@ bool mysqlDB::isGlobal(char *name)
 	mysql_free_result(res);
 	if(num>0)
 		return 1;
-	return 0;
+	return 0;*/
 }
 
 void mysqlDB::loadMapItems(cItemList *itemlist)
 {
-	char query[1024];
+/*	char query[1024];
 	sprintf(query, "SELECT * FROM items WHERE map != -1");
 
 	if(mysql_query(pConnection, query) != 0)
@@ -438,12 +431,12 @@ void mysqlDB::loadMapItems(cItemList *itemlist)
 		//memcpy(item.pData,row[i++],item.pDataSize);
 		itemlist->addItem(item);
 	}
-	mysql_free_result(res);
+	mysql_free_result(res);*/
 }
 
 void mysqlDB::loadPlayerItems(int id,int tempid,cItemList *itemlist)
 {
-	char query[1024];
+	/*char query[1024];
 	sprintf(query, "SELECT * FROM items WHERE owner = %d",id);
 
 	if(mysql_query(pConnection, query) != 0)
@@ -495,13 +488,13 @@ void mysqlDB::loadPlayerItems(int id,int tempid,cItemList *itemlist)
 			itemlist->addItem(item);
 		}
 	}
-	mysql_free_result(res);
+	mysql_free_result(res); */
 }
 
 int mysqlDB::loadPlayer(cPlayer *player,int slot)
 {
 	//obtain player id from account's slot
-	char query[1024];
+	/*char query[1024];
 	sprintf(query, "SELECT * FROM accounts WHERE accid='%s'",player->accid);
 
 	if(mysql_query(pConnection, query) != 0)
@@ -597,19 +590,19 @@ int mysqlDB::loadPlayer(cPlayer *player,int slot)
 	//update login_time
 	sprintf(query,"UPDATE players SET login_date=NOW() WHERE id=%d",player->id);
 	mysql_query(pConnection,query);
-	return 1;
+	return 1;*/
 }
 
 void mysqlDB::setAccountSlot(char *id,int slot,int index)
 {
-	char query[1024];
-	sprintf(query,"UPDATE accounts SET char%d=%d WHERE accid='%s'",slot+1,index,id);
-	mysql_query(pConnection,query);
+	char *zSQL = sqlite3_mprintf("DELETE FROM globals WHERE name='%s'",name);
+	sqlite3_exec(db, zSQL, 0, 0, 0);
+	sqlite3_free(zSQL);
 }
 
 int mysqlDB::loginAccount(char *id,char *pass,char *ip)
 {
-	char query[1024];
+/*	char query[1024];
 	sprintf(query, "SELECT * FROM accounts WHERE accid='%s' AND pass='%s'",id,pass);
 
 	if(mysql_query(pConnection, query) != 0)
@@ -626,12 +619,12 @@ int mysqlDB::loginAccount(char *id,char *pass,char *ip)
 	sprintf(query,"UPDATE accounts SET ip='%s' WHERE accid='%s'",ip,id);
 	mysql_query(pConnection,query);
 
-	return 1;
+	return 1;*/
 }
 
 int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slot3,cPlayer *slot4)
 {
-	char query[1024];
+	/*char query[1024];
 	sprintf(query, "SELECT * FROM accounts WHERE accid='%s'",id);
 
 	if(mysql_query(pConnection, query) != 0)
@@ -722,7 +715,7 @@ int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slo
 		slot4->clothes=atoi(row[5]);
 		mysql_free_result(res);
 	}
-	return 1;
+	return 1;*/
 }
 
 int mysqlDB::sendQuery(char *query)

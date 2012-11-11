@@ -3,25 +3,16 @@
 #ifndef _MYSQLDB_
 #define _MYSQLDB_
 
-#if defined(_MSC_VER)
-#   pragma comment(lib,"e:/mysql/lib/debug/libmysql.lib")
-#endif
-
 #include <stdio.h>
-#ifdef WIN32
-	#include <winsock.h>
-#else
-	#include <unistd.h>
-#endif
+#include <sqlite3.h>
 
 #include "gamedefs.h"
 #include "list.h"
 
 struct mysqlDB
 {
-/*	MYSQL *pConnection; 
-	MYSQL_RES *res; 
-	MYSQL_ROW row;*/
+	sqlite3 *db;
+
 	mysqlDB();
 	char mystring[256];
 	void runScript(char *filename);
