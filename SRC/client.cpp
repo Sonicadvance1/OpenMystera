@@ -263,6 +263,13 @@ void callback()
 	term.newLine("done");
 }
 
+#ifndef _WIN32
+void Sleep(unsigned int MS)
+{
+	usleep(MS * 1000);
+}
+#endif
+
 int main(int argc, char **argv)
 {
 	//parse command line

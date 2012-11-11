@@ -19,15 +19,17 @@ void strlwr(char *t)
 
 //#include "mleaks.h"
 
-#include "SDL.h"
-#include "SDL_Thread.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
 
 #include <math.h>
 #include <time.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <mmsystem.h>
+#else
+#include <unistd.h>
 #endif
 
 #include <GL/gl.h>
@@ -40,7 +42,6 @@ void strlwr(char *t)
 #include "signal.h"
 #include "DrawText.h"
 
-#include "glpng.h"
 #include "glfuncs.h"
 #include "sdlgameinput.h"
 #include "gamedefs.h"

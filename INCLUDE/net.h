@@ -12,7 +12,7 @@ server.host(12000) //udp now claiming 12001
 #ifndef __NET_H__
 #define __NET_H__
 
-#include "SDL_net_new.h"
+#include <SDL/SDL_net.h>
 #define MAX_PACKET 200000
 #define MAX_CLIENT 100
 

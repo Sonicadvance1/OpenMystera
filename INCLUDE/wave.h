@@ -1,5 +1,5 @@
 
-#include "SDL_mixer.h"
+#include <SDL/SDL_mixer.h>
 
 int music=1,sound=1;
 
