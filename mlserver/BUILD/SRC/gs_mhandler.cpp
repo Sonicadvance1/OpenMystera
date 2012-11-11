@@ -474,7 +474,7 @@ void cGameServer::onMessage(unsigned char *data,unsigned long dataSize,PlayerID 
 		for(int c=0;c<player.size();c++)
 			if(player[c].access>0 && player[c].type!=NPC && player[c].map == player[index].map)
 				sendChatMsg(itod(c),"%s:%s",player[index].name,theChat);
-		for(c=0;c<player.size();c++)
+		for(int c=0;c<player.size();c++)
 			if(player[c].access>0 && player[c].type==NPC && player[c].map == player[index].map && player[c].chat_script!=-1)
 				eHandler.add(player[c].chat_script,c,0);
 		newLine("%s:%s",player[index].name,theChat);
@@ -622,7 +622,7 @@ void cGameServer::onMessage(unsigned char *data,unsigned long dataSize,PlayerID 
 		
 
 		//send new npcs
-		for(count=0;count<player.size();count++)if(player[count].access>0&&player[count].type==NPC&&player[count].origin_map == player[index].map)
+		for(int count=0;count<player.size();count++)if(player[count].access>0&&player[count].type==NPC&&player[count].origin_map == player[index].map)
 			sendPlyrMsg(count);
 	}
 	else if(type==FILE_MSG)
@@ -715,7 +715,7 @@ void cGameServer::onMessage(unsigned char *data,unsigned long dataSize,PlayerID 
 				
 
 				//send new npcs
-				for(count=0;count<player.size();count++)if(player[count].access>0&&player[count].type==NPC&&player[count].origin_map == map)
+				for(int count=0;count<player.size();count++)if(player[count].access>0&&player[count].type==NPC&&player[count].origin_map == map)
 					sendPlyrMsg(count);
 			}
 			else

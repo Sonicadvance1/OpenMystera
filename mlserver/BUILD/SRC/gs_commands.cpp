@@ -38,10 +38,8 @@ int cGameServer::parse(char *str,signed short index)
 			sendChatMsg(itod(index),"^wNext script should be:%d",i);
 		}
 		else if(strcmp(com,"shutdown")==0 && (index==-45||(index>-1&& player[index].access>9)))
-		{
-			cs.Enter();			
+		{			
 			done=1;
-			cs.Leave();
 		}
 		else if(strcmp(com,"quiet")==0 && (index==-45||(index>-1&& player[index].access>9)))
 		{
@@ -89,7 +87,7 @@ int cGameServer::parse(char *str,signed short index)
 				
 			}
 			
-			for(c=0;c<player.size();c++)if(player[c].access>0 && player[c].type==PLAYER)
+			for(int c=0;c<player.size();c++)if(player[c].access>0 && player[c].type==PLAYER)
 				sendPlayerVMsg(c);
 		}
 		else if(strcmp(com,"delete")==0 &&(index==-45||(index>-1&& player[index].access>=10)))
@@ -218,9 +216,6 @@ int cGameServer::parse(char *str,signed short index)
 			fclose(chatLog);
 			copyFile("serverdata/server.log","serverdata/backups/chat.txt");
 			chatLog = fopen("serverdata/server.log","a");
-			
-			if(fileExists("serverdata/backups/chat.txt"))
-				WinExec("notepad serverdata/backups/chat.txt",SW_MAXIMIZE);
 		}
 		else if(strcmp(com,"repost")==0 &&(index==-45||(index>-1&& player[index].access>=8)))
 		{

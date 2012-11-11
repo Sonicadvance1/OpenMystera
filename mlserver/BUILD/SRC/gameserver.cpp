@@ -1,5 +1,5 @@
 #include <SDL/SDL.h>
-#include "censor.h"
+//#include "censor.h"
 #include "zlib.h"
 #include "console.h"
 #include "gameserver.h"
@@ -7,17 +7,25 @@
 #include "md5.h"
 #include "netstructs.h"
 
+//#include "script_commands.h" Umadbro?
+
+
 #define strcon(a,b)		strstr(a,b)!=NULL
 #define MAP_PLAYERS(_map_,_count_)  for(_count_=0;_count_<map_bucket[_map_].size();_count_++)if(player[map_bucket[_map_][_count_]].type==PLAYER)
+
+_MLF char *stringLower(char * p0)
+{
+	char* p = p0;
+	while (*p = toupper( *p )) p++;
+	return p0;
+}
 
 cGameServer::cGameServer()
 {
 	version=1.37f;
 	client_version=0.984f;
 	serverPort=20005;//20005
-	cs.Enter();
 	done=0;
-	cs.Leave();
 	numPlayers=0;
 	numConnections=0;
 	numSaves=0;
@@ -138,9 +146,7 @@ int cGameServer::initialize()
 void cGameServer::shutdownServer()
 {
 	DEBUGLOG("Shutdown beginning");
-	cs.Enter();
 	done=1;
-	cs.Leave();
 	newLine("*Shutting Down*\n");
 	/*
 	//tell auto we shutdown
@@ -166,17 +172,8 @@ void cGameServer::shutdownServer()
 	nh.shutdown();
 	DEBUGLOG("Net layer shutdown");
 	
-	if(metaPost)
-	{
-		char tmp[256];
-		sprintf(tmp,"http://www.mysteralegends.com/rpgbeta/metaserv.cgi?remove=%s",myIP);
-		ReadPage(tmp);
-	}
-	DEBUGLOG("Meta posted");
 	SDL_Quit();
 	DEBUGLOG("SDL Quit");
-	WSACleanup();
-	DEBUGLOG("winsock cleanup");
 	mlscript.freeAll();
 	DEBUGLOG("Scripts freed");
 	if(debugLog!=0)
@@ -214,7 +211,7 @@ void cGameServer::consoleInput(char *chat)
 	}
 	else
 	{
-		CENSOR.star(chat);
+		//CENSOR.star(chat); (need to either remove or fix censoring)
 		sendChatMsg(ALL_CLIENTS,"^Y[SERVER]:%s",chat);
 		newLine(chat);
 		fprintf(chatLog,chat);
@@ -436,23 +433,6 @@ void cGameServer::writeITEMfile()
 		fprintf(f,"weight=%f\n",float(mil[i].weight));
 	}
 	fclose(f);
-}
-
-void cGameServer::postServer()
-{
-	if(!metaPost)
-		return;
-	char *metahash = new char[256];
-	sprintf(metahash, "%s%s%s%s", server_title, myIP, myIP, server_title);
-	strcpy(metahash, MD5.crypt(metahash));
-	metahash[0] = 'a';
-	metahash[5] = 'c';
-	//$servername . $serverip . $serverip . $servername
-	//SDL_KillThread(post_thread);
-	//post_thread = 0;
-	sprintf(post_string,"http://www.mysteralegends.com/rpgbeta/metaserv.php?s=%s&n=%s&p=%d&h=%s",myIP,servTitle,numPlayers,metahash);
-    //post_thread = SDL_CreateThread(ReadPage,post_string);	
-	ReadPage(post_string);
 }
 
 void cGameServer::scheduler()
@@ -741,10 +721,10 @@ int cGameServer::ntoi(char *name)
 	char aname[256];
 	char pname[256];
 	strcpy(aname,name);
-	strlwr(aname);
+	stringLower(aname);
 
 	strcpy(pname,player[i].name);
-	strlwr(pname);
+	stringLower(pname);
 	while(strcmp(pname,aname)!=0)
 	{
 		if(i==player.size())
@@ -753,7 +733,7 @@ int cGameServer::ntoi(char *name)
 		if(i!=player.size())
 		{
 			strcpy(pname,player[i].name);
-			strlwr(pname);
+			stringLower(pname);
 		}
 		else 
 			return -1;
@@ -998,12 +978,12 @@ int cGameServer::nameOnline(char *name)
 {
 	char thename[256];
 	strcpy(thename,name);
-	strlwr(thename);
+	stringLower(thename);
 	char aname[256];
 	for(int i=0;i<player.size();i++)
 	{
 		strcpy(aname,player[i].accid);
-		strlwr(aname);
+		stringLower(aname);
 		if(player[i].access>=0 && strcmp(thename,aname)==0)
 			return 1;
 	}

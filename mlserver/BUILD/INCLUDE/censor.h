@@ -18,14 +18,14 @@ public: //INTERFACE
 			return;
 		char temp[256];
 		strcpy(temp,str);
-		strlwr(temp);
+		stringlower(temp);
 		for(int i=0;i<BADWORDLEN;i++)
 		{
 			if(str[i]==12)
 				str[i]=32;
 			while(starOut(temp,badWords[i])!=-1);
 		}
-		for(i=0;i<signed int(strlen(str));i++)
+		for(int i=0;i<signed int(strlen(str));i++)
 			if(temp[i]=='*')
 				str[i]='*';
 	}

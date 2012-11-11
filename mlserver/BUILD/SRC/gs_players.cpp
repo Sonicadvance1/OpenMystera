@@ -20,7 +20,7 @@ void cGameServer::doDeath(int id)
 	{
 		//exp loss
 		
-		player[id].exp = unsigned long( float(player[id].exp) * 0.666f);
+		player[id].exp = (unsigned long) ( float(player[id].exp) * 0.666f);
 		
 		sendEXPMsg(id);
 	}
@@ -346,7 +346,7 @@ int cGameServer::doLogin(int id,int slot)
 	
 	for(int i=0;i<MAX_INV;i++)
 		player[id].inventory[i]=-1;
-	for(i=0;i<ml_items.item.size();i++)
+	for(int i=0;i<ml_items.item.size();i++)
 		if(ml_items.item[i].qty!=0 && ml_items.item[i].owner==id)
 			player[id].inventory[ml_items.item[i].slot]=i;
 	//fix equip pointers
@@ -478,7 +478,7 @@ void cGameServer::doNpcFill(int id)
 			ml_items.item[player[id].inventory[i]]=cItem();
 			player[id].inventory[i]=-1;
 		}
-	for(i=0;i<MAX_INV;i++)
+	for(int i=0;i<MAX_INV;i++)
 	{
 		if(	ml_loot.loot[player[id].player_template].loot[i].qty!=0 &&
 			((rand()%1000)+1)<=ml_loot.loot[player[id].player_template].loot[i].chance)

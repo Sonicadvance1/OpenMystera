@@ -60,7 +60,7 @@ static int transact(TCPsocket *sock,char *message,char *expect)
 	return 0;
 }
 
-static void sendEmail(char *host,char *login,char *pass,char *from,char *to,char *subject,char *body)
+/*static void sendEmail(char *host,char *login,char *pass,char *from,char *to,char *subject,char *body)
 {
 	IPaddress ip;
 	if(SDLNet_ResolveHost(&ip,host,25)==-1)
@@ -109,6 +109,7 @@ static void sendEmail(char *host,char *login,char *pass,char *from,char *to,char
 	SDLNet_TCP_Send(sock,message,strlen(message));
 	SDLNet_TCP_Close(sock);
 }
+*/
 
 //file commands
 static int copyFile(char *name,char *newname)
