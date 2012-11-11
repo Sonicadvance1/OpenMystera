@@ -1,3 +1,5 @@
+#ifndef _SCRIPT_COMMANDS_H_
+#define _SCRIPT_COMMANDS_H_
 //\\//\\\// SCRIPT FUNCTIONS \\//\\//\\//
 char scriptGlobalString[512];
 
@@ -1046,7 +1048,7 @@ _MLF void setTarget(int p0,int p1)
 _MLF char *stringLower(char * p0)
 {
 	char* p = p0;
-	while (*p = toupper( *p )) p++;
+	while (*p = tolower( *p )) p++;
 	return p0;
 }
 
@@ -1209,3 +1211,4 @@ _MLF int updateMap(int p0)
 {
 	return 0;
 }
+#endif
