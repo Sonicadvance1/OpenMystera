@@ -87,6 +87,8 @@ int cScriptSystem::compile(int id)
 	sprintf(temp,"makedll.bat serverdata\\scripts\\%d.txt %d",id,id);
 	system(temp);
 	FILE *f=fopen("output.txt","r");
+	if (!f)
+		return false;
 	fgets(dllErrString,256,f);
 	fgets(dllErrString,256,f);
 	fclose(f);
