@@ -65,7 +65,7 @@ void cGameServer::onDisconnect(PlayerID pid)
 			numPlayers=0;
 
 		//post new player info
-		postServer();
+		//postServer(); <--- NO!
 		
 		//if(player[index].time_safe<120)//5 minute ban penalty
 		//	player[index].boot_time+=((unsigned)time(0)+300);
@@ -256,7 +256,7 @@ void cGameServer::onMessage(unsigned char *data,unsigned long dataSize,PlayerID 
 		
 		numPlayers++;
 
-		postServer();
+		//postServer(); NO NO NO
 
 		if(player[index].map >= world.size())
 		{

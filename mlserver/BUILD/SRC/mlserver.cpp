@@ -68,7 +68,7 @@ int keyPress(void *unused)
 		else if(c=='P')
 		{
 			newLine("Reposting.");
-			mlserver.postServer();
+			//mlserver.postServer();  <-- more shity metaserver
 		}
 		else if(c==13)
 		{
@@ -220,7 +220,7 @@ int main(int argc,char *argv[])
 	}
 
 	//Post on metaserver
-	mlserver.postServer();
+	//mlserver.postServer();  <--- gotta get this working eventually
 
 	//Create main loop thread
 	newLine("*Running*\n");

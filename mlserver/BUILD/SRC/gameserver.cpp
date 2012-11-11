@@ -7,18 +7,11 @@
 #include "md5.h"
 #include "netstructs.h"
 
-//#include "script_commands.h" Umadbro?
+#include "script_commands.h"
 
 
 #define strcon(a,b)		strstr(a,b)!=NULL
 #define MAP_PLAYERS(_map_,_count_)  for(_count_=0;_count_<map_bucket[_map_].size();_count_++)if(player[map_bucket[_map_][_count_]].type==PLAYER)
-
-_MLF char *stringLower(char * p0)
-{
-	char* p = p0;
-	while (*p = toupper( *p )) p++;
-	return p0;
-}
 
 cGameServer::cGameServer()
 {
@@ -35,7 +28,7 @@ cGameServer::cGameServer()
 	benchmark_flag=1;
 	benchmark_iterations=0;
 	ml_hour=12;
-	metaPost=0;
+	metaPost=0; // lets leave this at 0
 	chatLog=0;
 	ml_cycle[0]=45;
 	ml_cycle[1]=45;
@@ -503,9 +496,9 @@ void cGameServer::scheduler()
 	//run timed scripts
 	eHandler.handle(&mlscript);
 
-	//time to repost to the metaserver
-	if(rePostClock.tick(60000))
-		postServer();
+	//time to repost to the metaserver <---(more like time to stop being so lame)
+	//if(rePostClock.tick(60000))
+	//	postServer();
 
 	//check for ground item timeout
 	if(itemTimer.tick(120000))

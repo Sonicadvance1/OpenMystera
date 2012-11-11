@@ -1,14 +1,13 @@
 #ifndef _SCRIPT_COMMANDS_H_
 #define _SCRIPT_COMMANDS_H_
 //\\//\\\// SCRIPT FUNCTIONS \\//\\//\\//
-char scriptGlobalString[512];
 
 #include "gameserver.h"
 #include "console.h"
 
 static cGameServer *mygs;
 
-static void setScriptCommandGameServer(cGameServer *gs);
+void setScriptCommandGameServer(cGameServer *gs);
 //newer script access commands
 
 //script runtime vars

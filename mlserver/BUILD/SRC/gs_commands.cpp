@@ -219,7 +219,7 @@ int cGameServer::parse( const char *str,signed short index)
 		}
 		else if(strcmp(com,"repost")==0 &&(index==-45||(index>-1&& player[index].access>=8)))
 		{
-			postServer();
+			//postServer();
 		}
 		else if(strcmp(com,"compileall")==0 &&(index==-45||(index>-1&& player[index].access>=8)))
 		{

@@ -2,13 +2,15 @@
 //
 #include "consoleport.h"
 
-POINT screensize;
+//POINT screensize;
 
 //
 // Clears the screen
 //
+
 void clrscr()
 {
+/*
 	COORD coordScreen = { 0, 0 }; 
 	DWORD cCharsWritten; 
 	CONSOLE_SCREEN_BUFFER_INFO csbi; 
@@ -22,27 +24,32 @@ void clrscr()
 	FillConsoleOutputCharacter(hConsole, TEXT(' '), dwConSize, coordScreen, &cCharsWritten); 
 	GetConsoleScreenBufferInfo(hConsole, &csbi); 
 	FillConsoleOutputAttribute(hConsole, csbi.wAttributes, dwConSize, coordScreen, &cCharsWritten); 
-	SetConsoleCursorPosition(hConsole, coordScreen); 
+	SetConsoleCursorPosition(hConsole, coordScreen);
+*/
 }
 
 //
 // Moves the cursor to x, y in console window
 // ie x=left\right y=top\bottom
 //
+
 void gotoxy(int x, int y)
 {
-	COORD point;
+	/*COORD point;
 	if((x < 0 || x > screensize.x) || (y < 0 || y > screensize.y))
 		return;
 	point.X = x; point.Y = y;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), point);
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), point); */
+
 }
 
 //
 // Set text and background colors
 //
+
 void setrgb(int color)
 {
+/*
 	switch (color)
 	{
 	case 0:	// White on Black
@@ -121,5 +128,7 @@ void setrgb(int color)
 			FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 		break;
 	}
+*/
 }
+
 

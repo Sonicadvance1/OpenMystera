@@ -127,7 +127,7 @@ int netServer::update()
 			client[cid]=SDLNet_TCP_Accept(server);
 			if(client[cid])
 			{
-				SDLNet_TCP_SetNonBlocking(client[cid],1);
+				//SDLNet_TCP_SetNonBlocking(client[cid],1);
 				numClients=SDLNet_TCP_AddSocket(set,client[cid])-2;
 				clientip[cid].host=SDLNet_TCP_GetPeerAddress(client[cid])->host;
 				SDLNet_Write16((Uint16)(port+1),&clientip[cid].port);
@@ -413,7 +413,7 @@ int netClient::connect(char *serverip,int thePort)
 	set=SDLNet_AllocSocketSet(2);
 	SDLNet_TCP_AddSocket(set,sock);
 	SDLNet_UDP_AddSocket(set,udpsock);
-	SDLNet_TCP_SetNonBlocking(sock,1);
+	//SDLNet_TCP_SetNonBlocking(sock,1);
 	
 	//recieve security seed
 	int result;

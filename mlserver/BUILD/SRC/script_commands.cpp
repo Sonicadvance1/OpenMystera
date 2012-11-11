@@ -8,7 +8,7 @@ char scriptGlobalString[512];
 
 static cGameServer *mygs;
 
-static void setScriptCommandGameServer(cGameServer *gs)
+void setScriptCommandGameServer(cGameServer *gs)
 {
 	mygs=gs;
 }
