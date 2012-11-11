@@ -19,9 +19,9 @@
 
 struct mysqlDB
 {
-	MYSQL *pConnection; 
+/*	MYSQL *pConnection; 
 	MYSQL_RES *res; 
-	MYSQL_ROW row;
+	MYSQL_ROW row;*/
 	mysqlDB();
 	char mystring[256];
 	void runScript(char *filename);

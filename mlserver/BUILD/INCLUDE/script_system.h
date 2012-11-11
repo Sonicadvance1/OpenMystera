@@ -6,7 +6,7 @@
 class cScriptSystem
 {
 private:
-	cList <HINSTANCE> hDLL;
+	cList <int> hDLL;
 	char dllErrString[256];
 	int rPlayerID,curScript;
 	void runDll(int id);

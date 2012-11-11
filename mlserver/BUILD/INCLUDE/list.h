@@ -32,7 +32,7 @@ public:	 //INTERFACE
 			list = new itemType[len];
 			if(len<length)
 				length=len;
-			for(iList = 0; iList < length; iList++)
+			for(int iList = 0; iList < length; iList++)
 				list[iList] = tempList[iList];
 			delete [] tempList;
 		}

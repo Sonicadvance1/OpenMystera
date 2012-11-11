@@ -1,2 +1,2 @@
 all:
-	g++ mlserver.cpp -I../INCLUDE -o Server
+	g++ mlserver.cpp gameserver.cpp -I../INCLUDE -o Server -lSDL

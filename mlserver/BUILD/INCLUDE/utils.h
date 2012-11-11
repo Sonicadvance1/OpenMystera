@@ -128,10 +128,10 @@ static int copyFile(char *name,char *newname)
 	fseek(f,0,SEEK_END);
 	int len = ftell(f);
 	rewind(f);
-	void *buffer = new unsigned char[len];
+	unsigned char *buffer = new unsigned char[len];
 	fread(buffer,len,1,f);
 	fwrite(buffer,len,1,f2);
-	delete buffer;
+	delete [] buffer;
 	fclose(f);
 	fclose(f2);
 	return 1;
@@ -297,113 +297,5 @@ struct gameDB
 		return sz;
 	}
 };
-
-//critical sections
-class CriticalSection
-{
-public:
-    CriticalSection()
-    {
-        ::InitializeCriticalSection(&cs);
-    }
-    ~CriticalSection()
-    {
-        ::DeleteCriticalSection(&cs);
-    }
-    void Enter()
-    {
-        ::EnterCriticalSection(&cs);
-    }
-    void Leave()
-    {
-        ::LeaveCriticalSection(&cs);
-    }
-private:
-    CRITICAL_SECTION cs;
-}; 
-static CriticalSection cs;
-
-//http get
-#define MAX_PAGE    (1024*64)
-static char    PageBuffer[MAX_PAGE];
-
-static void startupWinsock()
-{
-	WSADATA         WsaData;
-    WSAStartup(0x0001, &WsaData);
-}
-
-static int GetAddr(const char* HostName, int Port, struct sockaddr* Result)
-{
-    struct hostent*     Host;
-    SOCKADDR_IN         Address;
-
-    memset(Result, 0, sizeof(*Result));
-    memset(&Address, 0, sizeof(Address));
-
-    Host                = gethostbyname(HostName);
-    if(Host != NULL)
-    {
-        Address.sin_family  = AF_INET;
-        Address.sin_port    = htons((short)Port);
-        memcpy(&Address.sin_addr, Host->h_addr_list[0], Host->h_length);
-        memcpy(Result, &Address, sizeof(Address));
-    }
-    return Host != NULL;
-}
-
-static int ReadPage(char *Page)
-{
-	int waitRead = 0;
-	char Host[256];
-
-	sprintf(Host,"www.mysteralegends.com");
-
-    struct sockaddr     SockAddr;
-    SOCKET              Socket;
-    int                 Port        = 80; /* HTTP */
-
-    if(GetAddr(Host, Port, &SockAddr))
-    {
-        int     Status;
-
-        Socket = socket(AF_INET, SOCK_STREAM, 0);
-        Status = connect(Socket, &SockAddr, sizeof(SockAddr));
-        if(Status >= 0)
-        {
-            DWORD   StartTime, EndTime;
-            char    Request[512];
-            char*   Rover   = PageBuffer;
-            int     Read;
-            sprintf(Request, "GET %s HTTP/1.0\n\n", Page);
-            send(Socket, Request, strlen(Request), 0);
-			if(!waitRead)
-				return 0;
-            StartTime = GetTickCount();
-            for(Read=0;Read < MAX_PAGE;)
-            {
-                int ThisRead;
-                ThisRead = recv(Socket, Rover, MAX_PAGE-Read, 0);
-                if(ThisRead == SOCKET_ERROR || ThisRead == 0)
-                    break;
-                else
-                {
-					Read    += ThisRead;
-					Rover   += ThisRead;
-                }
-            }
-            EndTime = GetTickCount();
-            //newLine("%d milliseconds to read %d-byte page\n",
-            //    EndTime-StartTime, Read);
-            closesocket(Socket);
-        }
-        else
-            printf( "connect failed (%d)\n",
-                WSAGetLastError());
-    }
-    else
-        printf( "Can't map hostname '%s'\n", Host);
-	return 0;
-}
 
 #endif

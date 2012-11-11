@@ -1045,9 +1045,9 @@ _MLF void setTarget(int p0,int p1)
 
 _MLF char *stringLower(char * p0)
 {
-	strcpy(scriptGlobalString,p0);
-	strlwr(scriptGlobalString);
-	return(scriptGlobalString);
+	char* p = p0;
+	while (*p = toupper( *p )) p++;
+	return p0;
 }
 
 

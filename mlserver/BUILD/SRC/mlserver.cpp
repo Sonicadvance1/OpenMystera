@@ -48,9 +48,7 @@ int checkAlive(void *unused)//rough way to see if the server has stalled (blocki
 		if(num>10)
 			break;
 	} 
-	cs.Enter();
 	*done=1;
-	cs.Leave();
 	return 0;
 }
 
@@ -63,13 +61,10 @@ int keyPress(void *unused)
 	int *done=(int *)unused;
 	while(!*done)
 	{
-		c=getch();
+		// TODO: LINUX
+		//c=getch();
 		if(c=='Q')//quit
-		{
-			cs.Enter();
 			*done=1;
-			cs.Leave();
-		}
 		else if(c=='P')
 		{
 			newLine("Reposting.");
@@ -86,7 +81,8 @@ int keyPress(void *unused)
 					putc(' ',stdout);
 				putc('\r',stdout);
 				setrgb(0);
-				c=getch();
+				// TODO: LINUX
+				//c=getch();
 				if(c==13)
 				{
 					mlserver.consoleInput(input);
@@ -178,7 +174,6 @@ void ScriptSignalHandler(int Signal)
 
 int main(int argc,char *argv[])
 {
-	LoadLibrary("exchndl.dll");
 
 	srand(time(0));
 
@@ -187,9 +182,6 @@ int main(int argc,char *argv[])
 
 	//Set callbacks and pointers
 	setScriptCommandGameServer(&mlserver);
-
-	//Startup sockets for cgi posting
-	startupWinsock();
 
 	//print header
 	newLine("Mystera Legends Beta Server %.2f - James Hamer 2004",mlserver.version);
@@ -213,9 +205,7 @@ int main(int argc,char *argv[])
 	if(!mlserver.initialize())
 	{
 		newLine("Error initializing...will shut down.\n");
-		cs.Enter();
 		mlserver.done=1;
-		cs.Leave();
 	}
 	//print players
 	newLine("%d players found in %d accounts.\n",mlserver.mydb.numPlayerAccounts(),mlserver.mydb.numAccounts());
@@ -226,9 +216,7 @@ int main(int argc,char *argv[])
 	if(!mlserver.nh.host(mlserver.serverPort))
 	{
 		newLine("Error hosting...will shut down.\n");
-		cs.Enter();
 		mlserver.done=1;
-		cs.Leave();
 	}
 
 	//Post on metaserver
