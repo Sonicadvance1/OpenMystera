@@ -9,13 +9,14 @@
 #include "gamedefs.h"
 #include "list.h"
 
-struct mysqlDB
+class mysqlDB
 {
 	sqlite3 *db;
-
+	int GetRowCount(const char *sql);
+public:
 	mysqlDB();
 	char mystring[256];
-	void runScript(char *filename);
+	void runScript(const char *filename);
 	int connect();
 	void disconnect();
 	int accountExists(char *id);

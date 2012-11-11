@@ -8,14 +8,15 @@ mysqlDB::mysqlDB()
 	db = 0;
 }
 
-void mysqlDB::runScript(char *filename)
+void mysqlDB::runScript(const char *filename)
 {
-/*	char query[10000];
+	char *query;
 	FILE *f=fopen(filename,"r");
 	if(f==NULL)
 		return;
 	fseek(f,0,SEEK_END);
 	int size = ftell(f);
+	query = (char*)malloc(size);
 	rewind(f);
 	fread(query,size,1,f);
 	fclose(f);
@@ -23,12 +24,13 @@ void mysqlDB::runScript(char *filename)
 		if(query[i]=='\n')
 			query[i]=' ';
 	int mark=0;
-	for(i=0;i<size;i++)
-		if(query[i]==';')
-		{
-			mysql_real_query(pConnection,&query[mark],i-mark);
-			mark=i+2;
-		}*/
+	char *quer;
+	while ((quer = strsep(&query, ";")) != NULL)
+	{
+		int ret = sqlite3_exec(db, quer, 0, 0, 0);
+	}
+	disconnect();
+	free(query);
 }
 
 int mysqlDB::connect()
@@ -40,7 +42,17 @@ int mysqlDB::connect()
 	runScript("serverdata/mlegends.sql");
 	return true;
 }
+int mysqlDB::GetRowCount(const char *sql)
+{
+	int numRows;
+	int numCol;
+	char *err;
+	char **table;
 
+	sqlite3_get_table(db, sql, &table, &numRows, &numCol, &err);
+	sqlite3_free_table(table);
+	return numRows;	
+}
 void mysqlDB::disconnect()
 {
 	sqlite3_close(db);
@@ -59,7 +71,7 @@ int mysqlDB::emailExists(char *email)
 {
 	int numRows;
 	char *zSQL = sqlite3_mprintf("SELECT * FROM accounts WHERE email = '%s'", email);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	numRows = GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 	
 	return (numRows > 0);
@@ -69,7 +81,7 @@ int mysqlDB::accountExists(char *id)
 {
 	int numRows;
 	char *zSQL = sqlite3_mprintf("SELECT * FROM accounts WHERE accid='%s'",id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	numRows = GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 	
 	return (numRows > 0);
@@ -77,7 +89,6 @@ int mysqlDB::accountExists(char *id)
 
 int mysqlDB::createPlayer(char *name,int body,int clothes,int hair,int access,int map,int x,int y,int *player_id)
 {
-	int numRows;
 	char *zSQL = sqlite3_mprintf("INSERT INTO players (name,body,clothes,hair,sprite,access,create_date,origin_map,origin_x,origin_y) VALUES ('%s',%d,%d,%d,%d,%d,NOW(),%d,%d,%d)",
 		name,
 		body,
@@ -88,7 +99,7 @@ int mysqlDB::createPlayer(char *name,int body,int clothes,int hair,int access,in
 		map,
 		x,
 		y);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 	*player_id = (int)sqlite3_last_insert_rowid(db);
@@ -97,38 +108,36 @@ int mysqlDB::createPlayer(char *name,int body,int clothes,int hair,int access,in
 
 void mysqlDB::deletePlayer(int id)//STRUCTUREFLAG
 {
-	int numRows;
 	char *zSQL;
 
 	zSQL =sqlite3_mprintf("DELETE FROM players WHERE id='%d'",id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 	zSQL = sqlite3_mprintf("DELETE FROM items WHERE owner='%d'",id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 	zSQL = sqlite3_mprintf("UPDATE accounts SET char1=-1 WHERE char1=%d",id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 	zSQL = sqlite3_mprintf("UPDATE accounts SET char2=-1 WHERE char2=%d",id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 	zSQL = sqlite3_mprintf("UPDATE accounts SET char3=-1 WHERE char3=%d",id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 	zSQL = sqlite3_mprintf("UPDATE accounts SET char4=-1 WHERE char4=%d",id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 }
 
 void mysqlDB::updatePlayer(const cPlayer *player)
 {
-	int numRows;
 	char *zSQL = sqlite3_mprintf("UPDATE players SET x=%d,y=%d,map=%d,direction=%d,type=%d,state=%d,range=%d,str=%d,dex=%d,con=%d,itl=%d,wis=%d,access=%d,eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d,level=%d,template=%d,sprite=%d,body=%d,hair=%d,clothes=%d,worth=%d,atk=%d,def=%d,train=%d,hp=%d,mhp=%d,mp=%d,mmp=%d,target=%d,target_at=%d,chat_script=%d,move_script=%d,exp=%d,flags=%d,origin_x=%d,origin_y=%d,origin_map=%d,name='%s',title='%s',boot_time=%d,serenity=%d,unknown=%d,logout_date=NOW() WHERE id=%d",
 		player->x,
 		player->y,
@@ -177,14 +186,13 @@ void mysqlDB::updatePlayer(const cPlayer *player)
 		player->serenity,
 		player->unknown,
 		player->id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 }
 
 void mysqlDB::updateCorePlayer(const cPlayer *player)
 {
-	int numRows;
 	char *zSQL = sqlite3_mprintf("UPDATE players SET x=%d,y=%d,map=%d,direction=%d,hp=%d,mp=%d,exp=%d,logout_date=NOW(),total_time=(total_time+10) WHERE id=%d",
 		player->x,
 		player->y,
@@ -194,14 +202,13 @@ void mysqlDB::updateCorePlayer(const cPlayer *player)
 		player->mp,
 		player->exp,
 		player->id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 }
 
 void mysqlDB::updateEquipPlayer(const cPlayer *player)
 {
-	int numRows;
 	char *zSQL = sqlite3_mprintf("UPDATE players SET eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d WHERE id=%d",
 		player->eLeft,
 		player->eRight,
@@ -209,7 +216,7 @@ void mysqlDB::updateEquipPlayer(const cPlayer *player)
 		player->eBody,
 		player->eSpecial,
 		player->id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 }
 
@@ -217,7 +224,7 @@ int mysqlDB::nameExists(char *name)
 {
 	int numRows;
 	char *zSQL = sqlite3_mprintf("SELECT id FROM players WHERE name='%s'",name);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	numRows = GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 	
 	return (numRows > 0);
@@ -225,23 +232,16 @@ int mysqlDB::nameExists(char *name)
 
 int mysqlDB::numPlayerAccounts()
 {
-	int numRows;
-	sqlite3_get_table(db, "SELECT * FROM players", NULL, &numRows, NULL, NULL);
-	
-	return numRows;
+	return GetRowCount("SELECT * FROM players");
 }
 
 int mysqlDB::numAccounts()
 {
-	int numRows;
-	sqlite3_get_table(db, "SELECT * FROM accounts", NULL, &numRows, NULL, NULL);
-	
-	return numRows;
+	return GetRowCount("SELECT * FROM accounts");
 }
 
 void mysqlDB::updateItem(cItem *item)
 {
-	int numRows;
 	if(item->qty==0)
 	{
 		removeItem(item->id);
@@ -277,21 +277,19 @@ void mysqlDB::updateItem(cItem *item)
 		item->total_cooldown,
 		item->weight,
 		item->id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 }
 
 void mysqlDB::removeItem(int permid)
 {
-	int numRows;
 	char *zSQL = sqlite3_mprintf("DELETE FROM items WHERE id='%d'",permid);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 }
 
 void mysqlDB::insertItem(cItem *item,int perm_owner)
 {
-	int numRows;
 	int old = item->owner;
 	item->owner=perm_owner;
 
@@ -329,7 +327,7 @@ void mysqlDB::insertItem(cItem *item,int perm_owner)
 		item->total_cooldown,
 		item->weight,
 		item->id);
-	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
+	GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 	item->owner=old;
