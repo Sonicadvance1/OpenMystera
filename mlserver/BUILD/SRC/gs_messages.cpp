@@ -9,7 +9,7 @@
 #define MAP_PLAYERS(_map_,_count_)  for(_count_=0;_count_<map_bucket[_map_].size();_count_++)if(player[map_bucket[_map_][_count_]].type==PLAYER)
 
 
-void cGameServer::sendChatMsg(PlayerID pid,char *fmt,...)
+void cGameServer::sendChatMsg(PlayerID pid, const char *fmt,...)
 {
 	char text[256];							// Holds Our String
 	va_list ap;									// Pointer To List Of Arguments

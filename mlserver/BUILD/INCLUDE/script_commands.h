@@ -316,3 +316,4 @@ _MLF void setMapLink(int p0,int p1,int p2);
 
 _MLF int getMapLink(int p0,int p1);
 _MLF int updateMap(int p0);
+#endif

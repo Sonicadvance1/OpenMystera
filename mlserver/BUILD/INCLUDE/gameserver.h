@@ -121,8 +121,8 @@ public:
 	int initialize();
 	void shutdownServer();
 	int loadConfig();
-	void consoleInput(char *chat);
-	int parse(char *str,signed short index);
+	void consoleInput(const char *chat);
+	int parse(const char *str,signed short index);
 	void writeITEMfile();
 	void loadITEMfile();
 	void writeNPCfile();
@@ -133,7 +133,7 @@ public:
 	void postServer();
 
 	//messages
-	void sendChatMsg(PlayerID pid,char *fmt,...);
+	void sendChatMsg(PlayerID pid, const char *fmt,...);
 	void sendAttrMsg(PlayerID pid,int id);
 	void sendLevlMsg(PlayerID pid,int id);
 	void sendMycrMsg(PlayerID pid,int id);

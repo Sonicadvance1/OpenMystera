@@ -186,11 +186,11 @@ int cGameServer::loadConfig()
 	FILE *f = fopen("serverdata/serv.cfg","r");
 	if(f!=NULL)
 	{
-		fscanf(f,"[Name]%[^\n]\n",&server_title);
+		fscanf(f,"[Name]%[^\n]\n",server_title);
 		fscanf(f,"[Port]%d\n",&serverPort);
-		fscanf(f,"[Greeting]%[^\n]\n",&server_welcome);
-		fscanf(f,"[Admin]%[^\n]\n",&admin_name);
-		fscanf(f,"[Force IP]%[^\n]\n",&myIP);
+		fscanf(f,"[Greeting]%[^\n]\n",server_welcome);
+		fscanf(f,"[Admin]%[^\n]\n",admin_name);
+		fscanf(f,"[Force IP]%[^\n]\n",myIP);
 		fscanf(f,"[Post]%d\n",&metaPost);
 		fscanf(f,"[Origin]%d %d %d\n",&origin_map,&origin_x,&origin_y);
 		fclose(f);
@@ -199,28 +199,27 @@ int cGameServer::loadConfig()
 	return 0;
 }
 
-void cGameServer::consoleInput(char *chat)
+void cGameServer::consoleInput(const char *chat)
 {
 	if(chat[0]=='/')
 	{
 		parse(chat,-45);
 		newLine(chat);
 		
-		fprintf(chatLog,chat);
-		
+		fwrite(chat, 1, sizeof(chat), chatLog);	
 	}
 	else
 	{
 		//CENSOR.star(chat); (need to either remove or fix censoring)
 		sendChatMsg(ALL_CLIENTS,"^Y[SERVER]:%s",chat);
 		newLine(chat);
-		fprintf(chatLog,chat);
+		fwrite(chat, 1, sizeof(chat), chatLog);	
 	}
 }
 
 void cGameServer::loadNPCfile()
 {
-	if(!fileExists("serverdata/npc.ml"))return;
+	if(!fileExists("serverdata/npc.ml")) return;
 	FILE *f=fopen("serverdata/npc.ml","r");
 	char line[64];
 	int npc=-1,temp;
@@ -237,7 +236,7 @@ void cGameServer::loadNPCfile()
 			if(mnl.size()>ml_loot.loot.size())
 				ml_loot.loot.size(mnl.size());
 			ml_loot.loot[npc].reset();
-			sscanf(line,"[%[^]]]",&mnl[npc].name);
+			sscanf(line,"[%[^]]]",mnl[npc].name);
 			mnl[npc].player_template=npc;
 		}
 		else
@@ -358,7 +357,7 @@ void cGameServer::loadITEMfile()
 			item++;
 			if(item>=mil.size())
 				mil.size((item+1)*(item+1));
-			sscanf(line,"[%[^]]]",&mil[item].name);
+			sscanf(line,"[%[^]]]",mil[item].name);
 			mil[item].item_template=item;
 		}
 		else

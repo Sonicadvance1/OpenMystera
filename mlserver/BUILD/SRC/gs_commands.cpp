@@ -1,17 +1,17 @@
-
+#include <unistd.h>
 #include "censor.h"
 #include "console.h"
 #include "gameserver.h"
 #include "net.h"
 
-int cGameServer::parse(char *str,signed short index)
+int cGameServer::parse( const char *str,signed short index)
 {
 	if(str==NULL)
 		return 0;
 	if(str[0]=='/')
 	{
 		char com[128],pm1[128],pm2[128],pm3[128],pm4[128];
-		sscanf(str,"/%s %s %s %s %s",&com,&pm1,&pm2,&pm3,&pm4);
+		sscanf(str,"/%s %s %s %s %s",com,pm1,pm2,pm3,pm4);
 
 		if(strcmp(com,"scout")==0 &&index>-1&& player[index].access>5)
 		{
@@ -167,7 +167,7 @@ int cGameServer::parse(char *str,signed short index)
 			char reason[64];
 			strcpy(reason,"...");
 			int id;
-			sscanf(str,"/%s %d %[^\n]",com,&id,&reason);
+			sscanf(str,"/%s %d %[^\n]",com,&id,reason);
 			if(id>=0 && id<player.size() && player[id].access>0)
 			{
 				sendChatMsg(ALL_CLIENTS,"^R%s gets booted! \"%s\"",player[id].name,reason);
@@ -180,7 +180,7 @@ int cGameServer::parse(char *str,signed short index)
 			char reason[64];
 			strcpy(reason,"...");
 			int id,mins;
-			sscanf(str,"/%s %d %d %[^\n]",com,&id,&mins,&reason);
+			sscanf(str,"/%s %d %d %[^\n]",com,&id,&mins,reason);
 			if(id>=0 && id<player.size() && player[id].access>0)
 			{
 				

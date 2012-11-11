@@ -141,7 +141,7 @@ static int copyFile(char *name,char *newname)
 static void backupFile(char *filePath,char *backupPath)
 {
 	char temp[64];
-	sprintf(temp,"%s.%d",backupPath,time(NULL));
+	sprintf(temp,"%s.%ld",backupPath,time(NULL));
 	copyFile(filePath,temp);
 }
 
@@ -164,7 +164,7 @@ static bool loadData(void *data,int size,char *filename)
 	fclose(f);
 	return true;
 }
-static bool fileExists(char *filename)
+static bool fileExists(const char *filename)
 {
 	FILE *f;
 	if((f=fopen(filename,"rb"))==NULL)
