@@ -6,7 +6,7 @@ CENSOR.star(str);
 #define _CENSOR_H
 
 #include <string.h>
-
+#include "script_commands.h"
 #define BADWORDLEN 101
 
 class cCensor
@@ -18,14 +18,14 @@ public: //INTERFACE
 			return;
 		char temp[256];
 		strcpy(temp,str);
-		stringlower(temp);
+		stringLower(temp);
 		for(int i=0;i<BADWORDLEN;i++)
 		{
 			if(str[i]==12)
 				str[i]=32;
 			while(starOut(temp,badWords[i])!=-1);
 		}
-		for(int i=0;i<signed int(strlen(str));i++)
+		for(int i=0;i<strlen(str);i++)
 			if(temp[i]=='*')
 				str[i]='*';
 	}

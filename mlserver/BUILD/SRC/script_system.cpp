@@ -8,21 +8,21 @@ void ScriptSignalHandler(int Signal);
 
 void cScriptSystem::runDll(int id)
 {
-	if(id>=0 && id<hDLL.size())
-	{
-		void (*pFunc)();
-		pFunc = (void (*)())GetProcAddress(hDLL[id],"main");
-		if(pFunc != NULL)	
-			pFunc();
-	}
+//	if(id>=0 && id<hDLL.size())
+//	{
+//		void (*pFunc)();
+//		pFunc = (void (*)())GetProcAddress(hDLL[id],"main");
+//		if(pFunc != NULL)	
+//			pFunc();
+//	}
 }
 
 int cScriptSystem::load(int id)
 {
-	char temp[64];
-	sprintf(temp,"%d.dll",id);
-	hDLL.at(id) = LoadLibrary(temp);
-	return int(hDLL[id] != NULL);
+//	char temp[64];
+//	sprintf(temp,"%d.dll",id);
+//	hDLL.at(id) = LoadLibrary(temp);
+//	return int(hDLL[id] != NULL);
 }
 
 cScriptSystem::cScriptSystem()
@@ -46,7 +46,7 @@ void cScriptSystem::run(int id,int index)
 
 void cScriptSystem::free(int id)
 {
-	FreeLibrary(hDLL[id]);
+//	FreeLibrary(hDLL[id]);
 }
 
 void cScriptSystem::loadAll()
