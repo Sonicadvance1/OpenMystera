@@ -15,6 +15,8 @@
 #include "console.h"
 #include "gameserver.h"
 #include "consoleport.h"
+#include <iostream>
+
 
 cGameServer mlserver;
 unsigned long live_counter=1;
@@ -61,8 +63,7 @@ int keyPress(void *unused)
 	int *done=(int *)unused;
 	while(!*done)
 	{
-		// TODO: LINUX
-		//c=getch();
+		c = std::cin.peek();
 		if(c=='Q')//quit
 			*done=1;
 		else if(c=='P')
@@ -81,8 +82,7 @@ int keyPress(void *unused)
 					putc(' ',stdout);
 				putc('\r',stdout);
 				setrgb(0);
-				// TODO: LINUX
-				//c=getch();
+				c = std::cin.peek(); 
 				if(c==13)
 				{
 					mlserver.consoleInput(input);

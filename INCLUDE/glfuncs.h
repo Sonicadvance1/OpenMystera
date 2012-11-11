@@ -21,7 +21,7 @@ struct glSurface
 	{
 		cr=1;cg=1;cb=1;ca=1;
 	}
-	int LoadPNG(const char *filename)
+	int LoadPNG(const char *filename, int minfilter, int magfilter)
 	{
 			FILE         *infile;         /* PNG file pointer */
 			png_structp   png_ptr;        /* internally used by libpng */
@@ -185,8 +185,8 @@ struct glSurface
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magfilter);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
 									 GL_RGB, GL_UNSIGNED_BYTE, image_data);            
@@ -199,7 +199,7 @@ struct glSurface
 			glDeleteTextures (1,&img);
 			img=0;
 		}
-		LoadPNG(filename);
+		LoadPNG(filename, minfilter, magfilter);
 		//img = pngBind(filename, PNG_NOMIPMAP, PNG_STENCIL,&info, GL_REPEAT, minfilter,magfilter);
 		if(img!=0)
 			return 1;
@@ -275,7 +275,7 @@ struct glSurface
 
 void setup_opengl( int width, int height )
 {
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);// Enable Alpha Blending (disable alpha testing)
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);// Enable Alpha Blending (disable alpha testing)
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
