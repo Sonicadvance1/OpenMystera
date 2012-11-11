@@ -1,0 +1,23 @@
+/*
+	Tile info script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	January 13, 2004
+*/
+
+void main()
+{
+	int PlayerID;
+	int MapID;
+	int X;
+	int Y;
+
+	PlayerID = getPlayer();
+	MapID = getMap(PlayerID);
+	X = getX(PlayerID);
+	Y = getY(PlayerID);
+
+	sendChatf(PlayerID, "^YMapID=%d, X=%d, Y=%d, Type=%d, L0=%d, L1=%d, L2=%d, L3=%d",
+		MapID, X, Y, getTileType(MapID, X, Y), getTile(MapID, X, Y, 0), getTile(MapID, X, Y, 1),
+		getTile(MapID, X, Y, 2), getTile(MapID, X, Y, 3));
+}

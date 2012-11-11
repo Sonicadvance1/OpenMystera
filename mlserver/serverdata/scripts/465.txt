@@ -1,0 +1,138 @@
+/*
+Honeymoon Script
+Written by Steve Northamer
+July 8, 2004
+*/
+
+void main()
+{
+int PlayerID;
+int MateID;
+int NumPlayers;
+int MapID;
+cPlayer* pPlayer;
+cPlayer* pMate;
+cMap* pMap;
+int MateDelay;
+
+if (!isGlobal("MateDelay"))
+ {
+ NumPlayers = playerLen();
+
+ for (PlayerID = 0; PlayerID < NumPlayers; PlayerID++)
+  {
+  pPlayer = playerStruct(PlayerID);
+  if (strcmp(pPlayer->name, "CoW") == 0)
+   break;
+  }
+ if (PlayerID == NumPlayers)
+  {
+  sendChatf(getPlayer(), "^RNo mate selected");
+  return;
+  }
+
+ for (MateID = 0; MateID < NumPlayers; MateID++)
+  {
+  pMate = playerStruct(MateID);
+  if (strcmp(pMate->name, "LittleAngel") == 0)
+   break;
+  }
+ if (MateID == NumPlayers)
+  {
+  sendChatf(getPlayer(), "^RNo mate selected");
+  return;
+  }
+
+ setGlobalInt("MateDelay", 1000);
+ setGlobalInt("MatePlayerID", PlayerID);
+ setGlobalInt("MateMateID", MateID);
+
+ setGlobalInt("MateClothes1", pPlayer->clothes);
+ pPlayer->clothes = -1;
+ playerSave(PlayerID);
+ sendPlayerUpdate(PlayerID);
+
+ setGlobalInt("MateClothes2", pMate->clothes);
+ pMate->clothes = -1;
+ playerSave(MateID);
+ sendPlayerUpdate(MateID);
+
+ MapID = pPlayer->map;
+ pMap = mapStruct(MapID);
+ setGlobalInt("MateMusicID", pMap->npc[4].index);
+ pMap->npc[4].index = 94;
+ mapSave(MapID);
+ mapCompleteSave(MapID);
+ sendMapUpdate(MapID);
+
+ makeSound(MapID, 127);
+
+ runScript(myScript(), 1);
+
+ return;
+ }
+
+MateDelay = globalInt("MateDelay");
+PlayerID = globalInt("MatePlayerID");
+MateID = globalInt("MateMateID");
+
+pPlayer = playerStruct(PlayerID);
+pMate = playerStruct(MateID);
+
+MapID = pPlayer->map;
+pMap = mapStruct(MapID);
+
+if (MateDelay == 0)
+ {
+ pPlayer->clothes = globalInt("MateClothes1");
+ playerSave(PlayerID);
+ sendPlayerUpdate(PlayerID);
+
+ pMate->clothes = globalInt("MateClothes2");
+ playerSave(MateID);
+ sendPlayerUpdate(MateID);
+
+ pMap->npc[4].index = globalInt("MateMusicID");
+ mapSave(MapID);
+ mapCompleteSave(MapID);
+ sendMapUpdate(MapID);
+
+ makeSound(MapID, 90);
+
+ freeGlobal("MateDelay");
+ freeGlobal("MatePlayerID");
+ freeGlobal("MateMateID");
+ freeGlobal("MateClothes1");
+ freeGlobal("MateClothes2");
+ freeGlobal("MateMusicID");
+
+ return;
+ }
+
+pPlayer->dir = getRand(4);
+sendPosition(PlayerID);
+
+pMate->map = pPlayer->map;
+pMate->x = pPlayer->x;
+pMate->y = pPlayer->y;
+pMate->dir = getRand(4);
+sendPosition(MateID);
+
+switch (getRand(3))
+ {
+ case 0:
+  makeSound(MapID, 18);
+  break;
+ case 1:
+  makeSound(MapID, 45);
+  break;
+ case 2:
+  makeSound(MapID, 67);
+  break;
+ }
+
+MateDelay -= 10;
+setGlobalInt("MateDelay", MateDelay);
+
+runScript(myScript(), MateDelay);
+}

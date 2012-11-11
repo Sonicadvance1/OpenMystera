@@ -1,0 +1,22 @@
+//Wellington Origin script
+void main()
+{
+	int id=getPlayer();	
+	int map,x,y;
+		
+	if(getPlayerType(id)==1)  //Make sure its not a NPC
+		return;
+
+	getOrigin(id,map,x,y);
+	if(map==482)
+	{
+		sendChat("^YYou are already a citizen of Wellington!",id);
+		return;
+	}
+
+	setOrigin(id,482,5,13);
+	setPos(id,482,5,13);
+	makeEffect(482,5,13,3);
+	sendChat("^YYou are now a citizen of Wellington.",id);
+}
+

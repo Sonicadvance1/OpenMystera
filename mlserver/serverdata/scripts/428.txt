@@ -1,0 +1,51 @@
+// Rogue Agility (modified Steve's ice tile)
+
+void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerDir;
+	int PlayerX;
+	int PlayerY;
+
+	PlayerID = getPlayer();
+	PlayerDir = getDir(PlayerID);
+	PlayerMapID = getMap(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+	if(getMP(PlayerID)<1)
+	{
+		sendChat("^RNot enough mana.",PlayerID);
+	}
+	else
+	{
+	setMP(PlayerID,getMP(PlayerID)-1);
+	// Move player coordinates forward using current direction
+	switch (PlayerDir)
+		{
+		case DIR_UP:
+			PlayerY--;
+			break;
+		case DIR_RIGHT:
+			PlayerX++;
+			break;
+		case DIR_DOWN:
+			PlayerY++;
+			break;
+		case DIR_LEFT:
+			PlayerX--;
+			break;
+		}
+
+	// Make sure coordinates are in bounds
+	if (!inBounds(PlayerX, PlayerY))
+		return;
+
+	// Make sure coordinates are not on a wall
+	if (getTileType(PlayerMapID, PlayerX, PlayerY) == TILE_TYPE_WALL)
+		return;
+
+	// Set player's position
+	setPos(PlayerID, PlayerMapID, PlayerX, PlayerY);
+	}
+}

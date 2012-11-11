@@ -1,0 +1,18 @@
+//pushable block generator
+void main()
+{
+	int id=getPlayer();
+	int dx=getX(id);
+	int dy=getY(id);
+	int map=getMap(id);
+	dx++;
+	string globlac = strCat("push",itos(map));
+	globlac = strCat(globlac,itos(dx));
+	globlac = strCat(globlac,itos(dy));
+	int obj = getTile(map,dx,dy,1);
+	setGlobalInt(globlac,obj);
+	setTile(map,dx,dy,1,28);
+	setTileType(map,dx,dy,6);
+	setTileScript(map,dx,dy,55);
+	updateMap(map);
+}

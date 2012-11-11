@@ -1,0 +1,334 @@
+/// Mini RPG Character Creation
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x=getX(id);
+	int y=getY(id);
+	cPlayer* pPlayer=playerStruct(id);
+	int serenity=pPlayer->serenity;
+	if(x==6 && map==1127 || x==7 && map==1127)
+	{
+		pPlayer->serenity-=serenity;
+		playerSave(id);
+		sendPlayerUpdate(id);
+		setClothes(id,35);
+		setHair(id,13);
+		giveItem(id,515,-1);
+		giveItem(id,515,-1);
+		giveItem(id,516,-1);
+		giveItem(id,540,15);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Gragh!!! I am a ^RBARBARIAN^W!",getName(id));
+	}
+	if(x==12 && map==1127 || x==13 && map==1127)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,35);
+		setHair(id,77);
+		giveItem(id,515,-1);
+		giveItem(id,515,-1);
+		giveItem(id,516,-1);
+		giveItem(id,540,15);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Gragh!!! I am a ^RBARBARIAN^W!",getName(id));
+	}
+	if(x==6 && map==1128 || x==7 && map==1128)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,41);
+		setHair(id,23);
+		giveItem(id,517,-1);
+		giveItem(id,518,-1);
+		giveItem(id,540,20);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:To arms!! I am a ^RSOLDIER^W!",getName(id));
+	}
+	if(x==12 && map==1128 || x==13 && map==1128)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,41);
+		setHair(id,56);
+		giveItem(id,517,-1);
+		giveItem(id,518,-1);
+		giveItem(id,540,20);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:To arms!! I am a ^RSOLDIER^W!",getName(id));
+	}
+	if(x==6 && map==1129 || x==7 && map==1129)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,44);
+		setHair(id,14);
+		giveItem(id,519,-1);
+		giveItem(id,520,-1);
+		giveItem(id,521,-1);
+		giveItem(id,540,25);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Faith in steel!! I am a ^RGUARD^W!",getName(id));
+	}
+	if(x==12 && map==1129 || x==13 && map==1129)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,44);
+		setHair(id,88);
+		giveItem(id,519,-1);
+		giveItem(id,520,-1);
+		giveItem(id,521,-1);
+		giveItem(id,540,25);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Faith in steel!! I am a ^RGUARD^W!",getName(id));
+	}
+	if(x==6 && map==1130 || x==7 && map==1130)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,3);
+		setHair(id,21);
+		giveItem(id,522,-1);
+		giveItem(id,523,-1);
+		giveItem(id,524,-1);
+		giveItem(id,540,15);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Death from afar!! I am a ^GRANGER^W!",getName(id));
+	}
+	if(x==12 && map==1130 || x==13 && map==1130)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,3);
+		setHair(id,45);
+		giveItem(id,522,-1);
+		giveItem(id,523,-1);
+		giveItem(id,524,-1);
+		giveItem(id,540,15);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Death from afar!! I am a ^GRANGER^W!",getName(id));
+	}
+	if(x==6 && map==1131 || x==7 && map==1131)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,36);
+		setHair(id,15);
+		giveItem(id,525,-1);
+		giveItem(id,526,-1);
+		giveItem(id,527,-1);
+		giveItem(id,540,20);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Best of both!! I am a ^GBATTLEMAGE^W!",getName(id));
+	}
+	if(x==12 && map==1131 || x==13 && map==1131)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,36);
+		setHair(id,81);
+		giveItem(id,525,-1);
+		giveItem(id,526,-1);
+		giveItem(id,527,-1);
+		giveItem(id,540,20);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Best of both!! I am a ^GBATTLEMAGE^W!",getName(id));
+	}
+	if(x==6 && map==1132 || x==7 && map==1132)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,23);
+		setHair(id,3);
+		giveItem(id,528,-1);
+		giveItem(id,529,-1);
+		giveItem(id,530,-1);
+		giveItem(id,540,35);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:All your coins are belong to me!! I am a ^GROGUE^W!",getName(id));
+	}
+	if(x==12 && map==1132 || x==13 && map==1132)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,55);
+		setHair(id,87);
+		giveItem(id,528,-1);
+		giveItem(id,529,-1);
+		giveItem(id,530,-1);
+		giveItem(id,540,35);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:All your coins are belong to me!! I am a ^GROGUE^W!",getName(id));
+	}
+	if(x==6 && map==1133 || x==7 && map==1133)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,32);
+		setHair(id,25);
+		giveItem(id,531,-1);
+		giveItem(id,539,-1);
+		giveItem(id,532,-1);
+		giveItem(id,540,15);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Let me get my hands on you!! I am a ^BHEALER^W!",getName(id));
+	}
+	if(x==12 && map==1133 || x==13 && map==1133)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,74);
+		setHair(id,86);
+		giveItem(id,531,-1);
+		giveItem(id,539,-1);
+		giveItem(id,532,-1);
+		giveItem(id,540,15);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Let me get my hands on you!! I am a ^BHEALER^W!",getName(id));
+	}
+	if(x==6 && map==1134 || x==7 && map==1134)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,34);
+		setHair(id,26);
+		giveItem(id,533,-1);
+		giveItem(id,534,-1);
+		giveItem(id,535,-1);
+		giveItem(id,540,25);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Behold!! I am a ^BMAGICIAN^W!",getName(id));
+	}
+	if(x==12 && map==1134 || x==13 && map==1134)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,64);
+		setHair(id,71);
+		giveItem(id,533,-1);
+		giveItem(id,534,-1);
+		giveItem(id,535,-1);
+		giveItem(id,540,25);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Behold!! I am a ^BMAGICIAN^W!",getName(id));
+	}
+	if(x==6 && map==1135 || x==7 && map==1135)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,24);
+		setHair(id,27);
+		giveItem(id,536,-1);
+		giveItem(id,537,-1);
+		giveItem(id,538,-1);
+		giveItem(id,540,20);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Kill them all KILL THEM ALL!! I am a ^BWARLOCK^W!",getName(id));
+	}
+	if(x==12 && map==1135 || x==13 && map==1135)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,66);
+		setHair(id,76);
+		giveItem(id,536,-1);
+		giveItem(id,537,-1);
+		giveItem(id,538,-1);
+		giveItem(id,540,20);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Kill them all KILL THEM ALL!! I am a ^BWARLOCK^W!",getName(id));
+	}
+	if(x==6 && map==1162 || x==7 && map==1162)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,27);
+		setHair(id,29);
+		giveItem(id,552,-1);
+		giveItem(id,553,-1);
+		giveItem(id,554,-1);
+		giveItem(id,555,-1);
+		giveItem(id,540,30);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Fire! Ice! Stuff!! I am an ^BELEMENTALIST^W!",getName(id));
+	}
+	if(x==12 && map==1162 || x==13 && map==1162)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,68);
+		setHair(id,47);
+		giveItem(id,552,-1);
+		giveItem(id,553,-1);
+		giveItem(id,554,-1);
+		giveItem(id,555,-1);
+		giveItem(id,540,30);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:Fire! Ice! Stuff!! I am an ^BELEMENTALIST^W!",getName(id));
+	}
+	if(x==6 && map==1138 || x==7 && map==1138)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,31);
+		setHair(id,0);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:IDENTITY CRISIS!! I am a ^YSHIFTER^W!",getName(id));
+	}
+	if(x==12 && map==1138 || x==13 && map==1138)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,31);
+		setHair(id,0);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:IDENTITY CRISIS!! I am a ^YSHIFTER^W!",getName(id));
+	}
+	if(x==6 && map==1138 || x==7 && map==1139)
+	{
+		pPlayer->serenity-=serenity;
+		setClothes(id,76);
+		setHair(id,0);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:They'll never see me coming!! I am a ^YSHADOW^W!",getName(id));
+	}
+	if(x==12 && map==1138 || x==13 && map==1139)
+	{
+		sendChatf(-1,"^C%s ^wis now a ^YSHADOW^w!",getName(id));
+		pPlayer->serenity-=serenity;
+		setClothes(id,76);
+		setHair(id,0);
+		setOrigin(id,1082,9,7);
+		setPos(id,1082,9,7);
+		makeEffect(1092,10,9,3);
+		sendMapChatf(1082,"%s:They'll never see me coming!! I am a ^YSHADOW^W!",getName(id));
+	}
+}

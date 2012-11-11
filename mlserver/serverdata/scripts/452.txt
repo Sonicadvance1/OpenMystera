@@ -1,0 +1,20 @@
+/*
+	Player disconnect script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	April 24, 2004
+*/
+
+void main()
+{
+	int PlayerID;
+	cPlayer* pPlayer;
+	PlayerID = getPlayer();
+	pPlayer = playerStruct(PlayerID);
+
+	// Disconnect
+	pPlayer->access = 0;
+	sendChatf(-1, "^R%s is banned from the server", pPlayer->name);
+	playerSave(PlayerID);
+	sendPlayerUpdate(PlayerID);
+}

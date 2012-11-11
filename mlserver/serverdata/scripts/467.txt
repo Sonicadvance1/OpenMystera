@@ -1,0 +1,53 @@
+//Questmaster script
+#include <time.h>
+void main()
+{
+	int mid=getPlayer();
+	cPlayer *master=playerStruct(mid);
+	int id = getChatPlayer();
+	cPlayer *player=playerStruct(id);
+
+	char chat[256];
+	strcpy(chat,stringLower(getChat()));
+	char response[256];
+
+	if(strCon(chat,"quest"))
+	{
+		char q[32]; sprintf(q,"%squest",player->name);
+		char t[32]; sprintf(t,"%sqtime",player->name);
+		if(isGlobal(t))
+		{
+			if(time(0)-globalInt(t) > 60)
+			{
+				freeGlobal(t);
+				freeGlobal(q);
+			}
+			else if(isGlobal(q))
+			{
+				sendMapChatf(master->map,"%s:You are already on a quest! Ask me again in %d seconds if you want something else..",master->name,60-(time(0)-globalInt(t)));
+				return;
+			}
+		}
+		int len = playerLen();
+		int tid;
+		cPlayer *target;
+		while(1)
+		{
+			tid = rand()%len-1;
+			target = playerStruct(tid);
+			if(target->access>0 && target->type==1 && target->state!=3 && target->worth > 10 && !strCon(target->name,"Guard") && !strCon(target->name,"Citizen") && !strCon(target->name,"Abyssite") && !strCon(target->name,"Adbomination") && !strCon(target->name,"Thunder Cat") && !strCon(target->name,"Farmer") && !strCon(target->name,"Farmer's Ghost") && !strCon(target->name,"Merchant") && !strCon(target->name,"Poacher") && !strCon(target->name,"Death Guard") && !strCon(target->name,"Grelik"))
+				break;
+		}
+		cMap *map = mapStruct(target->map);
+		sprintf(response,"I'll pay you %d gold to seek out a certain %s and destroy it! I hear it can be found in the place they call '%s'.",target->worth,target->name,map->name);
+		sendMapChatf(master->map,"%s:%s",master->name,response);
+		
+		setGlobalInt(q,tid);
+		setGlobalInt(t,time(0));
+	}
+	/*else
+	{
+		sprintf(response,"%s indeed!",chat);
+		sendMapChatf(master->map,"%s:%s",master->name,response);
+	}*/
+}

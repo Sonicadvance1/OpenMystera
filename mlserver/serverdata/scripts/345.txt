@@ -1,0 +1,14 @@
+// Charlie the Dancing Snowman!
+void main()
+{
+	if(getTile(140,10,7,2)==0)
+	{
+		setTile(140,10,7,2,863);
+		updateMap(140);
+	}
+	else
+	{
+		setTile(140,10,7,2,0);
+		updateMap(140);
+	}
+}

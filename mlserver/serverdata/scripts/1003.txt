@@ -1,0 +1,81 @@
+//logout script
+
+void main()
+{
+	return;
+	// Logout notification
+	//int id = getPlayer();
+	//cPlayer *player = playerStruct(id);
+	//sendChatf(-1,"^c%s has left the realm.",player->name);
+}
+
+
+/*#include <stdio.h>
+#include <string.h>
+
+void main()
+{
+	// Logout notification
+	int id = getPlayer();
+	cPlayer *player = playerStruct(id);
+	sendChatf(-1,"^c%s has left the realm.",player->name);
+
+	
+
+	// Get player information
+	int PlayerID;
+	cPlayer* pPlayer;
+	PlayerID = getPlayer();
+	pPlayer = playerStruct(PlayerID);
+
+
+	//if (strcmp(pPlayer->name, "Robin") != 0 && strcmp(pPlayer->name, "Sonicadvancell") != 0)
+	//if (strcmp(pPlayer->name, "Robin") != 0)
+	return;	
+
+	
+	// Create a temporary inventory file for this player
+	FILE* pInvFile;
+	char pFileName[128];
+	sprintf(pFileName, "Inv_%s.tmp", pPlayer->name);
+	pInvFile = fopen(pFileName, "w");
+
+
+	// Write out inventory items to file
+	int i;
+	int InvLen;
+	int ItemID;
+	cItem* pItem;
+	cItem EmptyItem;
+	InvLen = inventoryLen();
+	memset((void*)&EmptyItem, 0, sizeof(cItem));
+	for (i = 0; i < InvLen; i++)
+		{
+		// Write item to file
+		ItemID = pPlayer->inventory[i];
+		if (ItemID != -1)
+			{
+			pItem = itemStruct(ItemID);
+			fwrite((void*)pItem, sizeof(cItem), 1, pInvFile);
+
+			// Delete item from player's inventory
+			strcpy(pItem->name, "_EMPTY_");
+			pItem->life = 0;
+			pItem->qty = 0;
+			pItem->owner = -1;
+			itemSave(ItemID);
+			pPlayer->inventory[i] = -1;
+			}
+		else
+			{
+			fwrite((void*)&EmptyItem, sizeof(cItem), 1, pInvFile);
+			}
+		}
+	playerSave(PlayerID);
+	fclose(pInvFile);
+
+
+	// Overwrite player's old inventory file
+	sprintf(pFileName, "move /y Inv_%s.tmp Inv_%s.dat", pPlayer->name, pPlayer->name);
+	system(pFileName);
+}*/

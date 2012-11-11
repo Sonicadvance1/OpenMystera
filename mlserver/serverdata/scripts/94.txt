@@ -1,0 +1,12 @@
+
+/*
+	Paralyze Movement Script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	November 23, 2003
+*/
+
+void main()
+{
+	// Paralyzed - Do nothing
+}

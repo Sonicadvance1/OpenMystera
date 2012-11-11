@@ -1,0 +1,24 @@
+//Sheep Town Origin script
+
+#define SHEEP_TOWN_ORIGIN 237, 5, 10
+
+void main()
+{
+	int id=getPlayer();	
+	int map,x,y;
+		
+	if(getPlayerType(id)==1) //Make sure its not a NPC
+		return;
+
+	getOrigin(id,map,x,y);
+	if(map==237)
+	{
+		sendChat("^YYou are already a citizen of Sheep Town!",id);
+		return;
+	}
+
+	setOrigin(id,SHEEP_TOWN_ORIGIN);
+	setPos(id,SHEEP_TOWN_ORIGIN);
+	makeEffect(SHEEP_TOWN_ORIGIN,3);
+	sendChat("^YYou are now a citizen of Sheep Town.",id);
+}

@@ -1,0 +1,15 @@
+// Recall to Sheep Town
+void main()
+{
+	int map = getMap(getPlayer()); 
+	if(map != 22 && map != 48 && map != 55 && map != 136)//quest reward maps
+	{
+		int mapOrigin,xOrigin,yOrigin;
+		setPos(getPlayer(),237,11,8); // sends user to Sheep Town
+	}
+	else
+	{
+		sendChat("^RYou can't use that scroll here.",getPlayer());
+		makeItem(9,1,map,getX(getPlayer()),getY(getPlayer()));
+	}
+}

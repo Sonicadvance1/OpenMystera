@@ -1,0 +1,7 @@
+//underwater tunnel sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^yWelcome to ^rMoonshadow Island",id);
+}

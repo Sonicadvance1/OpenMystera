@@ -1,0 +1,101 @@
+/*const int TILE_TYPE_NONE = 1;
+const int TILE_TYPE_WALL = 2;
+const int TILE_TYPE_WARP = 3;
+const int TILE_TYPE_NPC = 4;
+const int TILE_TYPE_SCRIPT = 5;
+const int TILE_TYPE_SWITCH = 6;
+const int TILE_TYPE_KEEP = 7;
+
+const int DIR_DOWN = 0;
+const int DIR_UP = 1;
+const int DIR_LEFT = 2;
+const int DIR_RIGHT = 3;
+
+const int LAYER_FLOOR = 0;
+const int LAYER_OBJECT = 1;
+const int LAYER_FLIP = 2;
+const int LAYER_CEILING = 3;
+
+const int TILE_PENT = 493;
+const int TILE_DOTS = 943;
+
+struct FLOOR_TILE
+{
+	int MapID;
+	int X;
+	int Y;
+	int FloorType;
+};
+
+// ADD NEW TILES TO THE LIST BELOW
+TILE gTiles[] = {
+	{ 810, 8, 5, LAYER_OBJECT, TILE_PENT, TILE_DOTS }
+	{ 810, 10, 5, LAYER_OBJECT, TILE_PENT, TILE_DOTS }
+	{ 810, 12, 5, LAYER_OBJECT, TILE_PENT, TILE_DOTS }
+	{ 810, 14, 5, LAYER_OBJECT, TILE_PENT, TILE_DOTS }
+	{ 810, 16, 5, LAYER_OBJECT, TILE_PENT, TILE_DOTS }
+	};
+
+const int NUM_TILES = sizeof(gTiles) / sizeof(TILE);
+*/
+void main()
+{
+	/*int PlayerID;
+	int PlayerMapID;
+	int PlayerDir;
+	int PlayerX;
+	int PlayerY;
+	int TileMapID;
+	int TileX;
+	int TileY;
+	int TileIndex;
+	TILE* pTile;
+	string GlobalVarName;
+	
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerDir = getDir(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+	GlobalVarName = "Door";
+	GlobalVarName += itos(PlayerID);
+
+
+	TileMapID = PlayerMapID;
+	TileX = PlayerX;
+	TileY = PlayerY;
+	if (getTileType(TileMapID, TileX, TileY) == TILE_TYPE_SCRIPT)
+		// Search tile list for coordinates
+		for (TileIndex = 0; TileIndex < NUM_TILES; TileIndex++)
+			{
+			pTile = &(gTiles[TileIndex]);
+
+			if (pTile->MapID == TileMapID && pTile->X == TileX &&
+				pTile->Y == TileY && )
+				break;
+			}
+
+		// Exit if no tile was found
+		if (TileIndex >= NUM_TILES)
+			return;
+		}
+
+
+		// Switch to Tile 933
+		switch (pTile->TileType)
+			{
+			case DOOR_TYPE_DELAYED:
+
+				setTile(DoorMapID, DoorX, DoorY, pDoor->Layer, pDoor->TileOpen);
+
+				setTileType(DoorMapID, DoorX, DoorY, TILE_TYPE_NONE);
+
+				// Set door to close automatically after delay
+				setGlobalInt(GlobalVarName, DoorIndex);
+				runScript(myScript(), pDoor->Delay);
+
+				updateMap(DoorMapID);
+
+				break;
+			}*/
+}

@@ -1,0 +1,48 @@
+/*// Weapon of War
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	int len=5;
+	while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+	{
+		if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+		{
+			int victim=getID(map,x,y);
+			if(getPlayerType(victim)==0)
+			{
+				makeEffect(map,x,y,0);
+				setPos(victim,958,9,9);
+				int slot=itemSlot(victim,448);
+				if(slot>-1)
+				{
+					makeItem(448,1,map,x,y);
+				}
+			}
+			break;
+		}
+		switch(getDir(id))
+		{
+			case 0:
+				makeEffect(map,x,y,21);
+				break;
+			case 1:
+				makeEffect(map,x,y,23);
+				break;
+			case 2:
+				makeEffect(map,x,y,22);
+				break;
+			case 3:
+				makeEffect(map,x,y,20);
+				break;
+		}
+		if(getDir(id)==0)y++;
+		if(getDir(id)==1)y--;
+		if(getDir(id)==2)x--;
+		if(getDir(id)==3)x++;
+		len--;
+	}
+}*/

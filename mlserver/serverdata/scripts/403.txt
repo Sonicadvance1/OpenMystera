@@ -1,0 +1,101 @@
+/*
+	ML Interface test script
+	Written by Steve Northamer	
+	February 24, 2004
+	SteveNorthamer@yahoo.com
+*/
+
+#include "ml.h"
+
+
+void main()
+{
+	int PlayerID;
+	int TargetID;
+	PlayerID = getPlayer();
+	TargetID = mlGetPlayeri(PlayerID, ML_MAGIC_TARGET_ID);
+
+	if (TargetID == ML_PLAYER_ID_NONE)
+		{
+		sendChat("^RNo target selected", PlayerID);
+		return;
+		}
+
+	char pName[ML_PLAYER_NAME_LENGTH];
+	char pTitle[ML_TITLE_LENGTH];
+	char pIPAddress[ML_IP_ADDRESS_LENGTH];
+	char pCreateDate[ML_CREATE_DATE_LENGTH];
+	char pLogInDate[ML_LOG_IN_DATE_LENGTH];
+	char pLogOutDate[ML_LOG_OUT_DATE_LENGTH];
+	char pAccountName[ML_ACCOUNT_NAME_LENGTH];
+
+#define PRINT(xParam, xBuffer)	\
+	mlGetPlayercv(TargetID, xParam, xBuffer);	\
+	sendChatf(PlayerID, "^w%s = ^Y%s", #xParam, xBuffer);
+
+	PRINT(ML_NAME, pName)
+	PRINT(ML_TITLE, pTitle);
+	PRINT(ML_IP_ADDRESS, pIPAddress);
+	PRINT(ML_CREATE_DATE, pCreateDate);
+	PRINT(ML_LOG_IN_DATE, pLogInDate);
+	PRINT(ML_LOG_OUT_DATE, pLogOutDate);
+	PRINT(ML_ACCOUNT_NAME, pAccountName);
+
+#undef PRINT
+
+#define PRINT(xParam)	\
+	sendChatf(PlayerID, "^w%s = ^Y%s", #xParam, (mlGetPlayerb(TargetID, xParam) ? "ML_TRUE" : "ML_FALSE"));
+
+	PRINT(ML_IS_NPC)
+	PRINT(ML_IS_HOSTILE)
+	PRINT(ML_IS_MERCHANT)
+	PRINT(ML_IS_PREMIUM_ACCOUNT)
+
+#undef PRINT
+
+#define PRINT(xParam)	\
+	sendChatf(PlayerID, "^w%s = ^Y%d", #xParam, mlGetPlayeri(TargetID, xParam));
+
+	PRINT(ML_DATABASE_ID)
+	PRINT(ML_X)
+	PRINT(ML_Y)
+	PRINT(ML_MAP_ID)
+	PRINT(ML_DIRECTION)
+	PRINT(ML_VISION_RANGE)
+	PRINT(ML_STRENGTH)
+	PRINT(ML_DEXTERITY)
+	PRINT(ML_CONSTITUTION)
+	PRINT(ML_INTELLIGENCE)
+	PRINT(ML_WISDOM)
+	PRINT(ML_EQUIPMENT_LEFT_HAND)
+	PRINT(ML_EQUIPMENT_RIGHT_HAND)
+	PRINT(ML_EQUIPMENT_HEAD)
+	PRINT(ML_EQUIPMENT_BODY)
+	PRINT(ML_EQUIPMENT_OTHER)
+	PRINT(ML_LEVEL)
+	PRINT(ML_SPRITE_ID)
+	PRINT(ML_BODY_ID)
+	PRINT(ML_HAIR_ID)
+	PRINT(ML_CLOTHES_ID)
+	PRINT(ML_BOUNTY)
+	PRINT(ML_BASE_ATTACK)
+	PRINT(ML_BASE_DEFENSE)
+	PRINT(ML_TRAINING_POINTS)
+	PRINT(ML_CURRENT_HP)
+	PRINT(ML_MAXIMUM_HP)
+	PRINT(ML_CURRENT_MP)
+	PRINT(ML_MAXIMUM_MP)
+	PRINT(ML_AGGRESSOR_ID)
+	PRINT(ML_MAGIC_TARGET_ID)
+	PRINT(ML_CHAT_SCRIPT_ID)
+	PRINT(ML_MOVE_SCRIPT_ID)
+	PRINT(ML_EXPERIENCE)
+	PRINT(ML_ORIGIN_X)
+	PRINT(ML_ORIGIN_Y)
+	PRINT(ML_ORIGIN_MAP_ID)
+	PRINT(ML_SERENITY)
+	PRINT(ML_STATIONARY_TIME)
+
+#undef PRINT
+
+}

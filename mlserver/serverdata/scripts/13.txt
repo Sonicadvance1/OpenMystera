@@ -1,0 +1,7 @@
+//CC sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^yType /stats to see yours, /train to train them when you gain a level.",id);
+}

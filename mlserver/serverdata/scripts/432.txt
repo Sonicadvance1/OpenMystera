@@ -1,0 +1,45 @@
+// Warlock Explode
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	if(getMP(id)<12)
+	{
+		sendChat("^RNot enough mana.",id);
+	}
+	else
+	{
+		setMP(id,getMP(id)-12);
+		int victim;
+		switch(getDir(id))
+		{
+			case 0:
+				victim=getID(map,x,y+1);
+				makeEffect(map,x,y+1,10);
+				if(victim>-1)
+				setHP(victim,getHP(victim)-getRand(11)-4);
+				break;
+			case 1:
+				victim=getID(map,x,y-1);
+				makeEffect(map,x,y-1,10);
+				if(victim>-1)
+				setHP(victim,getHP(victim)-getRand(11)-4);
+				break;
+			case 2:
+				victim=getID(map,x-1,y);
+				makeEffect(map,x-1,y,10);
+				if(victim>-1)
+				setHP(victim,getHP(victim)-getRand(11)-4);
+				break;
+			case 3:
+				victim=getID(map,x+1,y);
+				makeEffect(map,x+1,y,10);
+				if(victim>-1)
+				setHP(victim,getHP(victim)-getRand(11)-4);
+				break;
+		}
+	}
+}

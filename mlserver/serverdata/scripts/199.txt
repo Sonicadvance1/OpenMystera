@@ -1,0 +1,12 @@
+// Sunn's Transmutate
+
+void main()
+{
+
+	int id=getPlayer();
+	makeEffect(getMap(id), getX(id), getY(id), 10);
+	if 
+	   (getImg(id)==9) setImg(id,89);
+	else 
+	   setImg(id,9);
+}

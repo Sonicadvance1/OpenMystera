@@ -1,0 +1,23 @@
+//switch
+
+void main()
+{
+	int id=getPlayer();
+	int cost=15;
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	int victim=getMTarget(id);
+	if(0&&getMP(id)<cost)
+	{
+		sendChat("^RNot enough mana.",id);
+	}
+	else if(victim>-1)
+	{
+		//setMP(id,getMP(id)-cost);
+		int tx =getX(victim);
+		int ty =getY(victim);
+		setPos(victim,map,x,y);
+		setPos(id,map,tx,ty);
+	}
+}

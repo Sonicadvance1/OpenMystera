@@ -1,0 +1,42 @@
+// Torch on wall
+
+void main()
+{
+	if (getTile(2,5,1,1)==0)   // change from wall to torch
+	{
+		setTile(2,5,1,1,262);
+		setTile(2,3,1,1,262);
+		setTile(2,3,9,1,262);
+		setTile(2,6,10,1,262);
+		setTile(2,8,10,1,262);
+		setTile(2,11,10,1,262);
+		setTile(2,13,10,1,262);
+		setTile(2,7,6,1,262);
+		setTile(2,12,6,1,262);
+		setTile(2,16,9,1,262);
+		setTile(2,17,1,1,262);
+		setTile(2,13,1,1,262);
+		setTile(2,5,12,3,262);
+		setTile(2,14,12,3,262);
+		setMapLighting(2,0);
+	}
+        else
+	{
+		setTile(2,5,1,1,0); // change from torch to wall
+		setTile(2,3,1,1,0);
+		setTile(2,3,9,1,0);
+		setTile(2,6,10,1,0);
+		setTile(2,8,10,1,0);
+		setTile(2,11,10,1,0);
+		setTile(2,13,10,1,0);
+		setTile(2,7,6,1,0);
+		setTile(2,12,6,1,0);
+		setTile(2,16,9,1,0);
+		setTile(2,17,1,1,0);
+		setTile(2,13,1,1,0);
+		setTile(2,5,12,3,0);
+		setTile(2,14,12,3,0);
+		setMapLighting(2,-70);
+	}
+	updateMap(getMap(getPlayer()));
+}

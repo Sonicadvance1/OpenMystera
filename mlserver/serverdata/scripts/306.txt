@@ -1,0 +1,83 @@
+// Lumberjack Script
+
+//const int DIR_DOWN = 0;
+//const int DIR_UP = 1;
+//const int DIR_LEFT = 2;
+//const int DIR_RIGHT = 3;
+
+/*void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerDir;
+	int PlayerX;
+	int PlayerY;
+	int TreeMapID;
+	int TreeX;
+	int TreeY;
+	int i;
+
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerDir = getDir(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+
+	TreeMapID = PlayerMapID;
+	TreeX = PlayerX;
+	TreeY = PlayerY;
+	switch (PlayerDir)
+		{
+		case DIR_DOWN:
+			TreeY++;
+			break;
+		case DIR_UP:
+			TreeY--;
+			break;
+		case DIR_LEFT:
+			TreeX--;
+			break;
+		case DIR_RIGHT:
+			TreeX++;
+			break;
+		}
+		{
+			if (getTile(TreeMapID,TreeX,TreeY,1) == 300 && getTileType(TreeMapID,TreeX,TreeY) == 2)
+			{
+				if (PlayerMapID == 501 || PlayerMapID == 865 || PlayerMapID == 883 || PlayerMapID == 941)
+				{
+					sendMapChatf(PlayerMapID, "%s:^G*chops the tree down*", getName(PlayerID));
+					giveItem(PlayerID,35,3);
+					setTile(TreeMapID,TreeX,TreeY,1,302);
+					setTileType(TreeMapID,TreeX,TreeY,1);
+					updateMap(PlayerMapID);
+				}
+				else
+				{
+					sendChat("^rYou can't chop wood there!",PlayerID);
+				}
+			}
+			else
+			{
+				if (getTile(TreeMapID,TreeX,TreeY,1) == 301 && getTileType(TreeMapID,TreeX,TreeY) == 2)
+				{
+					if (PlayerMapID == 501 || PlayerMapID == 865 || PlayerMapID == 883 || PlayerMapID == 941)
+					{
+						sendMapChatf(PlayerMapID, "%s:^G*chops the sapling down*", getName(PlayerID));
+						giveItem(PlayerID,35,1);
+						setTile(TreeMapID,TreeX,TreeY,1,302);
+						setTileType(TreeMapID,TreeX,TreeY,1);
+						updateMap(PlayerMapID);
+					}
+					else
+					{
+						sendChat("^rYou can't chop wood there!",PlayerID);
+					}
+				}
+				else
+				{
+					sendChat("^rYou can't chop wood there!",PlayerID);
+				}
+			}
+		}
+}*/

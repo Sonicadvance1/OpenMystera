@@ -1,0 +1,44 @@
+
+/*
+	Chaos spell
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	November 28, 2003
+*/
+
+const int CHAOS_EFFECTS[] = { 15, 29, 30 };
+const int CHAOS_EFFECT_COUNT = sizeof(CHAOS_EFFECTS) / sizeof(CHAOS_EFFECTS[0]);
+const int CHAOS_NUM_STRIKES = 25;
+const int CHAOS_DAMAGE = 0;
+//const int MAP_WIDTH = 20;
+//const int MAP_HEIGHT = 15;
+
+void main()
+{
+	int PlayerID;
+	int CurrMapID;
+	int i;
+	int TargetID;
+	int CurrX;
+	int CurrY;
+	int ChaosDamage;
+
+	PlayerID = getPlayer();
+	CurrMapID = getMap(PlayerID);
+
+	sendMapChatf(CurrMapID, "%s:^RYou shall ALL Burn and Rot!!!! Feel my POWER!!!!", getName(PlayerID));
+
+	for (i = 0; i < CHAOS_NUM_STRIKES; i++)
+		{
+		CurrX = getRand(MAP_WIDTH);
+		CurrY = getRand(MAP_HEIGHT);
+
+		makeEffect(CurrMapID, CurrX, CurrY, CHAOS_EFFECTS[getRand(CHAOS_EFFECT_COUNT)]);
+		
+		TargetID = getID(CurrMapID, CurrX, CurrY);
+		if (TargetID == -1)
+			continue;
+
+		setHP(TargetID, getHP(TargetID) - CHAOS_DAMAGE);
+		}
+}

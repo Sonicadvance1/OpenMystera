@@ -1,0 +1,54 @@
+// Smoking Pipe
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	int slot=itemSlot(id,549);
+	if(slot>0)
+	{
+		int qty=qtyAt(id,slot);
+		if(qty<1)
+		{
+			sendChat("^RNo ammo!",id);
+		}
+		else
+		{
+			int qty=qtyAt(id,slot);
+			setQty(id,slot,qty-1);
+			setHP(id,getHP(id)-5);
+			setMP(id,getMP(id)+3);
+			sendMapChatf(map,"%s:^w*puff*",getName(id));
+			int victim;
+			switch(getDir(id))
+			{
+				case 0:
+					victim=getID(map,x,y+1);
+					makeEffect(map,x,y+1,29);
+					if(victim>-1)
+					setHP(victim,getHP(victim)-3);
+					break;
+				case 1:
+					victim=getID(map,x,y-1);
+					makeEffect(map,x,y-1,29);
+					if(victim>-1)
+					setHP(victim,getHP(victim)-3);
+					break;
+				case 2:
+					victim=getID(map,x-1,y);
+					makeEffect(map,x-1,y,29);
+					if(victim>-1)
+					setHP(victim,getHP(victim)-3);
+					break;
+				case 3:
+					victim=getID(map,x+1,y);
+					makeEffect(map,x+1,y,29);
+					if(victim>-1)
+					setHP(victim,getHP(victim)-3);
+					break;
+			}
+		}
+	}
+}

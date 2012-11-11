@@ -1,0 +1,95 @@
+/*
+	Turkey movement script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	January 25, 2004
+*/
+
+#include <math.h>
+
+
+void main()
+{
+	int MonsterID;
+	int MapID;
+	int MapListLen;
+	int i;
+	int PlayerID;
+	int PlayerDist;
+	int NearestPlayerID;
+	int NearestPlayerDist;
+	int MonsterX;
+	int MonsterY;
+	int PlayerX;
+	int PlayerY;
+
+	MonsterID = getPlayer();
+	MapID = getMap(MonsterID);
+
+	// Randomly speak
+	if (getRand(16) == 0)
+		{
+		sendMapChatf(MapID, "%s:^YGobble Gobble!", getName(MonsterID));
+		}
+
+	// Find nearest non-admin player
+	MapListLen = mapListLen(MapID);
+	MonsterX = getX(MonsterID);
+	MonsterY = getY(MonsterID);
+	NearestPlayerID = -1;
+	NearestPlayerDist = 1000;
+	for (i = 0; i < MapListLen; i++)
+		{
+		PlayerID = mapList(MapID, i);
+
+		if (getPlayerType(PlayerID) != PLAYER_TYPE_PC || getAccess(PlayerID) != 1)
+			continue;
+
+		PlayerDist = abs(MonsterX - getX(PlayerID)) + abs(MonsterY - getY(PlayerID));
+		if (PlayerDist < NearestPlayerDist)
+			{
+			NearestPlayerID = PlayerID;
+			NearestPlayerDist = PlayerDist;
+			}
+		}
+	PlayerID = NearestPlayerID;
+
+	// No players, move randomly
+	if (PlayerID == -1)
+		{
+		npcMove(MonsterID, getRand(4));
+		return;
+		}
+
+	// Avoid player
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+
+	// 1st Priority: Straight line avoidance
+	if (PlayerX == MonsterX)
+		{
+		npcMove(MonsterID, (getRand(2) ? DIR_LEFT : DIR_RIGHT));
+		return;
+		}
+	if (PlayerY == MonsterY)
+		{
+		npcMove(MonsterID, (getRand(2) ? DIR_DOWN : DIR_UP));
+		return;
+		}
+
+	// 2nd Priority: Walk away from player
+	if (abs(MonsterX - PlayerX) > abs(MonsterY - PlayerY))
+		{
+		if (MonsterX < PlayerX)
+			npcMove(MonsterID, DIR_LEFT);
+		else
+			npcMove(MonsterID, DIR_RIGHT);
+		}
+	else
+		{
+		if (MonsterY < PlayerY)
+			npcMove(MonsterID, DIR_UP);
+		else
+			npcMove(MonsterID, DIR_DOWN);
+		}
+}

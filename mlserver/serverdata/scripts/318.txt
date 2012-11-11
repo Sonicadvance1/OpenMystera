@@ -1,0 +1,6 @@
+// Stop Tree Regrowing
+
+void main()
+{
+	haltScript(317);
+}

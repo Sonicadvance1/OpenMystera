@@ -1,0 +1,280 @@
+// Farbeshot Gun
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	if(map==828 || map==931 || map==932 || map==933 || map==937)
+	{
+		int slot=itemSlot(id,440);
+		if(slot>0)
+		{
+			int qty=qtyAt(id,slot);
+			if(qty>=1)
+			{
+				int len=5;
+				setQty(id,slot,qty-1);
+				while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+				{
+					if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+					{
+						int victim=getID(map,x,y);
+						makeEffect(map,x,y,30);
+						setPos(victim,0,5,5);
+						break;
+					}
+					makeEffect(map,x,y,18);
+					if(getDir(id)==0)y++;
+					if(getDir(id)==1)y--;
+					if(getDir(id)==2)x--;
+					if(getDir(id)==3)x++;
+					len--;
+				}
+			}
+			else
+			{
+				sendChat("^RNot enough ammo!",id);
+			}
+		}
+		else
+		{
+			sendChat("^RNo ammo!",id);
+		}
+	}
+	else if(map==944 && y!=1 && y!=2 && y!=3 && y!=11 && y!=12 && y!=13 && x!=1 && x!=2 && x!=3 && x!=16 && x!=17 && x!=18 && x!=19 || map==963 && y!=1 && y!=2 && y!=3 && y!=11 && y!=12 && y!=13 && x!=1 && x!=2 && x!=3 && x!=16 && x!=17 && x!=18 && x!=19)
+	{
+		int slot=itemSlot(id,440);
+		if(slot>0)
+		{
+			int qty=qtyAt(id,slot);
+			if(qty>=1)
+			{
+				int len=5;
+				setQty(id,slot,qty-1);
+				while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+				{
+					if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+					{
+						int victim=getID(map,x,y);
+						makeEffect(map,x,y,30);
+						sendMapChatf(map,"^R%s^Y tagged ^G%s^Y!!!",getName(id),getName(victim));
+						if(map==944)
+						{
+							makeEffect(944,18,2,17);
+							setPos(victim,944,18,2);
+							break;
+						}
+						else
+						{
+							makeEffect(963,1,2,17);
+							setPos(victim,963,1,2);
+							break;
+						}
+						break;
+					}
+					makeEffect(map,x,y,18);
+					if(getDir(id)==0)y++;
+					if(getDir(id)==1)y--;
+					if(getDir(id)==2)x--;
+					if(getDir(id)==3)x++;
+					len--;
+				}
+			}
+			else
+			{
+				sendChat("^RNot enough ammo!",id);
+			}
+		}
+		else
+		{
+			sendChat("^RNo ammo!",id);
+		}
+	}
+	else if(map==962 && x>3)
+	{
+		int slot=itemSlot(id,440);
+		if(slot>0)
+		{
+			int qty=qtyAt(id,slot);
+			if(qty>=1)
+			{
+				int len=5;
+				setQty(id,slot,qty-1);
+				while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+				{
+					if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+					{
+						int victim=getID(map,x,y);
+						makeEffect(map,x,y,30);
+						makeEffect(962,1,2,17);
+						sendMapChatf(map,"^R%s^Y tagged ^G%s^Y!!!",getName(id),getName(victim));
+						setPos(victim,962,1,2);
+						break;
+					}
+					makeEffect(map,x,y,18);
+					if(getDir(id)==0)y++;
+					if(getDir(id)==1)y--;
+					if(getDir(id)==2)x--;
+					if(getDir(id)==3)x++;
+					len--;
+				}
+			}
+			else
+			{
+				sendChat("^RNot enough ammo!",id);
+			}
+		}
+		else
+		{
+			sendChat("^RNo ammo!",id);
+		}
+	}
+	else if(map==968 || map==969 || map==1024)
+	{
+		int slot=itemSlot(id,440);
+		if(slot>0)
+		{
+			int qty=qtyAt(id,slot);
+			if(qty>=1)
+			{
+				int len=5;
+				setQty(id,slot,qty-1);
+				while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+				{
+					if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+					{
+						int victim=getID(map,x,y);
+						makeEffect(map,x,y,30);
+						makeEffect(967,11,4,17);
+						sendMapChatf(map,"^R%s^Y tagged ^G%s^Y!!!",getName(id),getName(victim));
+						setPos(victim,967,11,4);
+						break;
+					}
+					makeEffect(map,x,y,18);
+					if(getDir(id)==0)y++;
+					if(getDir(id)==1)y--;
+					if(getDir(id)==2)x--;
+					if(getDir(id)==3)x++;
+					len--;
+				}
+			}
+			else
+			{
+				sendChat("^RNot enough ammo!",id);
+			}
+		}
+		else
+		{
+			sendChat("^RNo ammo!",id);
+		}
+	}
+	else if(map>=972 && map<=1000)
+	{
+		int slot=itemSlot(id,440);
+		if(slot>0)
+		{
+			int qty=qtyAt(id,slot);
+			if(qty>=1)
+			{
+				int len=5;
+				setQty(id,slot,qty-1);
+				while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+				{
+					if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+					{
+						int victim=getID(map,x,y);
+						int aslot=itemSlot(victim,450);
+						if(aslot>0)
+						{
+							int aqty=qtyAt(victim,aslot);
+							if(aqty>=1)
+							{
+								setQty(victim,aslot,aqty-1);
+								makeEffect(map,x,y,15);
+							}
+						}
+						else
+						{
+							makeEffect(map,x,y,30);
+							makeEffect(1000,13,8,17);
+							sendMapChatf(map,"^R%s^Y killed ^G%s^Y!!!",getName(id),getName(victim));
+							int dslot=itemSlot(victim,451);
+							if(dslot>0)
+							{
+								makeItem(451,1,map,x,y);
+							}
+							setPos(victim,1000,13,8);
+							break;
+						}
+						break;
+					}
+					makeEffect(map,x,y,18);
+					if(getDir(id)==0)y++;
+					if(getDir(id)==1)y--;
+					if(getDir(id)==2)x--;
+					if(getDir(id)==3)x++;
+					len--;
+				}
+			}
+			else
+			{
+				sendChat("^RNot enough ammo!",id);
+			}
+		}
+		else
+		{
+			sendChat("^RNo ammo!",id);
+		}
+	}
+	else if(map==1026 && y>=6 && y<=10)
+	{
+		int slot=itemSlot(id,440);
+		if(slot>0)
+		{
+			int qty=qtyAt(id,slot);
+			if(qty>=1)
+			{
+				int len=5;
+				setQty(id,slot,qty-1);
+				while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+				{
+					if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+					{
+						int victim=getID(map,x,y);
+						makeEffect(map,x,y,30);
+						sendMapChatf(map,"^R%s^Y tagged ^G%s^Y!!!",getName(id),getName(victim));
+						if(getRand(2)==0)
+						{
+							makeEffect(1027,1,2,17);
+							setPos(victim,1027,1,2);
+							break;
+						}
+						else
+						{
+							makeEffect(1027,18,2,17);
+							setPos(victim,1027,18,2);
+							break;
+						}
+						break;
+					}
+					makeEffect(map,x,y,18);
+					if(getDir(id)==0)y++;
+					if(getDir(id)==1)y--;
+					if(getDir(id)==2)x--;
+					if(getDir(id)==3)x++;
+					len--;
+				}
+			}
+			else
+			{
+				sendChat("^RNot enough ammo!",id);
+			}
+		}
+		else
+		{
+			sendChat("^RNo ammo!",id);
+		}
+	}
+}

@@ -1,0 +1,37 @@
+// Ranger Bow
+
+void main()
+{
+	int id =getPlayer();
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	int len=8;
+	if(2>getMP(id))
+	sendChat("^RNo ammo!",id);
+	else
+	{
+		setMP(id,getMP(id)-2);
+		while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+		{
+			if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+			{
+				int victim=getID(map,x,y);
+				if(getRand(4)<=3)
+				{
+					makeEffect(map,x,y,0);
+					setHP(victim,getHP(victim)-getRand(4)-2);
+					break;
+				}
+				else
+				makeEffect(map,x,y,4);
+			}
+			makeEffect(map,x,y,getDir(id)+5);
+			if(getDir(id)==0)y++;
+			if(getDir(id)==1)y--;
+			if(getDir(id)==2)x--;
+			if(getDir(id)==3)x++;
+			len--;
+		}
+	}
+}

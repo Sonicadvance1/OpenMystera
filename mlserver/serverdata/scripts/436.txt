@@ -1,0 +1,22 @@
+/*
+	Jamesbot response script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	April 1, 2004
+*/
+
+void main()
+{
+	int NPCID;
+	cPlayer* pNPC;
+	NPCID = getPlayer();
+	pNPC = playerStruct(NPCID);
+	strcpy(pNPC->name, "James");
+	playerSave(NPCID);
+	sendPlayerUpdate(NPCID);
+	sendMapChatf(getMap(NPCID), "%s:%s", getName(NPCID), globalStr("JamesResponse"));
+	strcpy(pNPC->name, "^BJames");
+	playerSave(NPCID);
+	sendPlayerUpdate(NPCID);
+	freeGlobal("JamesResponse");
+}

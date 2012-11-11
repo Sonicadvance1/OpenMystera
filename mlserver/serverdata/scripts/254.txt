@@ -1,0 +1,18 @@
+/*
+	Stop glitter script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	December 24, 2003
+*/
+
+void main()
+{
+	int TimerID;
+
+	if (!isGlobal("GlitterTimerID"))
+		return;
+
+	TimerID = globalInt("GlitterTimerID");
+	haltScript(TimerID);
+	freeGlobal("GlitterTimerID");
+}

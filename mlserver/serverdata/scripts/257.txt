@@ -1,0 +1,32 @@
+//Send to start location (CC).
+
+void main()
+{
+	int id=getPlayer();
+	int map=0;
+	int x=5;
+	int y=5;
+	int target=getMTarget(id);
+	if (getPlayerType(target)==0)
+	{
+		if (target!=id)
+		{
+			if (target==-1)
+			{
+				setPos(id,map,x,y);
+			}
+			else if (target!=id)
+			{
+				setPos(target,map,x,y);
+			}
+		}
+		else if (target==id)
+		{
+			setPos(id,map,x,y);
+		}
+	}
+	else if (getPlayerType(target)==1)
+	{
+		sendChat("^RInvalid Target!",id);
+	}
+}

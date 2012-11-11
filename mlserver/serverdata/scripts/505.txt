@@ -1,0 +1,27 @@
+// Sweet Potion Creation
+
+void main()
+{
+	int id=getPlayer();
+	int pot=itemSlot(id,595);
+	int cand=itemSlot(id,28);
+	if(pot>-1 && cand>-1)
+	{
+		int pqty=qtyAt(id,pot);
+		int cqty=qtyAt(id,cand);
+		if(pqty>=5 && cqty>=10)
+		{
+			setQty(id,pot,pqty-5);
+			setQty(id,cand,cqty-10);
+			giveItem(id,597,5);
+		}
+		else
+		{
+			sendChat("^RYou don't have the correct ingredients!",id);
+		}
+	}
+	else
+	{
+		sendChat("^RYou don't have the correct ingredients!",id);
+	}
+}

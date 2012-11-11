@@ -1,0 +1,142 @@
+/*
+
+Waterfall
+
+Rewritten by Steve Northamer
+
+July 13, 2004
+*/
+
+const int SPELL_COST = 50;
+const int SPELL_EFFECT = 12;
+
+void main()
+{
+
+int PlayerID;
+
+cPlayer* pPlayer;
+
+int MapID;
+
+cMap* pMap;
+
+int x;
+
+int y;
+
+int VictimID;
+
+cPlayer* pVictim;
+
+int SpellDamage;
+
+
+
+PlayerID = getPlayer();
+
+pPlayer = playerStruct(PlayerID);
+
+
+
+if (pPlayer->mp < SPELL_COST)
+
+
+{
+
+
+sendChatf(PlayerID, "^RNot enough mana.");
+
+
+return;
+
+
+}
+
+
+pPlayer->mp -= SPELL_COST;
+
+playerSave(PlayerID);
+
+sendMP(PlayerID);
+
+
+MapID = pPlayer->map;
+
+pMap = mapStruct(MapID);
+
+
+x = pPlayer->x;
+
+y = pPlayer->y;
+
+switch (pPlayer->dir)
+
+
+{
+
+
+case DIR_UP:
+
+
+
+y--;
+
+
+
+break;
+
+
+case DIR_RIGHT:
+
+
+
+x++;
+
+
+
+break;
+
+
+case DIR_DOWN:
+
+
+
+y++;
+
+
+
+break;
+
+
+case DIR_LEFT:
+
+
+
+x--;
+
+
+
+break;
+
+
+}
+
+
+makeEffect(MapID, x, y, SPELL_EFFECT);
+
+
+VictimID = getID(MapID, x, y);
+
+
+if (VictimID == -1)
+
+
+return;
+
+
+SpellDamage = magicDamage(PlayerID) * 2 + magicDamage(PlayerID) / 2;
+
+
+setHP(VictimID, getHP(VictimID) - SpellDamage);
+}

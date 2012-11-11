@@ -1,0 +1,11 @@
+// Warp to Snowman Mountain
+
+void main()
+{
+	int id=getPlayer();
+	int victim=getMTarget(id);
+	if(victim>-1)
+	{
+		setPos(victim,140,5,5);
+	}
+}

@@ -1,0 +1,21 @@
+//Galebrook Origin script
+void main()
+{
+	int id=getPlayer();	
+	int map,x,y;
+		
+	if(getPlayerType(id)==1) //Make sure its not a NPC
+		return;
+
+	getOrigin(id,map,x,y);
+	if(map==0)
+	{
+		sendChat("^YYou are already a citizen of Galebrook!",id);
+		return;
+	}
+
+	setOrigin(id,0,5,5);
+	setPos(id,0,5,5);
+	makeEffect(0,5,5,3);
+	sendChat("^YYou are now a citizen of Galebrook.",id);
+}

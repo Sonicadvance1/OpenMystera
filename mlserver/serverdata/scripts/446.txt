@@ -1,0 +1,22 @@
+// Fie's Pawn-o-Rama kill tile
+
+void main()
+{
+	int PlayerID;
+	cPlayer* pPlayer;
+
+	PlayerID = getPlayer();
+	pPlayer = playerStruct(PlayerID);
+
+	if (pPlayer->access > 1 || strcmp(pPlayer->name, "Fie") == 0)
+		return;
+
+	sendChatf(-1, "^Y%s ^R has tripped the Anti-Haxor v1.5b security device in Fie's Pawn-o-Rama!", pPlayer->name);
+
+	pPlayer->origin_map = 446;
+	pPlayer->origin_x = 9;
+	pPlayer->origin_y = 7;
+	pPlayer->hp = 0;
+	playerSave(PlayerID);
+	sendHP(PlayerID);
+}

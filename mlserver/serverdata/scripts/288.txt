@@ -1,0 +1,160 @@
+//Tidal Wave Spell
+
+void main()
+{
+	int pc=getPlayer();
+	int pcMP=getMP(pc);
+	int dir=getDir(pc);
+	int map=getMap(pc);
+	int x=getX(pc);
+	int y=getY(pc);
+	int effect=12;
+	int MPcost=100;
+	int reqInt=40;
+	int pcInt=getInt(pc);
+	int DamMod1=getCon(pc)/4;
+	int DamMod2=getInt(pc)/3;
+	int damage=magicDamage(pc)+DamMod1+DamMod2;
+	int range=4;
+	int cRange=0;
+	int xp1=x+1;
+	int xp2=x+2;
+	int xp3=x+3;
+	int xm1=x-1;
+	int xm2=x-2;
+	int xm3=x-3;
+	int yp1=y+1;
+	int yp2=y+2;
+	int yp3=y+3;
+	int ym1=y-1;
+	int ym2=y-2;
+	int ym3=y-3;
+
+	if((pcMP<MPcost) || (pcInt<reqInt))
+	{
+		if (pcMP<MPcost)
+		{
+			sendChat("^RNot enough mana.",pc);
+		}
+		if (pcInt<reqInt)
+		{
+			sendChat("^RNot enough intelligence to cast this spell.",pc);
+		}
+	}
+	else
+	{
+		setMP(pc,pcMP-MPcost);
+		while(inBounds(x,y) && getTileType(map,x,y) != 2)
+		{
+			if (cRange<1)
+			{
+				if (dir==0)
+				{
+					y++;		//down
+					makeEffect(map,x,y,effect);
+					makeEffect(map,xp1,y,effect);
+					makeEffect(map,xp2,y,effect);
+					makeEffect(map,xp3,y,effect);
+					makeEffect(map,xm1,y,effect);
+					makeEffect(map,xm2,y,effect);
+					makeEffect(map,xm3,y,effect);
+					y++;		//down
+				}
+				else if (dir==1)
+				{
+					y--;		//up
+					makeEffect(map,x,y,effect);
+					makeEffect(map,xp1,y,effect);
+					makeEffect(map,xp2,y,effect);
+					makeEffect(map,xp3,y,effect);
+					makeEffect(map,xm1,y,effect);
+					makeEffect(map,xm2,y,effect);
+					makeEffect(map,xm3,y,effect);
+					y--;		//up
+				}
+				else if (dir==2)
+				{
+					x--;		//left
+					makeEffect(map,x,y,effect);
+					makeEffect(map,x,yp1,effect);
+					makeEffect(map,x,yp2,effect);
+					makeEffect(map,x,yp3,effect);
+					makeEffect(map,x,ym1,effect);
+					makeEffect(map,x,ym2,effect);
+					makeEffect(map,x,ym3,effect);
+					x--;		//left
+				}
+				else if (dir==3)
+				{
+					x++;		//right
+					makeEffect(map,x,y,effect);
+					makeEffect(map,x,yp1,effect);
+					makeEffect(map,x,yp2,effect);
+					makeEffect(map,x,yp3,effect);
+					makeEffect(map,x,ym1,effect);
+					makeEffect(map,x,ym2,effect);
+					makeEffect(map,x,ym3,effect);
+					x++;		//right
+				}
+				if (getID(map,x,y)!=-1 && getID(map,x,y)!=pc)
+				{
+					int victim=getID(map,x,y);
+					makeEffect(map,x,y,0);
+					setHP(victim,getHP(victim)-damage);
+				}
+			}
+			else if (cRange!=range)
+			{
+				if (dir==0)
+				{
+					makeEffect(map,x,y,effect);
+					makeEffect(map,xp1,y,effect);
+					makeEffect(map,xp2,y,effect);
+					makeEffect(map,xp3,y,effect);
+					makeEffect(map,xm1,y,effect);
+					makeEffect(map,xm2,y,effect);
+					makeEffect(map,xm3,y,effect);
+					y++;		//down
+				}
+				else if (dir==1)
+				{
+					makeEffect(map,x,y,effect);
+					makeEffect(map,xp1,y,effect);
+					makeEffect(map,xp2,y,effect);
+					makeEffect(map,xp3,y,effect);
+					makeEffect(map,xm1,y,effect);
+					makeEffect(map,xm2,y,effect);
+					makeEffect(map,xm3,y,effect);
+					y--;		//up
+				}
+				else if (dir==2)
+				{
+					makeEffect(map,x,y,effect);
+					makeEffect(map,x,yp1,effect);
+					makeEffect(map,x,yp2,effect);
+					makeEffect(map,x,yp3,effect);
+					makeEffect(map,x,ym1,effect);
+					makeEffect(map,x,ym2,effect);
+					makeEffect(map,x,ym3,effect);
+					x--;		//left
+				}
+				else if (dir==3)
+				{
+					makeEffect(map,x,y,effect);
+					makeEffect(map,x,yp1,effect);
+					makeEffect(map,x,yp2,effect);
+					makeEffect(map,x,yp3,effect);
+					makeEffect(map,x,ym1,effect);
+					makeEffect(map,x,ym2,effect);
+					makeEffect(map,x,ym3,effect);
+					x++;		//right
+				}
+			}
+			else if (cRange==range)
+			{
+				break;
+			}
+			cRange++;
+		}
+	}
+}

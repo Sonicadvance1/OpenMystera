@@ -1,0 +1,67 @@
+long hpBonus(long con)
+{
+	return (con-1) * 6;
+}
+
+long manaBonus(long itl)
+{
+	return (itl-1) * 6;
+}
+void main()
+{
+	long id = getPlayer();
+	cPlayer *player = playerStruct(id);
+	char *stat = getCommand();
+	
+	if(player->train>0)
+	{
+		if(strcmp(stat,"str")==0 && player->str<255)
+		{
+			
+			player->train--;
+			player->str++;
+			sendChatf(id,"^BYou train in strength and feel stronger.");
+		}
+		else if(strcmp(stat,"dex")==0 && player->dex<255)
+		{
+			
+			player->train--;
+			player->dex++;
+			sendChatf(id,"^BYou train in dexterity and feel faster.");
+		}
+		else if(strcmp(stat,"con")==0 && player->con<255)
+		{
+			
+			player->train--;
+			player->con++;
+			sendChatf(id,"^BYou train in constitution and feel tougher.");
+		}
+		else if(strcmp(stat,"int")==0 && player->itl<255)
+		{
+			player->train--;
+			player->itl++;
+			sendChatf(id,"^BYou train in intelligence and feel more knowledgable.");
+		}
+		else if(strcmp(stat,"wis")==0 && player->wis<255)
+		{
+			
+			player->train--;
+			player->wis++;
+			sendChatf(id,"^BYou train in wisdom and feel more wise and aware.");
+			
+		}
+		
+		player->mhp = hpBonus(player->con) + 100 + ((player->lvl-1) * 10);
+		player->mmp = manaBonus(player->itl) + 80 + ((player->lvl-1) * 10);
+		player->atk = (player->str/2) + 2;
+		player->def = (player->con/2);
+		
+		playerSave(id);
+		sendPlayerUpdate(id);
+		sendAttribute(id);
+		sendLevel(id);
+		
+	}
+	else
+		sendChatf(id,"^bNo training points left.");
+}

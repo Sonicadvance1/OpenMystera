@@ -1,0 +1,37 @@
+//game script
+
+#include <stdio.h>
+
+void main()
+{
+	/*char msg[256];
+
+	sprintf(msg, "Bottom: %d", getTile(440, 8, 9, 1));
+	sendMapChat(msg, getMap(getPlayer()));
+
+	sprintf(msg, "Top: %d", getTile(440, 8, 8, 1));
+	sendMapChat(msg, getMap(getPlayer()));*/
+
+	int PlayerID;
+	int TargetID;
+	int TargetMap;
+	int TargetX;
+	int TargetY;
+	
+	PlayerID = getPlayer();
+	TargetID = getMTarget(PlayerID);
+
+	if (TargetID == -1)
+		{
+		sendChat("No target selected.", PlayerID);
+		return;
+		}
+
+	TargetMap = getMap(TargetID);
+	TargetX = getX(TargetID);
+	TargetY = getY(TargetID);
+
+	setTile(TargetMap, TargetX, TargetY, 1, 479);
+	setTile(TargetMap, TargetX, TargetY - 1, 1, 463);
+	updateMap(TargetMap);
+}

@@ -1,0 +1,92 @@
+// Grapple
+
+const int SPELL_COST = 25;
+
+void main()
+{
+	int PlayerID;
+	int TargetID;
+	int TargetX;
+	int TargetY;
+	int miss=0;
+	int npc =0;
+
+	// Get player coordinates
+	PlayerID = getPlayer();
+	cPlayer *player = playerStruct(PlayerID); 
+	cMap *map=mapStruct(player->map);
+
+	if(player->map == 1386)
+		return;
+
+	// Subtract mana cost
+	if (player->mp < SPELL_COST)
+	{
+		sendChat("^RNot enough mana.", PlayerID);
+		return;
+	}
+
+	player->mp-=SPELL_COST;
+
+	// Get target coordinates
+	TargetX = player->x;
+	TargetY = player->y;
+	int distance = player->str/5;
+	if(distance < 1)
+		return;
+
+	int count=0,frontX,frontY;
+	while(count < distance)
+	{
+		if(player->dir==DIR_DOWN)
+			TargetY++;
+		else if(player->dir==DIR_UP)
+			TargetY--;
+		else if(player->dir==DIR_LEFT)
+			TargetX--;
+		else if(player->dir==DIR_RIGHT)
+			TargetX++;
+		count++;
+		if(count == 1)
+		{
+			frontX = TargetX;
+			frontY = TargetY;
+		}
+	
+	
+		// Make sure we didn't go off screen
+		if (!inBounds(TargetX, TargetY) || map->map[TargetY][TargetX].type == 2 || map->map[TargetY][TargetX].type == 6)
+			return;
+	
+		if(map->map[TargetY][TargetX].type == 3)
+			miss = 1;
+		if(map->map[TargetY][TargetX].type == 4)
+			npc = 1;
+		
+		TargetID=map->map[TargetY][TargetX].space;
+
+		if(TargetID>-1)//no one there
+		{
+			cPlayer *target=playerStruct(TargetID);
+			if(miss || (npc && target->type==1))
+			{
+				makeEffect(player->map, target->x, target->y, 4);
+				return;
+			}
+			sendMapChatf(player->map, "%s:^GGet over here!", player->name);
+			
+			makeEffect(player->map, target->x, target->y, 0);
+
+			map->map[frontY][frontX].space=TargetID;
+			map->map[TargetY][TargetX].space=-1;
+			target->x=frontX; target->y=frontY;
+			setHP(TargetID,target->hp-(player->str / 2));
+			if(target->type==0) 
+				sendPosition(TargetID);
+			return;
+		}
+
+		makeEffect(player->map, TargetX, TargetY, 18);
+
+	}
+}

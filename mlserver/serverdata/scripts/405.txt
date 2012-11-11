@@ -1,0 +1,23 @@
+//server debugging script - James Hamer
+void main()
+{
+	int id=getPlayer();
+	cItem *item;
+	cPlayer *owner;
+	char ownerName[64];
+	sendChatf(id,"Server Debug Script");
+	for(int i=0;i<itemLen();i++)
+	{
+		item = itemStruct(i);
+		if(item->qty==0 && item->owner!=-1)
+		{
+			strcpy(ownerName,"");
+			if(item->owner!=-1)
+			{
+				owner=playerStruct(item->owner);
+				strcpy(ownerName,owner->name);
+			}
+			sendChatf(id,"[%d]Item:%s qty:%d owner:%d(%s) map:%d db:%d",i,item->name,item->qty,item->owner,ownerName,item->map,item->id);
+		}
+	}
+}

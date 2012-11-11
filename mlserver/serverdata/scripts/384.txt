@@ -1,0 +1,31 @@
+// Rarshanka's Target Orb
+
+const int SPELL_COST = 12;
+const float SPELL_DAMAGE_FACTOR = 0.75;
+const int SPELL_EFFECT = 19;
+
+void main()
+{
+	int PlayerID;
+	int TargetID;
+
+	PlayerID = getPlayer();
+	TargetID = getMTarget(PlayerID);
+
+	if (TargetID == -1)
+		{
+		sendChat("^RNo target selected", PlayerID);
+		return;
+		}
+	
+	if (getMP(PlayerID) < SPELL_COST)
+		{
+		sendChat("^RNot enough mana", PlayerID);
+		return;
+		}
+
+	setMP(PlayerID, getMP(PlayerID) - SPELL_COST);
+
+	makeEffect(getMap(TargetID), getX(TargetID), getY(TargetID), SPELL_EFFECT);
+	setHP(TargetID, getHP(TargetID) - (magicDamage(PlayerID) * SPELL_DAMAGE_FACTOR));
+}

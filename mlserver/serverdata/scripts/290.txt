@@ -1,0 +1,88 @@
+//Plastic Surgeon (Dr Newbody) say script -Amber Hamer
+#include <stdio.h>
+
+string TempGetWord(char* xpString, int xWordIndex)
+{
+	char* pBeginWord;
+	char* pEndWord;
+	int i;
+	string Word;
+
+	i = 0;
+	pBeginWord = xpString;
+	while (true)
+		{
+		pEndWord = strchr(pBeginWord, ' ');
+
+		if (i == xWordIndex)
+			break;
+		if (pEndWord == NULL)
+			return Word;
+
+		pBeginWord = pEndWord + 1;
+		i++;
+		}
+
+	if (pEndWord != NULL)
+		*pEndWord = '\0';
+
+	Word = pBeginWord;
+
+	if (pEndWord != NULL)
+		*pEndWord = ' ';
+
+	return Word;
+}
+
+int takeGold(int amount,int TargetID)
+{
+	int ItemID,Quantity;
+	for (int i = 0; i < inventoryLen(); i++)
+	{
+		ItemID = itemAt(TargetID, i);
+		Quantity = qtyAt(TargetID, i);
+
+		if (Quantity == 0)
+			continue;
+
+		if(ItemID == 1 && Quantity >= amount)
+		{
+			setQty(TargetID,i,Quantity-amount);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+void main()
+{
+	int id=getPlayer();
+	int player=getChatPlayer();
+	int newbody;
+	string chat=getChat();
+		
+	if(getY(player)>10 && chat[0]>='0' && chat[0]<='9')
+	{
+		if(getImg(player)!=0)
+		{
+			sendMapChatf(757,"Dr Newbody:I can't operate on you while you're wearing a costume!");
+			return;
+		}
+		chat=TempGetWord(chat, 0);
+		sscanf(chat,"%d",&newbody);
+		if(newbody <0 || newbody > 19) 
+		{
+			sendMapChatf(757,"Dr Newbody:I can not do THAT surgery!");
+			return;
+		}
+
+		if(takeGold(5000,player))
+		{	
+			sendMapChatf(757,"Dr Newbody:Ok, I will change your body from %d to %s. Thank you.",getBody(player),chat);	
+			setBody(player,newbody);
+		}
+		else
+			sendMapChatf(757,"Dr Newbody:Sorry, you don't have enough money.");
+	}
+	
+}

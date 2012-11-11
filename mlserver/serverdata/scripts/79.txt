@@ -1,0 +1,7 @@
+//CC sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^GPlease place older items you do not use anymore here for those who may need em, thank you.",id);
+}

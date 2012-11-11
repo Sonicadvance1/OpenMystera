@@ -1,0 +1,59 @@
+// Concentration Game
+
+
+
+void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerDir;
+	int PlayerX;
+	int PlayerY;
+	int TileMapID;
+	int TileX;
+	int TileY;
+	int i;
+
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerDir = getDir(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+
+//Get coordinates for tile that player is facing
+
+	TileMapID = PlayerMapID;
+	TileX = PlayerX;
+	TileY = PlayerY;
+	switch (PlayerDir)
+	{
+	case DIR_DOWN:
+	TileY++;
+	break;
+
+	case DIR_UP:
+	TileY--;
+	break;
+
+	case DIR_LEFT:
+	TileX--;
+	break;
+
+	case DIR_RIGHT:
+	TileX++;
+	break;
+	}
+
+// What Tile is there
+if (getTile(TileMapID,TileX,TileY,1)==493) //change from pentagram to 4 dots
+	{
+		setTile(TileMapID,TileX,TileY,1,943);
+	}
+	else
+	{
+		setTile(TileMapID,TileX,TileY,1,493);
+	}
+
+mapSave(TileMapID);
+sendMapUpdate(TileMapID);
+}

@@ -1,0 +1,5 @@
+ void main()
+ {
+ sendChat("^yIn remembrance of Marcoroni", getPlayer());
+ sendChat("^r...The rest of the engraving has been worn off by the sands of time...", getPlayer());
+ }

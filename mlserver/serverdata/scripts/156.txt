@@ -1,0 +1,428 @@
+/*
+	Consolidated Sign Script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	December 12, 2003
+*/
+
+/*
+	Description: This script consolidates all sign scripts by looking up
+	which sign text to display using the sign's world coordinates
+*/
+
+
+
+struct SIGN_TEXT
+{
+	int MapID;
+	int X;
+	int Y;
+	char* pText;
+};
+
+// ADD NEW SIGNS TO THE LIST BELOW!
+SIGN_TEXT gSigns[] = {
+	{ 0, 8, 3, "^CAttention Newbies: Go northwest and kill raccoons for experience and gear!" },
+	{ 0, 7, 3, "^cPress [enter] to chat and enter commands, /quit will exit the game.\n^cThe \\ key broadcasts the message, and the ] key is for private messages." },
+        { 0, 16, 10, "^yPlease donate any items you do not need here." },
+	{ 1387, 12, 6, "^YThe lottery takes place every 60 minutes. Drop money in the well to enter. At the end of the lottery you must be logged on or you cannot win." },
+ 	{ 3, 12, 11, "^YLockers for Rent" },
+	{ 517, 9, 6, "^YFishing Pass can only be used inside the boathouse and on the fishing boat. Click to use." },
+	{ 1390, 6, 6, "^YDont step in the acid pools!" },
+	{ 0, 3, 6, "^yHelp keep Galebrook clean!  Place unwanted items into the trash receptacle." },
+	{ 0, 11, 3, "^gNorth:^yCastle Galebrook  ^gWest:^yWestern Woods  ^gEast:^yThe Long Road  ^gSouth: ^yGalebrook Arms" },
+	{ 0, 6, 3, "^YATTENTION ALL PLAYERS: ^yAny form of violence within the City Center will result in you either being booted or jailed." },
+	{ 0, 8, 5, "^yIf you notice that your inventory is messed up, try clicking the crystal ball as soon as possible.  - Steve" },
+	{ 1, 4, 10, "^RGalebrook Barbecue Hut - We'll handle your meat." },
+	{ 1, 17, 12, "^CVacant House For Sale!" },
+	{ 3, 13, 6, "^GGet all of your farming supplies here!" },
+	{ 4, 5, 5, "^CVacant House For Sale!" },
+	{ 6, 4, 7, "^yLastrights' School House" },
+	{ 6, 17, 9, "^yTo ^rMoonshadow Island" },
+	{ 7, 13, 12, "^yTo ^yMeerlok: Alpha Colony" },
+	{ 8, 8, 12, "^yHold space to fight, shift picks up, click items you have to equip or cast.\n^yRight clicking on the mouse shifts through targeting, red for physical and green for magic." },
+	{ 8, 8, 5, "^yType /stats to see information about yourself.\n^yWhen you gain a level, type /train and use your training points to become more powerful." },
+	{ 19, 11, 1, "^RBeware of Cave Imps!" },
+	{ 30, 8, 2, "^yBounty Hunter Headquarters" },
+	{ 31, 13, 12, "^RDO NOT KILL THE VAMPS. This in in direct violation of the renters code." },
+	{ 41, 5, 7, "^y-=Peacekeeper Clan Hall=-" },
+	{ 71, 6, 4, "^yWoe be to he who does not tip!" },
+	{ 86, 8, 7, "^yWelcome to ^rMoonshadow Island" },
+	{ 139, 6, 2, "^yNorth: ^WSnowman Mountain^y|East: ^gWestern Woods" },
+	{ 174, 12, 4, "^ySnowman Mountain Boneyard" },
+	{ 174, 18, 3, "^yTo Glen Hilton from your friends. Hope you're happy where ever you are. P.S.: Hope you still have your computer games with you." },
+	{ 180, 14, 9, "^CVacant House For Sale!" },
+	{ 181, 7, 11, "^yRent for 25 gold! Show your items safely! (Note, items will dissappear after 10 minutes.) ^cAfter you are finished, please type in /moveout while in front of the door to the booth, so that it may be available for others to use. " },
+	{ 181, 12, 11, "^yRent for 25 gold! Show your items safely! (Note, items will dissappear after 10 minutes.) ^cAfter you are finished, please type in /moveout while in front of the door to the booth, so that it may be available for others to use. " },
+	{ 181, 17, 11, "^yRent for 25 gold! Show your items safely! (Note, items will dissappear after 10 minutes.) ^cAfter you are finished, please type in /moveout while in front of the door to the booth, so that it may be available for others to use. " },
+	{ 222, 9, 6, "^CBeyond is the Shrine of Serenity" },
+	{ 221, 16, 7, "^CWelcome to Amber's House. Please make yourself at home, Mi casa es tu casa!!" },
+	{ 236, 4, 2, "^yBy far you, Sunnmann, are fairest of them all!" },
+	{ 237, 12, 12, "^GPlease place older items you do not use anymore here for those who may need em, thank you." },
+	{ 240, 11, 7, "^GBeds will heal you in this inn. Please be clean." },
+	{ 241, 15, 11, "^CVacant House For Sale!" },
+	{ 241, 14, 11, "^CVacant House For Sale!" },
+	{ 241, 5, 11, "^CVacant House For Sale!" },
+	{ 241, 4, 11, "^CVacant House For Sale!" },
+	{ 241, 4, 4, "^CVacant House For Sale!" },
+	{ 241, 5, 4, "^CVacant House For Sale!" },
+	{ 241, 14, 4, "^CVacant House For Sale!" },
+	{ 241, 15, 4, "^CVacant House For Sale!" },
+	{ 243, 12, 11, "^CVacant House For Sale!" },
+	{ 325, 7, 8, "^yMutant Ninja Turtle Guild Hall" },
+	{ 428, 1, 5, "^CVacant House For Sale!" },
+	{ 428, 6, 5, "^CThe Fortress of Solitude" },
+	{ 428, 11, 5, "^CVacant House For Sale!" },
+	{ 428, 16, 5, "^CVacant House For Sale!" },	// Fie's beach house
+	{ 428, 7, 11, "^CVacant House For Sale!" },
+	{ 428, 2, 11, "^CVacant House For Sale!" },
+	{ 446, 14, 3, "^RYou have been placed here because an Admin may be running a player check. Please do not be alarmed and do not spam the world chat." },
+	{ 464, 16, 2, "^yForest Master: Only those who have respect for nature may seek my council.\nPlease water my shrubs before entering..." },
+	{ 488, 8, 8, "^CVacant House For Sale!" },
+	{ 488, 15, 8, "^CVacant House For Sale!" },
+	{ 490, 10, 11, "^CVacant House For Sale!" },
+	{ 490, 7, 8, "^CVacant House For Sale!" },
+	{ 490, 12, 6, "^CVacant House For Sale!" },
+	{ 499, 8, 10, "^CVacant House For Sale!" },
+	{ 499, 12, 8, "^CVacant House For Sale!" },
+	{ 514, 11, 4, "^yYikes!!! That's a scary face!" },
+	{ 540, 2, 2, "^yWarp to Galebrook City Center" },
+	{ 540, 4, 2, "^yWarp to Sheep Town Main Street" },
+	{ 540, 6, 2, "^yWarp to Callias Village" },
+	{ 540, 8, 2, "^yWarp to Moonshadow City Center" },
+	{ 540, 10, 2, "^yWarp to Snowman Mountain" },
+	{ 540, 12, 2, "^yWarp to Forest Dungeon" },
+	{ 540, 14, 2, "^yWarp to New Continent Minimap" },
+	{ 540, 16, 2, "^yWarp to Wellington City Center" },
+	{ 540, 2, 5, "^yWarp to Bounty Hunter's Guild Hall" },
+	{ 540, 4, 5, "^yWarp to Healer's Guild Hall" },
+	{ 540, 6, 5, "^yWarp to Acolyte's Guild Hall" },
+	{ 540, 8, 5, "^yWarp to Dark Knight's Guild Hall" },
+	{ 540, 10, 5, "^yWarp to Vampire's Guild Hall" },
+	{ 540, 12, 5, "^yWarp to Minotaur City" },
+	{ 540, 14, 5, "^yWarp to Bone City" },
+	{ 540, 16, 5, "^yWarp to The Underworld" },
+	{ 540, 2, 8, "^yWarp to Happyton Acres" },
+	{ 540, 4, 8, "^yWarp to Meerlok" },
+	{ 540, 6, 8, "^yWarp to Shrine of Serenity" },
+	{ 540, 8, 8, "^yWarp to Newbie Forest" },
+	{ 547, 4, 1, "^yHealers' Guild Storage Room" },
+	{ 547, 16, 1, "^yHealers' Guild Storage Room" },
+	{ 577, 9, 4, "^yDominion Pride Guild Hall" },
+	{ 570, 12, 5, "^yTo Wellington" },
+	{ 585, 15, 11, "^CVacant House For Sale!" },
+	{ 585, 14, 11, "^CVacant House For Sale!" },
+	{ 585, 5, 11, "^CVacant House For Sale!" },
+	{ 585, 4, 11, "^CVacant House For Sale!" },
+	{ 585, 15, 5, "^CVacant House For Sale!" },
+	{ 585, 14, 5, "^CVacant House For Sale!" },
+	{ 585, 5, 5, "^CVacant House For Sale!" },
+	{ 585, 4, 5, "^CVacant House For Sale!" },
+	{ 605, 12, 6, "^yTriple your gold or pay to gamble for a prize!" },
+	{ 605, 13, 11, "^yDouble your gold or lose it all by guessing for the right card!" },
+	{ 605, 6, 11, "^yDouble your gold or lose it all by the roll of dice!" },
+	{ 771, 19, 9, "^yBeware the ^rcreepers^y!!!" },
+	{ 777, 18, 9, "^yStep on this tile to get rid of all your ^Gserenity^y." },
+	{ 778, 1, 9, "^rCreepers^y can't get on the wood!" },
+	{ 785, 15, 7, "^CVacant House For Sale!" },
+	{ 785, 14, 5, "^CVacant House For Sale!" },
+	{ 785, 5, 5, "^CVacant House For Sale!" },
+	{ 785, 4, 7, "^CVacant House For Sale!" },
+	{ 785, 3, 11, "^CVacant House For Sale!" },
+	{ 785, 16, 11, "^CVacant House For Sale!" },
+	{ 795, 10, 9, "^CStep on the origin tile to become a citizen of Wellington." },
+	{ 803, 10, 5, "^CStep on the origin tile to become a citizen of Galebrook." },
+	{ 811, 4, 8, "^CStep on the origin tile to become a citizen of Callias." },
+	{ 819, 10, 9, "^CStep on the origin tile to become a citizen of Sheep Town." },
+	{ 820, 8, 5, "^YHello and welcome to ^CMystera Legends^Y! This tutorial forest will teach you all of the basics you need to know. If you ever get tired of the game, say /quit to leave." },
+	{ 821, 6, 10, "^YUse the space button to melee attack, or right click for the red target and left click it onto your desired victim. When you get close to the targeted creature, you will automatically attack." },
+	{ 821, 11, 7, "^YIf you right click twice, the target will turn green. This is for targeted items and spells, such as fishing rods or the poison spell. The tab button brings up your secondary inventory menu" },
+	{ 821, 17, 7, "^YRaccoons are a relatively easy prey, try killing them for useful items! Use the shift button to pick up items under you, and left click the item's image while in your inventory to use or equip the item.." },
+	{ 822, 4, 7, "^YThe enter button opens up the map chat box. Anything you put into there will show up only for people on your screen. The \\ is used to broadcast messages to everyone in the game, and the ] button is for private messages to one person." },
+	{ 822, 12, 7, "^YTo check your stats, say /stats. To put points into stats after leveling up, say /train." },
+	{ 822, 10, 5, "^COnce you reach level 5, you can enter the house by pressing spacebar on the door. You then choose your start location and begin your adventure." },
+	{ 822, 14, 4, "^YDrink from the well with space bar to recover your life and mana!" },
+	{ 823, 4, 9, "^YSome enemies are agressive and will attack you first, be careful because these enemies are often stronger than their peaceful counterparts!" },
+	{ 823, 16, 6, "^YSometimes if you look hard enough, you can find a hidden path through the trees." },
+	{ 824, 5, 6, "^CWalk onto this tile to set your origin point as ^cGalebrook^C and start your adventure!" },
+	{ 824, 8, 6, "^CWalk onto this tile to set your origin point as ^cWellington^C and start your adventure!" },
+	{ 824, 11, 6, "^CWalk onto this tile to set your origin point as ^cCallias^C and start your adventure!" },
+	{ 853, 17, 4, "^RDANGER: Lava is hot!" },
+	{ 885, 7, 7, "^yTo Galebrook" },
+	{ 888, 11, 4, "^yHere lies Freddiken Smith, the legendary rock thrower!" },
+	{ 925, 8, 6, "^ySay 'list' to find out what the merchant is selling, and 'trade #' to buy something. For example 'trade 1' would get you a tin knife and take 70 gold." },
+	{ 925, 10, 6, "^gThe door is locked." },
+	{ 945, 9, 1, "^yWarps to Callias, Bone City, Snowman Mt, Wellington, Sheep Town, and Happyton Acres" },
+	{ 1019, 1, 6, "^rBEWARE OF GERBILS" },
+	{ 1023, 17, 12, "^yGO" },
+	{ 1023, 16, 12, "^yMediterranean Avenue - Cost: $60 Rent: $2-$10-$30-$90-$160-$250 Mortgage: $30 House Cost: $50" },
+	{ 1023, 15, 12, "^yCOMMUNITY CHEST" },
+	{ 1023, 14, 12, "^yBaltic Avenue - Cost: $60 Rent: $4-$20-$60-$180-$320-$450 Mortgage: $30 House Cost: $50" },
+	{ 1023, 13, 12, "^yIncome Tax - Pay 10 percent or $200" },
+	{ 1023, 12, 12, "^yReading Railroad - Cost: $200 Rent: $25-$50-$100-$200 Mortgage: $100" },
+	{ 1023, 11, 12, "^yOriental Avenue - Cost: $100 Rent: $6-$30-$90-$270-$400-$550 Mortgage: $50 House Cost: $50" },
+	{ 1023, 10, 12, "^yCHANCE" },
+	{ 1023, 9, 12, "^yVermont Avenue - Cost: $100 Rent: $6-$30-$90-$270-$400-$550 Mortgage: $50 House Cost: $50" },
+	{ 1023, 8, 12, "^yConnecticut Avenue - Cost: $120 Rent: $8-$40-$100-$300-$450-$600 Mortgage: $60 House Cost: $50" },
+	{ 1023, 7, 12, "^yJAIL" },
+	{ 1023, 7, 11, "^ySt. Charles Place - Cost: $140 Rent: $10-$50-$150-$450-$625-$750 Mortgage: $70 House Cost: $100" },
+	{ 1023, 7, 10, "^yElectric Company - Cost: $150 Rent: If one 'Utility' is owned rent is 4 times amount shown on dice. If both 'Utilities' are owned rent is 10 times amount shown on dice. Mortgage: $75" },
+	{ 1023, 7, 9, "^yStates Avenue - Cost: $140 Rent: $10-$50-$150-$450-$625-$750 Mortgage: $70 House Cost: $100" },
+	{ 1023, 7, 8, "^yVirginia Avenue - Cost: $160 Rent: $12-$60-$180-$500-$700-$900 Mortgage: $80 House Cost: $100" },
+	{ 1023, 7, 7, "^yPennsylvania Railroad - Cost: $200 Rent: $25-$50-$100-$200 Mortgage: $100" },
+	{ 1023, 7, 6, "^ySt. James Place - Cost: $180 Rent: $14-$70-$200-$550-$750-$950 Mortgage: $90 House Cost: $100" },
+	{ 1023, 7, 5, "^yCOMMUNITY CHEST" },
+	{ 1023, 7, 4, "^yTennessee Avenue - Cost: $180 Rent: $14-$70-$200-$550-$750-$950 Mortgage: $90 House Cost: $100" },
+	{ 1023, 7, 3, "^yNew York Avenue - Cost: $200 Rent: $16-$80-$220-$600-$800-$1000 Mortgage: $100 House Cost: $100" },
+	{ 1023, 7, 2, "^yFREE PARKING" },
+	{ 1023, 8, 2, "^yKentucky Avenue - Cost: $220 Rent: $18-$90-$250-$700-$875-$1050 Mortgage: $110 House Cost: $150" },
+	{ 1023, 9, 2, "^yCHANCE" },
+	{ 1023, 10, 2, "^yIndiana Avenue - Cost: $220 Rent: $18-$90-$250-$700-$875-$1050 Mortgage: $110 House Cost: $150" },
+	{ 1023, 11, 2, "^yIllinois Avenue - Cost: $240 Rent: $20-$100-$300-$750-$925-$1100 Mortgage: $120 House Cost: $150" },
+	{ 1023, 12, 2, "^yB & O Railroad - Cost: $200 Rent: $25-$50-$100-$200 Mortgage: $100" },
+	{ 1023, 13, 2, "^yAtlantic Avenue - Cost: $260 Rent: $22-$110-$330-$800-$975-$1150 Mortgage: $130 House Cost: $150" },
+	{ 1023, 14, 2, "^yVentnor Avenue - Cost: $260 Rent: $22-$110-$330-$800-$975-$1150 Mortgage: $130 House Cost: $150" },
+	{ 1023, 15, 2, "^yWater Works - Cost: $150 Rent: If one 'Utility' is owned rent is 4 times amount shown on dice. If both 'Utilities' are owned rent is 10 times amount shown on dice. Mortgage: $75" },
+	{ 1023, 16, 2, "^yMarvin Gardens - Cost: $280 Rent: $24-$120-$360-$850-$1025-$1200 Mortgage: $140 House Cost: $150" },
+	{ 1023, 17, 2, "^yGO TO JAIL" },
+	{ 1023, 17, 3, "^yPacific Avenue - Cost: $300 Rent: $26-$130-$390-$900-$1100-$1275 Mortgage: $150 House Cost: $200" },
+	{ 1023, 17, 4, "^yNorth Carolina Avenue - Cost: $300 Rent: $26-$130-$390-$900-$1100-$1275 Mortgage: $150 House Cost: $200" },
+	{ 1023, 17, 5, "^yCOMMUNITY CHEST" },
+	{ 1023, 17, 6, "^yPennsylvania Avenue - Cost: $320 Rent: $28-$150-$450-$1000-$1200-$1400 Mortgage: $160 House Cost: $200" },
+	{ 1023, 17, 7, "^yShort Line Railroad - Cost: $200 Rent: $25-$50-$100-$200 Mortgage: $100" },
+	{ 1023, 17, 8, "^yCHANCE" },
+	{ 1023, 17, 9, "^yPark Place - Cost: $350 Rent: $35-$175-$500-$1100-$1300-$1500 Mortgage: $175 House Cost: $200" },
+	{ 1023, 17, 10, "^yLuxury Tax - Pay $75" },
+	{ 1023, 17, 11, "^yBoard Walk - Cost: $400 Rent: $50-$200-$600-$1400-$1700-$2000 Mortgage: $200 House Cost: $200" },
+	{ 1078, 2, 2, "^wEnter this door to select a ^RFIGHTER^w class." },
+	{ 1078, 5, 2, "^wEnter this door to select a ^RFIGHTER^w class." },
+	{ 1078, 6, 2, "^wEnter this door to select an ^GIN-BETWEEN^w class." },
+	{ 1078, 9, 2, "^wEnter this door to select an ^GIN-BETWEEN^w class." },
+	{ 1078, 10, 2, "^wEnter this door to select a ^BMAGE^w class." },
+	{ 1078, 13, 2, "^wEnter this door to select a ^BMAGE^w class." },
+	{ 1078, 14, 2, "^wEnter this door to select a ^YSPECIAL^w class." },
+	{ 1078, 17, 2, "^wEnter this door to select a ^YSPECIAL^w class." },
+	{ 1079, 3, 2, "^wEnter this door to become a ^RBARBARIAN^w." },
+	{ 1079, 6, 2, "^wEnter this door to become a ^RBARBARIAN^w." },
+	{ 1079, 8, 2, "^wEnter this door to become a ^RSOLDIER^w." },
+	{ 1079, 11, 2, "^wEnter this door to become a ^RSOLDIER^w." },
+	{ 1079, 13, 2, "^wEnter this door to become a ^RGUARD^w." },
+	{ 1079, 16, 2, "^wEnter this door to become a ^RGUARD^w." },
+	{ 1080, 3, 2, "^wEnter this door to become a ^GRANGER^w." },
+	{ 1080, 6, 2, "^wEnter this door to become a ^GRANGER^w." },
+	{ 1080, 8, 2, "^wEnter this door to become a ^GBATTLEMAGE^w." },
+	{ 1080, 11, 2, "^wEnter this door to become a ^GBATTLEMAGE^w." },
+	{ 1080, 13, 2, "^wEnter this door to become a ^GROGUE^w." },
+	{ 1080, 16, 2, "^wEnter this door to become a ^GROGUE^w." },
+	{ 1081, 2, 2, "^wEnter this door to become a ^BHEALER^w." },
+	{ 1081, 5, 2, "^wEnter this door to become a ^BHEALER^w." },
+	{ 1081, 6, 2, "^wEnter this door to become a ^BMAGICIAN^w." },
+	{ 1081, 9, 2, "^wEnter this door to become a ^BMAGICIAN^w." },
+	{ 1081, 10, 2, "^wEnter this door to become a ^BWARLOCK^w." },
+	{ 1081, 13, 2, "^wEnter this door to become a ^BWARLOCK^w." },
+	{ 1081, 14, 2, "^wEnter this door to become an ^BELEMENTALIST^w." },
+	{ 1081, 17, 2, "^wEnter this door to become an ^BELEMENTALIST^w." },
+	{ 339, 9, 7, "^yWitch's Hut - West" },
+	{ 326, 8, 7, "^yWitch's Hut - South" },
+	{ 359, 12, 5, "^yWitch's Hut - West" },
+	{ 413, 14, 5, "^yWitch's Hut - North" },
+	{ 351, 13, 5, "^yWitch's Hut - East" },
+	{ 267, 13, 11, "^yWitch's Hut - North" },
+	{ 260, 12, 8, "^yWitch's Hut - East" },
+	{ 333, 13, 3, "^yWitch's Hut - South" },
+	{ 291, 10, 9, "^yWitch's Hut - East" },
+	{ 384, 11, 7, "^yWitch's Hut - South" },
+	{ 1127, 5, 2, "^wMale" },
+	{ 1127, 8, 2, "^wMale" },
+	{ 1127, 11, 2, "^wFemale" },
+	{ 1127, 14, 2, "^wFemale" },
+	{ 1128, 5, 2, "^wMale" },
+	{ 1128, 8, 2, "^wMale" },
+	{ 1128, 11, 2, "^wFemale" },
+	{ 1128, 14, 2, "^wFemale" },
+	{ 1129, 5, 2, "^wMale" },
+	{ 1129, 8, 2, "^wMale" },
+	{ 1129, 11, 2, "^wFemale" },
+	{ 1129, 14, 2, "^wFemale" },
+	{ 1130, 5, 2, "^wMale" },
+	{ 1130, 8, 2, "^wMale" },
+	{ 1130, 11, 2, "^wFemale" },
+	{ 1130, 14, 2, "^wFemale" },
+	{ 1131, 5, 2, "^wMale" },
+	{ 1131, 8, 2, "^wMale" },
+	{ 1131, 11, 2, "^wFemale" },
+	{ 1131, 14, 2, "^wFemale" },
+	{ 1132, 5, 2, "^wMale" },
+	{ 1132, 8, 2, "^wMale" },
+	{ 1132, 11, 2, "^wFemale" },
+	{ 1132, 14, 2, "^wFemale" },
+	{ 1133, 5, 2, "^wMale" },
+	{ 1133, 8, 2, "^wMale" },
+	{ 1133, 11, 2, "^wFemale" },
+	{ 1133, 14, 2, "^wFemale" },
+	{ 1134, 5, 2, "^wMale" },
+	{ 1134, 8, 2, "^wMale" },
+	{ 1134, 11, 2, "^wFemale" },
+	{ 1134, 14, 2, "^wFemale" },
+	{ 1135, 5, 2, "^wMale" },
+	{ 1135, 8, 2, "^wMale" },
+	{ 1135, 11, 2, "^wFemale" },
+	{ 1135, 14, 2, "^wFemale" },
+	{ 1137, 3, 2, "^wEnter this door to become a ^YSHIFTER^w." },
+	{ 1137, 6, 2, "^wEnter this door to become a ^YSHIFTER^w." },
+	{ 1137, 8, 2, "^wEnter this door to become an ^YSHADOW^w." },
+	{ 1137, 11, 2, "^wEnter this door to become an ^YSHADOW^w." },
+	{ 1137, 13, 2, "^wEnter this door to become a ^Y^w." },
+	{ 1137, 16, 2, "^wEnter this door to become a ^Y^w." },
+	{ 1147, 5, 5, "^wWelcome to the ^GRelaxation Grove^w." },
+        { 1152, 9, 4, "^RTop Lockers: badboy, Genz, Gwydion, Archie, Shredder and Sudimi" },
+        { 1152, 17, 4, "^RBottom Lockers: Crewa, mysterysoilder, Pyrim, DarkstalkerX, kay/kayla and kay/kayla" },
+        { 1152, 13, 4, "^RKeep tiles are red tiles only !!" },
+	{ 1162, 5, 2, "^wMale" },
+	{ 1162, 8, 2, "^wMale" },
+	{ 1162, 11, 2, "^wFemale" },
+	{ 1162, 14, 2, "^wFemale" },
+	
+	
+
+	{ 23, 14, 7, "^RDestiny's Soldiers Guild Hall" },
+	{ 1152, 6, 5, "^YOnly the tan tiles are keep tiles." },
+	{ 1152, 4, 5, "^BTop level storage room listings, proceeding from left to right: Hellfreeze, Syrinx, Adune, Crewa, Sudimi, and Cap" },
+	{ 1152, 8, 5, "^BBottom level storage room listings, proceeding from left to right: XFoxX. Other rooms have yet to be assigned." },
+	{ 1216, 5, 10, "^RKeep tiles are the red carpet only." },
+	{ 638, 4, 7, "^YKeep tiles are red carpet only, not the stairs." }, 
+	{ 1209, 5, 5, "^YSorry about that, forgot to close the area off when I was not working on it -_-. Anyways, step on the magical warp bush to be warped back to CC. - Degenero" },
+	{ 1146, 10, 6, "^CTo become an honorary chicken, say, [You suck!] to James inside. See CrowKnight for other things to say. ^RADMIN GENERAL's WARNING: This is not the real James! It is a robot! Do not be afraid!" },
+	{ 637, 5, 1, "^RThe six star tiles are keep tiles." },
+	{ 637, 12, 1, "^RThe red carpeting is keep tiles." },	
+	{ 637, 14, 1, "^RThe six star tiles are keep tiles." },
+	{ 644, 14, 1, "^RThe six star tiles are keep tiles." },
+	{ 644, 7, 1, "^RThe red carpeting is keep tiles." },
+	{ 644, 5, 1, "^RThe six star tiles are keep tiles." },
+	{ 841, 1, 6, "^YConcentration Room" },
+	{ 841, 8, 2, "^YObstacle Course" },
+	{ 841, 18, 6, "^YMaze Room" },
+	{ 690, 8, 2, "^YEvent Lobby North: Concentration Room, Obstacle Course, Maze Room" },
+	{ 690, 1, 6, "^YEvent Lobby West: Soccer, Ogre Wars" },
+	{ 690, 18, 6, "^YEvent Lobby East: Herding Room, Farbeshot Arena, Construction Room" },
+	{ 840, 18, 6, "^YEvent Lobby Central" },
+	{ 840, 8, 2, "^YOgre Wars" },
+	{ 840, 1, 6, "^YSoccer" },
+	{ 842, 1, 6, "^YStop N Go" },
+	{ 842, 8, 2, "^YEvent Lobby Central" },
+	{ 842, 18, 6, "^YBoard Game Lobby" },
+	{ 842, 8, 12, "^YTeam Room Event" },
+	{ 690, 8, 12, "^YEvent Lobby South: Stop N Go, Team Room Event, Board Game Lobby" },
+	{ 743, 1, 6, "^YEvent Lobby Central" },
+	{ 743, 8, 12, "^YConstruction Room" },
+	{ 743, 18, 6, "^YFarbeshot Arena" },
+	{ 743, 8, 2, "^YHerding Room" },
+	{ 841, 8, 12, "^YEvent Lobby Central" },
+	{ 1375, 17, 9, "^CPlease make any donations of items here. You can drop a specific item in your inventory by right-clicking it." },
+	{ 440, 13, 2, "^YWARNING: ^RYou will be slain if you enter! " },
+	{ 448, 14, 1, "^CAlrighty, well, guess it's all wrapped up here. Just wanted to wish you guys a happy marriage, and I hope you enjoy your new house :) (Left you a little present to get you started out.) -Deg" },
+	{ 637, 6, 8, "^RNote to all guild members: do not buy any rooms or use more than one locker if you already have a storage space. " },
+	{ 713, 9, 6, "^RWest - Void of the Lost                                                                                                                          North - Void of the Lost " },	
+	{ 713, 11, 6, "^REast - The Underworld - Maze                                                                                                              South - Underworld City " },
+	{ 714, 8, 4, "^YPlease keep the Underworld litter-free! " }, 	
+	{ 714, 5, 5, "^RTo become a denizen of the Underworld, please visit the City Hall " },
+	{ 768, 3, 4, "^CGet all your fishin' supplies here!" },
+	{ 768, 9, 4, "^CGet all your farming goods here!" },
+	{ 925, 12, 7, "^gNo new mail..." },
+	{ 925, 11, 6, "^BTrade your goods here!" },
+	{ 1319, 16, 4, "^gThe ancient stone door won't budge..." },
+	{ 1229, 9, 2, "^rYou see a note lying on the desk... the only words that you can make out on it are, ^c(Items may only remain on the red carpet and the light brown flooring.)" },
+	{ 1229, 10, 2, "^rYou see a note lying on the desk... the only words that you can make out on it are, ^c(Items may only remain on the red carpet and the light brown flooring.)" },
+	{ 132, 9, 14, "^gThe ancient stone door won't budge..." },
+        { 131, 9, 1, "^gThe ancient stone door won't budge..." },
+	{ 1064, 12, 4, "^gRecipes - BBQ Meat : 1 Spicy Herb, 5 Cooked Meat (Serves 5 BBQ Meat) " },
+	{ 1064, 10, 2, "^RThe left-hand fire is for cooking meat, the right-hand fire is for BBQing meat. " },
+	{ 1064, 8, 4, "^cYou may store ingredients on the two darkened tiles. " },
+	{ 1239, 12, 2, "^gYou may store items on any tile on this side of the counter. " },
+	{ 1335, 7, 11, "^yRent for 25 gold! Show your items safely! (Note, items will dissappear after 10 minutes.) ^cAfter you are finished, please type in /moveout while in front of the door to the booth, so that it may be available for others to use. " },
+	{ 1335, 12, 11, "^yRent for 25 gold! Show your items safely! (Note, items will dissappear after 10 minutes.) ^cAfter you are finished, please type in /moveout while in front of the door to the booth, so that it may be available for others to use. " },
+	{ 1335, 17, 11, "^yRent for 25 gold! Show your items safely! (Note, items will dissappear after 10 minutes.) ^cAfter you are finished, please type in /moveout while in front of the door to the booth, so that it may be available for others to use. " },
+	{ 1370, 3, 4, "^GThe Guild Master is here to help you create new guilds and recruit new members to your guild. On the wall is a list of commands." },
+	{ 1370, 5, 4, "^YStand on the white tile when you speak to the Guild Master and type /newguild nameofguild to create your guild. The initial cost is 30k (which will be taken from your inventory) plus 10k per week." },
+	{ 1370, 5, 11, "^CWhen recruiting a member to your guild, stand on the white tile and have them stand on the black tile. Then type /recruit." },
+	{ 1370, 2, 1, "^CCommands - /guilds (show all guilds and number of members), /members guildname (show guild members and ranks), /newguild guildname (make a guild)" },
+	{ 1370, 6, 1, "^GGuild Member Commands - /g message (guild chat), /balance (view guild balance), /pay amount (pay off balance), /guildquit (leave the guild)" },
+	{ 1370, 13, 1, "^YGuild Leader Commands - /promote name (promote 1 level), /demote name (demote 1 level), /remove name (removes member from the guild), /newfounder name (Founder may use this command to switch founders)" },
+	{ 1370, 16, 1, "^CChain of Command -  Guild Members are level 1 (guild chat, view balance, pay balance, leave guild), Guild Recruiters are level 2 (recruit + level 1 commands)" },
+	{ 1370, 17, 1, "^CGuild leaders are level 3  (promote and demote lower levels + level 2 commands), Guild Founder is level 4 (newfounder command + level 3 commands)" },
+	{ 477, 13, 1, "^cHelp keep Wellington clean!  Place unwanted items into the trash receptacle." },
+	{ 496, 16, 8, "^RWARNING - Dangerous monsters lurk in the forests beyond this point. Keep out! ^W- Wellington City Council" },
+	{ 495, 10, 8, "^RWARNING - Dangerous monsters lurk in the caves below. If you value your safety, keep out! ^W                     - Wellington City Council" },
+	{ 477, 0, 3, "^yPlease donate any items you do not need here." },
+	{ 766, 5, 10, "^RThe Witchdoctor's Hut is closed for repairs." },
+	{ 1115, 8, 6, "^YTeleporter locations, from left to right, are as follows: 1 - CC, 2 - Happy Fun Time, 3 - Happyton,           4 - Wellington, 5 - The Party Room, 6 - Callias" },
+	{ 1165, 11, 8, "^CDegenero's Concept Workshop" },
+	{ 1375, 7, 10, "^gNo new mail..." },
+	{ 0, 1, 3, "^cHelp keep Galebrook clean!  Place unwanted items into the trash receptacle." },
+	{ 1375, 2, 10, "^cHelp keep Galebrook clean!  Place unwanted items into the trash receptacle." },
+	{ 1377, 15, 10, "^CStep on the origin tile to become a citizen of Galebrook." },
+
+	};
+
+const int NUM_SIGNS = sizeof(gSigns) / sizeof(SIGN_TEXT);
+
+void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerDir;
+	int PlayerX;
+	int PlayerY;
+	int SignMapID;
+	int SignX;
+	int SignY;
+	int i;
+
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerDir = getDir(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+
+	// TODO: Why do the other sign scripts check if getPlayerType() == 0 ?
+
+	// Get coordinates for sign the player is facing
+	SignMapID = PlayerMapID;
+	SignX = PlayerX;
+	SignY = PlayerY;
+	switch (PlayerDir)
+		{
+		case DIR_DOWN:
+			SignY++;
+			break;
+		case DIR_UP:
+			SignY--;
+			break;
+		case DIR_LEFT:
+			SignX--;
+			break;
+		case DIR_RIGHT:
+			SignX++;
+			break;
+		}
+
+	// Search sign list for coordinates
+	for (i = 0; i < NUM_SIGNS; i++)
+		{
+		if (gSigns[i].MapID != SignMapID || gSigns[i].X != SignX || gSigns[i].Y != SignY)
+			continue;
+		
+		sendChat(gSigns[i].pText, PlayerID);
+		if(gSigns[i].MapID == 820 && gSigns[i].X == 8 && gSigns[i].Y == 5)
+		{
+			setPos(PlayerID, 821,7,6);
+			setOrigin(PlayerID,821,7,6); 
+			sendChatf(PlayerID,"^GYou passed the first test! Funny .. eh. Here's a dagger. It's under yer feet, press Shift to pick it up.");
+			makeItem(0,1,821,7,6);
+		}
+		return;
+		}
+
+	// If script 156 was invoked, but there is no corresponding sign in list, there is a problem
+	sendChat("^RError in script 156: No sign text defined at specified coordinates", PlayerID);
+}

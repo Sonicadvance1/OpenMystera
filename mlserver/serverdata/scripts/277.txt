@@ -1,0 +1,19 @@
+// Willy's Sprite Change
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x=getX(id);
+	int y=getY(id);
+	if(getImg(id)==47)
+	{
+		makeEffect(map,x,y,17);
+		setImg(id,0);
+	}
+	else
+	{
+		makeEffect(map,x,y,17);
+		setImg(id,47);
+	}
+}

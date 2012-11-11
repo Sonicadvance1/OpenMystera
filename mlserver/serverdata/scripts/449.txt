@@ -1,0 +1,59 @@
+/*
+	Reassociate player inventory
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	April 15, 2004
+*/
+
+void main()
+{
+	int PlayerID;
+	int ItemID;
+	int SlotID;
+	int ItemLen;
+	int InvLen;
+	cPlayer* pPlayer;
+	cItem* pItem;
+
+	PlayerID = getPlayer();
+	pPlayer = playerStruct(PlayerID);
+
+	// Disassociate inventory from player
+	InvLen = inventoryLen();
+	for (SlotID = 0; SlotID < InvLen; SlotID++)
+		{
+		pPlayer->inventory[SlotID] = -1;
+		}
+
+	// Reassociate inventory with player
+	ItemLen = itemLen();
+	for (ItemID = 0; ItemID < ItemLen; ItemID++)
+		{
+		pItem = itemStruct(ItemID);
+
+		if (pItem->qty == 0)
+			continue;
+
+		if (pItem->owner != PlayerID)
+			continue;
+
+		pPlayer->inventory[pItem->slot] = ItemID;
+		}
+	playerSave(PlayerID);
+
+	// Update client
+	for (SlotID= 0; SlotID < InvLen; SlotID++)
+		{
+		ItemID = pPlayer->inventory[SlotID];
+		if (ItemID != -1)
+			{
+			pItem = itemStruct(ItemID);
+			sendInventoryAdd(PlayerID, pItem->graphic, pItem->name, SlotID, pItem->qty);
+			sendInventoryQty(PlayerID, SlotID, pItem->qty);
+			}
+		else
+			{
+			sendInventoryQty(PlayerID, SlotID, 0);
+			}
+		}
+}

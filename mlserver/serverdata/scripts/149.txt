@@ -1,0 +1,28 @@
+// Admin Bow
+
+void main()
+{
+	int id =getPlayer();
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	int len=12;
+	while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+	{
+		if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+		{
+			int victim=getID(map,x,y);
+			makeEffect(map,x,y,0);
+			int dex=getDex(id);
+			int str=getStr(id);
+			setHP(victim,getHP(victim)-dex*3-str);
+			break;
+		}
+		makeEffect(map,x,y,getDir(id)+5);
+		if(getDir(id)==0)y++;
+		if(getDir(id)==1)y--;
+		if(getDir(id)==2)x--;
+		if(getDir(id)==3)x++;
+		len--;
+	}
+}

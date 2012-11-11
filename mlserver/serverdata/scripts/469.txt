@@ -1,0 +1,55 @@
+//farming script part 1
+
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	cMap *map = mapStruct(player->map);
+	int tile=map->map[player->y][player->x].tile[0];
+	int plant=map->map[player->y][player->x].tile[1];
+
+	if(tile==22 && (player->map==1246 || player->map==928 || player->map==1291 || player->map==1342 || player->map==1343 || player->map==1355) && plant==0)
+	{
+		map->map[player->y][player->x].tile[1]=291;
+		map->map[player->y][player->x].warp.map=0;
+		mapSave(player->map);
+		sendMapUpdate(player->map);
+		sendChatf(id,"Seed planted!");
+	}
+	else
+		sendChatf(id,"Seed could not be planted there...");
+}
+
+/*
+#include <time.h>
+
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	cMap *map = mapStruct(player->map);
+	int tile=map->map[player->y][player->x].tile[0];
+	int plant=map->map[player->y][player->x].tile[1];
+
+	if(tile==22 && (player->map==1246 || player->map==928) && plant==0)
+	{
+		map->map[player->y][player->x].tile[1]=291;
+		mapSave(player->map);
+		sendMapUpdate(player->map);
+		sendChatf(id,"Seed planted!");
+		int i=0;
+		char name[16];
+		char value[128];
+		sprintf(name,"fm%d",i);
+		while(isGlobal(name))
+		{
+			i++;
+			sprintf(name,"fm%d",i);
+		}
+		sprintf(value,"%d %d %d %d",time(0),player->map,player->x,player->y);
+		setGlobalStr(name,value);
+		runScript(470,1000);
+	}
+	else
+		sendChatf(id,"Seed could not be planted there...");
+}*/

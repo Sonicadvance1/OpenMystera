@@ -1,0 +1,130 @@
+/*
+	Jamesbot chat script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	April 1, 2004
+*/
+
+const int RESPONSE_SCRIPT_ID = 436;
+
+void main()
+{
+	int NPCID;
+	int PlayerID;
+	char* pRequest;
+	char pResponse[128];
+
+	NPCID = getPlayer();
+	PlayerID = getChatPlayer();
+	pRequest = getChat();
+	_strlwr(pRequest);
+	pResponse[0] = '\0';
+
+	if (strstr(pRequest, "hello") || strstr(pRequest, "hey") || strstr(pRequest, "james"))
+		{
+		switch (getRand(2))
+			{
+			case 0:
+				strcpy(pResponse, "hi");
+				break;
+			case 1:
+				strcpy(pResponse, "hey");
+				break;
+			}
+		}
+
+	else if (pRequest[strlen(pRequest) - 1] == '?')
+		{
+		switch (getRand(6))
+			{
+			case 0:
+				strcpy(pResponse, "?");
+				break;
+			case 1:
+				strcpy(pResponse, "meh");
+				break;
+			case 2:
+				strcpy(pResponse, "heh");
+				break;
+			case 3:
+				strcpy(pResponse, "yup");
+				break;
+			case 4:
+				strcpy(pResponse, "nah");
+				break;
+			case 5:
+				strcpy(pResponse, "hold on...");
+				break;
+			}
+		}
+
+	else if (strstr(pRequest, "question"))
+		{
+		switch (getRand(3))
+			{
+			case 0:
+				strcpy(pResponse, "what's that?");
+				break;
+			case 1:
+				strcpy(pResponse, "hm?");
+				break;
+			case 2:
+				strcpy(pResponse, "sure");
+				break;
+			}
+		}
+
+	else if (strstr(pRequest, "wtf"))
+		{
+		switch (getRand(2))
+			{
+			case 0:
+				strcpy(pResponse, "lol");
+				break;
+			case 1:
+				strcpy(pResponse, "hehe");
+				break;
+			}
+		}
+
+	else if (strstr(pRequest, "cool") || strstr(pRequest, "awesome") || strstr(pRequest, "nice") || strstr(pRequest, "excellent"))
+		{
+		switch (getRand(1))
+			{
+			case 0:
+				strcpy(pResponse, "thanks!");
+				break;
+			}
+		}
+
+	else if (strstr(pRequest, "suck") || strstr(pRequest, "blow") || strstr(pRequest, "stupid"))
+		{
+		switch (getRand(1))
+			{
+			case 0:
+				strcpy(pResponse, "alakazam!");
+				setImg(PlayerID, 5);
+				break;
+			}
+		}
+	
+
+	else if (getRand(4) == 0)
+		{
+		switch (getRand(2))
+			{
+			case 0:
+				strcpy(pResponse, "hmm");
+				break;
+			case 1:
+				strcpy(pResponse, "...");
+				break;
+			}
+		}
+
+	if (pResponse[0] != '\0')
+		{
+		setGlobalStr("JamesResponse", pResponse);
+		runScript(RESPONSE_SCRIPT_ID, (strlen(pResponse) * 250) + 1500);
+		}
+}

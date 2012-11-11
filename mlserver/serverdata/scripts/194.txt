@@ -1,0 +1,33 @@
+/*
+	Glitter script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	December 14, 2003
+*/
+
+const int MAP_ID = 0;
+const int GLITTER_EFFECT = 3;
+const int GLITTER_INTERVAL = 2000;
+const int GLITTER_SCRIPT_ID = 194;
+
+void main()
+{
+	return;
+
+	int PlayerID;
+	int MapID;
+	int CurrX;
+	int CurrY;
+	int TimerID;
+	string GlobalVarName;
+
+	CurrX = getRand(MAP_WIDTH);
+	CurrY = getRand(MAP_HEIGHT);
+	makeEffect(MAP_ID, CurrX, CurrY, GLITTER_EFFECT);
+
+	TimerID = runScript(GLITTER_SCRIPT_ID, GLITTER_INTERVAL);
+
+	GlobalVarName = "GlitterTimerID";
+	GlobalVarName += itos(MAP_ID);
+	setGlobalInt(GlobalVarName, TimerID);
+}

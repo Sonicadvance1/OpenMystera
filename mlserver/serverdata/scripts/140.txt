@@ -1,0 +1,7 @@
+// kill
+
+void main()
+{
+	int id=getPlayer();
+	setHP(id,getHP(id)-getHP(id));
+}

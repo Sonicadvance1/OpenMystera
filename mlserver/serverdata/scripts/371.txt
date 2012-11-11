@@ -1,0 +1,12 @@
+// gold mushroom
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x=getX(id);
+	int y=getY(id);
+	makeEffect(map,x,y,17);
+	sendChat("^GYou eat the mushroom... you cough something back up, GOLD!!",id);
+	giveItem(id,1,100);
+}

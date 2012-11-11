@@ -1,0 +1,16 @@
+// Galebrook House of Wonders Kick Out
+
+void main()
+{
+	int id=getPlayer();
+	int victim=getMTarget(id);
+	if(victim>-1 && getMap(id)==463 && getAccess(victim)==1)
+	{
+		sendChat("^RYou have been kicked out of the House of Wonders!",victim);
+		setPos(victim,140,5,5);
+	}
+	else
+	{
+		sendChat("^RYou have to select a target and you can only use this item in the House of Wonders, also you cannot kick out admins!",id);
+	}
+}

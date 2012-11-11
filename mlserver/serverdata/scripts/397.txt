@@ -1,0 +1,52 @@
+// Grain Mill
+
+void main()
+{
+
+	int PlayerID;
+	int SlotID;
+	int ItemID;
+	cPlayer* pPlayer;
+	cItem* pItem;
+	PlayerID = getPlayer();
+	pPlayer = playerStruct(PlayerID);
+
+	// Search player's inventory for grain
+	for (SlotID = 0; SlotID < inventoryLen(); SlotID++)
+		{
+		ItemID = pPlayer->inventory[SlotID];
+		pItem = itemStruct(ItemID);
+		if (pItem->item_template == 434)
+			break;
+		}
+
+	// If no grain found
+	if (SlotID == inventoryLen())
+		{
+		sendChat("^RNo grain to process!", PlayerID);
+		return;
+		}
+
+	// Turn grain into flour
+	int PlayerMapID=getMap(PlayerID);
+	sendMapChatf(PlayerMapID, "%s:^G*shoves in some grain*", getName(PlayerID));
+	*pItem = *itemTemplateStruct(435);
+	pItem->owner = PlayerID;
+	pItem->slot = SlotID;
+	pItem->qty = -1;
+	itemSave(ItemID);
+	sendInventoryAdd(PlayerID, pItem->graphic, pItem->name, pItem->slot, pItem->qty);
+		
+
+	/*int id=getPlayer();
+	int slot=itemSlot(id,434);
+	if(slot<0)
+	{
+		sendChat("^RNo grain to process!",id);
+	}
+	else
+	{
+		takeItem(id,slot);
+		giveItem(id,435,1);
+	}*/
+}

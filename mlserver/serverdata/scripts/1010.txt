@@ -1,0 +1,74 @@
+#include "combat.h"
+
+void main()
+{
+	long id = getPlayer();
+	long victim;
+	cItem *left;
+	cItem *right;
+	cPlayer *player = playerStruct(id);
+	cPlayer *target;
+	long dmg;
+	long x = player->x;
+	long y = player->y;
+	long mapid = player->map;
+	
+	switch (player->dir)
+	{
+		case DIR_UP:
+			y--;
+			break;
+		case DIR_DOWN:
+			y++;
+			break;
+		case DIR_LEFT:
+			x--;
+			break;
+		case DIR_RIGHT:
+			x++;
+			break;
+	}
+	
+	victim = getID(mapid,x,y);
+	
+	if(victim > -1)
+	{
+		target = playerStruct(victim);
+		if((target->type != PLAYER_TYPE_NPC || target->total_time<=0) && target->access>0 && (target->type==PLAYER_TYPE_NPC || (target->serenity==0 && player->serenity==0)))
+		{
+			if(player->eLeft!=-1)
+			{
+				left = itemStruct(player->inventory[player->eLeft]);
+				if(left->use_script > -1)
+				{
+					runScriptAs(left->use_script,0,id);
+				}
+			}
+			if(player->eRight!=-1)
+			{
+				right= itemStruct(player->inventory[player->eRight]);
+				if(right->use_script > -1)
+				{
+					runScriptAs(right->use_script,0,id);
+				}
+			}
+			
+			long dmg = wouldAttack(id,victim);
+			if(missBonus(player->dex))
+				dmg=0;
+			
+			setHP(victim,target->hp - dmg);
+			
+			//send blood/miss effect out
+			if(dmg==0)
+				makeEffect(target->map,target->x,target->y,4);
+			else
+				makeEffect(target->map,target->x,target->y,0);
+	
+			//send hp bar
+			sendHPbar(player->map,victim);
+			
+			target->target=id;
+		}
+	}
+}

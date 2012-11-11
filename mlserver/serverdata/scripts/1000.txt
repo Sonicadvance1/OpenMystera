@@ -1,0 +1,21 @@
+//game script
+#include <time.h>
+void main()
+{
+	// No PK Maps
+	//runScript(343, 1000);
+
+	//Tree Regrowth!
+	//runScript(317,90000);
+
+	//Shroom Regrowth!
+	//runScript(363,30000);
+
+	//farming
+	runScript(470,600);
+
+	//lottery
+	runScript(544,1000);
+
+	srand(time(0));
+}

@@ -1,0 +1,6 @@
+ void main()
+ {
+ sendChat("^cIn remembrance of Robin", getPlayer());
+ sendChat("^cR.I.P. ~ - June, 2004", getPlayer());
+ sendChat("^c~Your kindness and respect will be remembered with joy", getPlayer());
+ }

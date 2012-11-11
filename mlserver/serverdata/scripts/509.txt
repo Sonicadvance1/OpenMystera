@@ -1,0 +1,10 @@
+//heal according to stats
+   
+   void main()
+
+        int id=getPlayer();
+
+   {
+        setHP(id,getHP(id)+(player->con*2+player->str+player->dex/2));
+        setMP(id,getMP(id)+(player->int*3+player->wis));
+   }

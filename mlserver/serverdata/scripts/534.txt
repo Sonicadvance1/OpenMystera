@@ -1,0 +1,21 @@
+//Makes maps pretty
+#include"mapping.h"
+int i=STARTMAP;
+void main()
+{
+	int i = STARTMAP;
+	while(i<ENDMAP)
+	{
+		int chance=7;
+		while(getRand(10)>=chance)
+		{
+			makelake(i,6);
+			chance++;
+		}
+		printf ("%d water processed\n", i);
+		prettymap(i);
+		savemap(i);
+		printf ("%d prettied\n", i);
+		i++;
+	}
+}

@@ -1,0 +1,21 @@
+// targeted spell
+
+void main()
+{
+	int id=getPlayer();
+	int cost=0;
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	int victim=getMTarget(id);
+	if(0&&getMP(id)<cost)
+	{
+		sendChat("You're not Marc! Drop this book!",id);
+	}
+	else if(victim>-1)//makes sure that spell target is set
+	{		
+		//setMP(id,getMP(id)-cost);
+		makeEffect(map,getX(victim),getY(victim),11);
+		setHP(victim,getHP(victim)-magicDamage(id)*20);
+	}
+}

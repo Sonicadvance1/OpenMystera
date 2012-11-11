@@ -1,0 +1,46 @@
+//game script
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x=getX(id);
+	int y=getY(id);
+	int dx;
+	int dy;
+	int dir=getDir(id);
+	if(dir==0){y++;dx=x;dy=y+1;}
+	if(dir==1){y--;dx=x;dy=y-1;}
+	if(dir==2){x--;dx=x-1;dy=y;}
+	if(dir==3){x++;dx=x+1;dy=y;}
+	if(!inBounds(dx,dy) || (getTileType(map,dx,dy)==1 && getID(map,dx,dy)==-1))
+	{
+		if(!inBounds(dx,dy)) 
+		{
+			dx=getX(id);
+			dy=getY(id);
+		}
+		int block=getTile(map,x,y,1);
+		setTileType(map,x,y,1);
+		char globloc[256];
+		sprintf(globloc,"push%d%d%d",map,x,y);
+		if(!isGlobal(globloc))
+			setTile(map,x,y,1,0);//blank it
+		else
+		{
+			setTile(map,x,y,1,globalInt(globloc));//restore layer 1
+			freeGlobal(globloc);
+		}
+		char globlac[256];
+		sprintf(globlac,"push%d%d%d",map,dx,dy);
+		int obj = getTile(map,dx,dy,1);
+		setGlobalInt(globlac,obj);
+		setTile(map,dx,dy,1,block);
+		setTileType(map,dx,dy,6);
+		setTileScript(map,dx,dy,55);
+		mapSave(map);
+		sendMapUpdate(map);
+	}
+}

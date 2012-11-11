@@ -1,0 +1,17 @@
+// Board Game Dice
+
+void main()
+{
+	int id=getPlayer();
+	int vc=getMTarget(id);
+	if(vc>-1)
+	{
+		int dice=getRand(6)+1;
+		int map=getMap(id);
+		sendMapChatf(map,"^C%s ^Grolled a %d!",getName(vc),dice);
+	}
+	else
+	{
+		sendChat("^RYou must select a target first!",id);
+	}
+}

@@ -1,0 +1,399 @@
+// Consolidated switch Scripted
+
+
+
+// const int DIR_DOWN = 0;
+ //const int DIR_UP = 1;
+ //const int DIR_LEFT = 2;
+ //const int DIR_RIGHT = 3;
+
+
+void main()
+ {
+ 
+int PlayerID;
+int PlayerMapID;
+int PlayerDir;
+int PlayerX;
+int PlayerY;
+int SignMapID;
+int SignX;
+int SignY;
+int i;
+
+PlayerID = getPlayer();
+PlayerMapID = getMap(PlayerID);
+PlayerDir = getDir(PlayerID);
+PlayerX = getX(PlayerID);
+PlayerY = getY(PlayerID);
+
+// Get coordinates for switch the player is facing
+
+SignMapID = PlayerMapID;
+SignX = PlayerX;
+SignY = PlayerY;
+switch (PlayerDir)
+
+{
+
+case DIR_DOWN:
+SignY++;
+break;
+
+case DIR_UP:
+SignY--;
+break;
+
+case DIR_LEFT:
+SignX--;
+break;
+
+case DIR_RIGHT:
+SignX++;
+break;
+ 
+
+}
+ 
+ 
+// Search for switch at specified coordinates
+ 
+if (SignMapID == 2 && SignX == 4 && SignY == 1)
+{
+// code for switch #1
+if (getTile(2,5,1,1)==0)   // change from wall to torch
+	{
+		setTile(2,5,1,1,262);
+		setTile(2,3,1,1,262);
+		setTile(2,3,9,1,262);
+		setTile(2,6,10,1,262);
+		setTile(2,8,10,1,262);
+		setTile(2,11,10,1,262);
+		setTile(2,13,10,1,262);
+		setTile(2,7,6,1,262);
+		setTile(2,12,6,1,262);
+		setTile(2,16,9,1,262);
+		setTile(2,17,1,1,262);
+		setTile(2,13,1,1,262);
+		setTile(2,5,12,3,262);
+		setTile(2,14,12,3,262);
+
+		setTile(2,5,1,2,845);
+		setTile(2,3,1,2,845);
+		setTile(2,3,9,2,845);
+		setTile(2,6,10,2,845);
+		setTile(2,8,10,2,845);
+		setTile(2,11,10,2,845);
+		setTile(2,13,10,2,845);
+		setTile(2,7,6,2,845);
+		setTile(2,12,6,2,845);
+		setTile(2,16,9,2,845);
+		setTile(2,17,1,2,845);
+		setTile(2,13,1,2,845);
+		setMapLighting(2,0);
+	}
+        else
+	{
+		setTile(2,5,1,1,0); // change from torch to wall
+		setTile(2,3,1,1,0);
+		setTile(2,3,9,1,0);
+		setTile(2,6,10,1,0);
+		setTile(2,8,10,1,0);
+		setTile(2,11,10,1,0);
+		setTile(2,13,10,1,0);
+		setTile(2,7,6,1,0);
+		setTile(2,12,6,1,0);
+		setTile(2,16,9,1,0);
+		setTile(2,17,1,1,0);
+		setTile(2,13,1,1,0);
+		setTile(2,5,12,3,0);
+		setTile(2,14,12,3,0);
+
+		setTile(2,5,1,2,0);
+		setTile(2,3,1,2,0);
+		setTile(2,3,9,2,0);
+		setTile(2,6,10,2,0);
+		setTile(2,8,10,2,0);
+		setTile(2,11,10,2,0);
+		setTile(2,13,10,2,0);
+		setTile(2,7,6,2,0);
+		setTile(2,12,6,2,0);
+		setTile(2,16,9,2,0);
+		setTile(2,17,1,2,0);
+		setTile(2,13,1,2,0);
+		setMapLighting(2,-70);
+	}
+}
+ 
+else if (SignMapID == 236 && SignX == 3 && SignY == 1)
+{
+// code for switch #2
+if (getTile(236,6,2,3)==0)   // change from wall to torch
+	{
+		setTile(236,6,2,3,262);
+		setTile(236,10,2,3,262);
+		setTile(236,10,4,3,262);
+		setTile(236,6,4,3,262);
+		setMapLighting(236,0);
+	}
+        else
+	{
+		setTile(236,6,2,3,0); // change from torch to wall
+		setTile(236,10,2,3,0);
+		setTile(236,10,4,3,0);
+		setTile(236,6,4,3,0);
+		setMapLighting(236,-70);
+	}
+}
+
+else if (SignMapID == 586 && SignX == 14 && SignY == 10)
+{
+// code for Medep's Switch
+if (getTile(586,9,8,3)==0)   // change from wall to torch
+	{
+		setTile(586,9,8,3,262);
+		setTile(586,9,7,3,262);
+		setTile(586,9,6,3,262);
+		setTile(586,10,7,3,262);
+		setTile(586,8,7,3,262);
+		setMapLighting(586,0);
+	}
+        else
+	{
+		setTile(586,9,8,3,0); // Change from torch to wall
+		setTile(586,9,7,3,0);
+		setTile(586,9,6,3,0);
+		setTile(586,10,7,3,0);
+		setTile(586,8,7,3,0);
+		setMapLighting(586,-70);
+	}
+}
+
+else if (SignMapID == 235 && SignX == 0 && SignY == 3)
+{
+// code for Sunn's First Floor Switch
+if (getTile(235,2,1,1)==0)   // change from wall to torch
+	{
+		setTile(235,2,1,1,262);
+		setTile(235,6,1,1,262);
+		setTile(235,14,1,1,262);
+		setTile(235,16,1,1,262);
+		setTile(235,18,7,1,262);
+		setTile(235,12,7,1,262);
+		setTile(235,7,7,1,262);
+		setTile(235,1,7,1,262);
+		setTile(235,1,11,1,262);
+		setTile(235,5,11,1,262);
+		setTile(235,7,11,1,262);
+		setTile(235,12,11,1,262);
+		setTile(235,14,11,1,262);
+		setTile(235,18,11,1,262);
+
+		setTile(235,2,1,2,845);
+		setTile(235,6,1,2,845);
+		setTile(235,14,1,2,845);
+		setTile(235,16,1,2,845);
+		setTile(235,18,7,2,845);
+		setTile(235,12,7,2,845);
+		setTile(235,7,7,2,845);
+		setTile(235,1,7,2,845);
+		setTile(235,1,11,2,845);
+		setTile(235,5,11,2,845);
+		setTile(235,7,11,2,845);
+		setTile(235,12,11,2,845);
+		setTile(235,14,11,2,845);
+		setTile(235,18,11,2,845);
+		setMapLighting(235,0);
+	}
+        else
+	{
+		setTile(235,2,1,1,0);
+		setTile(235,6,1,1,0);
+		setTile(235,14,1,1,0);
+		setTile(235,16,1,1,0);
+		setTile(235,18,7,1,0);
+		setTile(235,12,7,1,0);
+		setTile(235,7,7,1,0);
+		setTile(235,1,7,1,0);
+		setTile(235,1,11,1,0);
+		setTile(235,5,11,1,0);
+		setTile(235,7,11,1,0);
+		setTile(235,12,11,1,0);
+		setTile(235,14,11,1,0);
+		setTile(235,18,11,1,0);
+
+		setTile(235,2,1,2,0);
+		setTile(235,6,1,2,0);
+		setTile(235,14,1,2,0);
+		setTile(235,16,1,2,0);
+		setTile(235,18,7,2,0);
+		setTile(235,12,7,2,0);
+		setTile(235,7,7,2,0);
+		setTile(235,1,7,2,0);
+		setTile(235,1,11,2,0);
+		setTile(235,5,11,2,0);
+		setTile(235,7,11,2,0);
+		setTile(235,12,11,2,0);
+		setTile(235,14,11,2,0);
+		setTile(235,18,11,2,0);
+		setMapLighting(235,-70);
+	}
+}
+
+else if (SignMapID == 579 && SignX == 18 && SignY == 7)
+{
+// code for Sunnmann's Left guest quarters switch
+if (getTile(579,17,7,1)==0)   // change from wall to torch
+	{
+		setTile(579,17,7,1,262);
+		setTile(579,15,7,1,262);
+		setTile(579,13,7,1,262);
+		setTile(579,11,7,1,262);
+		setTile(579,8,7,1,262);
+		setTile(579,6,7,1,262);
+		setTile(579,4,7,1,262);
+		setTile(579,2,7,1,262);
+
+		setTile(579,17,7,2,845);
+		setTile(579,15,7,2,845);
+		setTile(579,13,7,2,845);
+		setTile(579,11,7,2,845);
+		setTile(579,8,7,2,845);
+		setTile(579,6,7,2,845);
+		setTile(579,4,7,2,845);
+		setTile(579,2,7,2,845);
+		setMapLighting(579,0);
+	}
+        else
+	{
+		setTile(579,17,7,1,0); // change from torch to wall
+		setTile(579,15,7,1,0);
+		setTile(579,13,7,1,0);
+		setTile(579,11,7,1,0);
+		setTile(579,8,7,1,0);
+		setTile(579,6,7,1,0);
+		setTile(579,4,7,1,0);
+		setTile(579,2,7,1,0);
+
+		setTile(579,17,7,2,0);
+		setTile(579,15,7,2,0);
+		setTile(579,13,7,2,0);
+		setTile(579,11,7,2,0);
+		setTile(579,8,7,2,0);
+		setTile(579,6,7,2,0);
+		setTile(579,4,7,2,0);
+		setTile(579,2,7,2,0);
+		setMapLighting(579,-70);
+	}
+}
+
+else if (SignMapID == 578 && SignX == 1 && SignY == 7)
+{
+// code for Sunnmann's Right guest quarters switch
+if (getTile(578,17,7,1)==0)   // change from wall to torch
+	{
+		setTile(578,17,7,1,262);
+		setTile(578,15,7,1,262);
+		setTile(578,13,7,1,262);
+		setTile(578,11,7,1,262);
+		setTile(578,8,7,1,262);
+		setTile(578,6,7,1,262);
+		setTile(578,4,7,1,262);
+		setTile(578,2,7,1,262);
+		setTile(578,17,7,2,845);
+		setTile(578,15,7,2,845);
+		setTile(578,13,7,2,845);
+		setTile(578,11,7,2,845);
+		setTile(578,8,7,2,845);
+		setTile(578,6,7,2,845);
+		setTile(578,4,7,2,845);
+		setTile(578,2,7,2,845);
+		setMapLighting(578,0);
+	}
+        else
+	{
+		setTile(578,17,7,1,0); // change from torch to wall
+		setTile(578,15,7,1,0);
+		setTile(578,13,7,1,0);
+		setTile(578,11,7,1,0);
+		setTile(578,8,7,1,0);
+		setTile(578,6,7,1,0);
+		setTile(578,4,7,1,0);
+		setTile(578,2,7,1,0);
+		setTile(578,17,7,2,0);
+		setTile(578,15,7,2,0);
+		setTile(578,13,7,2,0);
+		setTile(578,11,7,2,0);
+		setTile(578,8,7,2,0);
+		setTile(578,6,7,2,0);
+		setTile(578,4,7,2,0);
+		setTile(578,2,7,2,0);
+		setMapLighting(578,-70);
+	}
+}
+else if (SignMapID == 132 && SignX == 11 && SignY == 6)
+{
+// code for Abbadon's switch
+if (getTile(132,16,6,1)==0)   // change from wall to torch
+	{
+		setTile(132,16,6,1,262);
+		setTile(132,14,6,1,262);
+		setTile(132,11,12,1,262);
+		setTile(132,8,12,1,262);
+		setTile(132,6,3,1,262);
+		setTile(132,4,3,1,262);
+		setTile(132,16,6,2,845);
+		setTile(132,14,6,2,845);
+		setTile(132,11,12,2,845);
+		setTile(132,8,12,2,845);
+		setTile(132,6,3,2,845);
+		setTile(132,4,3,2,845);
+		setMapLighting(132,0);
+	}
+        else
+	{
+		setTile(132,16,6,1,0); // change from torch to wall
+		setTile(132,14,6,1,0);
+		setTile(132,11,12,1,0);
+		setTile(132,8,12,1,0);
+		setTile(132,6,3,1,0);
+		setTile(132,4,3,1,0);
+		setTile(132,16,6,2,0); // turn off layer 2
+		setTile(132,14,6,2,0);
+		setTile(132,11,12,2,0);
+		setTile(132,8,12,2,0);
+		setTile(132,6,3,2,0);
+		setTile(132,4,3,2,0);
+		setMapLighting(132,-70);
+	}
+}
+else if (SignMapID == 203 && SignX == 3 && SignY == 14)
+{
+// code for Abbadon's Armory switch
+if (getTile(203,8,6,1)==0)   // change from wall to torch
+	{
+		setTile(203,8,6,1,262);
+		setTile(203,11,6,1,262);
+		setTile(203,15,1,1,262);
+		setTile(203,4,1,1,262);
+		setTile(203,8,6,2,845);
+		setTile(203,11,6,2,845);
+		setTile(203,15,1,2,845);
+		setTile(203,4,1,2,845);
+		setMapLighting(203,0);
+	}
+        else
+	{
+		setTile(203,8,6,1,0); // change from torch to wall
+		setTile(203,11,6,1,0);
+		setTile(203,15,1,1,0);
+                setTile(203,4,1,1,0);
+		setTile(203,8,6,2,0); // turn off layer 2
+		setTile(203,11,6,2,0);
+		setTile(203,15,1,2,0);
+                setTile(203,4,1,2,0); 
+		setMapLighting(203,-70);
+	}
+}
+updateMap(SignMapID);
+}

@@ -1,0 +1,7 @@
+//mana leaf heal
+
+void main()
+{
+	int id=getPlayer();
+	setMP(id,getMP(id)+50);
+}

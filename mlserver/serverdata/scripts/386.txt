@@ -1,0 +1,88 @@
+//game script
+
+int attackOf(int id)
+{
+	return 0;
+}
+
+int defenseOf(int id)
+{
+	return 0;
+}
+
+int nextExp(int lvl)
+{
+	return int(10*(lvl*lvl));
+}
+
+int totalExpOf(int index)
+{
+	cPlayer *player=playerStruct(index);
+	int exp=player->exp;
+	for(int c=1;c<player->lvl;c++)
+		exp+=nextExp(c);
+	return exp;
+}
+
+char* classOf(int index)
+{
+	cPlayer *player=playerStruct(index);
+	int s[5];
+	s[0] = player->str;
+	s[1] = player->dex;
+	s[2] = player->con;
+	s[3] = player->itl;
+	s[4] = player->wis;
+	int m=-1,m2=-1,r=1;
+	for(int i=0;i<5;i++)
+	{
+		if(s[i]>r)
+		{
+			r=s[i];
+			m=i;
+		}
+	}
+	r=1;
+	for(i=0;i<5;i++)
+	{
+		if(i!=m && s[i]>r)
+		{
+			r=s[i];
+			m2=i;
+		}
+	}
+	if(m==0 && m2==1)return "Rogue";
+	if(m==0 && m2==2)return "Warrior";
+	if(m==0 && m2==3)return "BattleMage";
+	if(m==0 && m2==4)return "Knight";
+
+	if(m==1 && m2==0)return "Ninja";
+	if(m==1 && m2==2)return "Assassin";
+	if(m==1 && m2==3)return "Thief";
+	if(m==1 && m2==4)return "Ranger";
+
+	if(m==2 && m2==0)return "Barbarian";
+	if(m==2 && m2==1)return "Samurai";
+	if(m==2 && m2==3)return "Monk";
+	if(m==2 && m2==4)return "Cleric";
+
+	if(m==3 && m2==0)return "Warlock";
+	if(m==3 && m2==1)return "Sorcerer";
+	if(m==3 && m2==2)return "Wizard";
+	if(m==3 && m2==4)return "Prophet";
+
+	if(m==4 && m2==0)return "Paladin";
+	if(m==4 && m2==1)return "Mystic";
+	if(m==4 && m2==2)return "Shaman";
+	if(m==4 && m2==3)return "Druid";
+	return "Multi-Class";
+}
+
+void main()
+{
+	//stats
+	int id = getPlayer();
+	cPlayer *player = playerStruct(id);
+	sendChatf(id,"^BATK:%d+%d (%d) DEF:%d+%d (%d) EXP:%d TNL:%d TRAIN:%d",player->atk,attackOf(id)-player->atk,attackOf(id),player->def,defenseOf(id)-player->def,defenseOf(id),totalExpOf(id),nextExp(player->lvl)-player->exp,player->train);
+	sendChatf(id,"^BCLASS:%s STR:%d DEX:%d CON:%d INT:%d WIS:%d",classOf(id),player->str,player->dex,player->con,player->itl,player->wis);
+}

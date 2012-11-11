@@ -1,0 +1,16 @@
+// Recall to CC
+
+void main()
+{
+	int map = getMap(getPlayer()); 
+	if(map != 22 && map != 48 && map != 55 && map != 136)//quest reward maps
+	{
+		int mapOrigin,xOrigin,yOrigin;
+		setPos(getPlayer(),0,9,10); // sends user to Wellington
+	}
+	else
+	{
+		sendChat("^RYou can't use that scroll here.",getPlayer());
+		makeItem(9,1,map,getX(getPlayer()),getY(getPlayer()));
+	}
+}

@@ -1,0 +1,110 @@
+//Bombs
+//Stackable
+void main()
+{
+   int id=getPlayer();
+   int map=getMap(id);
+   int x  =getX(id);
+   int y  =getY(id);
+   int len=0;
+   int victim;
+
+   while(inBounds(x,y) && getTileType(map,x,y) != 2 && len<4)
+   { 
+     makeEffect(map,x,y,18);
+     if(getDir(id)==0)y++;
+     if(getDir(id)==1)y--;
+     if(getDir(id)==2)x--;
+     if(getDir(id)==3)x++;
+     len++;
+   }
+   if(len==4)
+   {
+     if(inBounds(x,y) && getTileType(map,x,y) != 2)
+     {
+        if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+        {
+          victim=getID(map,x,y);
+          if(getCon(victim)>5)
+   {
+            setHP(victim,getHP(victim)-50);
+   }
+          else
+          {
+            setHP(victim,getHP(victim)-250/getCon(victim));
+          }
+        }
+        makeEffect(map,x,y,10);
+     }
+     x++;
+     if(inBounds(x,y) && getTileType(map,x,y) != 2)
+     {
+        if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+        {
+          victim=getID(map,x,y);
+          if(getCon(victim)>5)
+   {
+            setHP(victim,getHP(victim)-50);
+   }
+          else
+          {
+            setHP(victim,getHP(victim)-250/getCon(victim));
+          }
+        }
+        makeEffect(map,x,y,10);
+     }
+     x-=2;
+     if(inBounds(x,y) && getTileType(map,x,y) != 2)
+     {
+        if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+        {
+          victim=getID(map,x,y);
+          if(getCon(victim)>5)
+   {
+            setHP(victim,getHP(victim)-50);
+   }
+          else
+          {
+            setHP(victim,getHP(victim)-250/getCon(victim));
+          }
+        }
+        makeEffect(map,x,y,10);
+     }
+     x++;
+     y--;
+     if(inBounds(x,y) && getTileType(map,x,y) != 2)
+     {
+        if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+        {
+          victim=getID(map,x,y);
+          if(getCon(victim)>5)
+   {
+            setHP(victim,getHP(victim)-50);
+   }
+          else
+          {
+            setHP(victim,getHP(victim)-250/getCon(victim));
+          }
+        }
+        makeEffect(map,x,y,10);
+     }
+     y+=2;
+     if(inBounds(x,y) && getTileType(map,x,y) != 2)
+     {
+        if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+        {
+          victim=getID(map,x,y);
+          if(getCon(victim)>5)
+   {
+            setHP(victim,getHP(victim)-50);
+   }
+          else
+          {
+            setHP(victim,getHP(victim)-250/getCon(victim));
+          }
+        }
+        makeEffect(map,x,y,10);
+      }
+      len++;
+   }
+}

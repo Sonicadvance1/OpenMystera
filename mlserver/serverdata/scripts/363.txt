@@ -1,0 +1,50 @@
+// Mushroom Regrow Script
+
+struct shroomcheck
+{
+	int map;
+	int x;
+	int y;
+};
+
+shroomcheck shroom[]={
+	{869,4,3},
+	{869,13,7},
+	{869,8,12},
+	{872,7,3},
+	{872,14,7},
+	{872,6,11},
+	{873,5,3},
+	{873,13,6},
+	{873,8,11},
+	{874,10,7},
+	{874,2,11},
+	{874,13,10},
+	{875,14,13},
+	{875,4,9},
+	{875,14,12},
+	{876,10,2},
+	{876,4,11},
+	{876,16,12}
+	};
+
+const int shroomamount = sizeof(shroom) / sizeof(shroomcheck);
+
+void main()
+{
+	int i;
+	for (i = 0; i < shroomamount; i+=getRand(5)+1)
+	{
+		switch (getTile(shroom[i].map,shroom[i].x,shroom[i].y,1))
+		{
+			case 447:
+				continue;
+			case 0:
+				setTile(shroom[i].map,shroom[i].x,shroom[i].y,1,447);
+				setTileScript(shroom[i].map,shroom[i].x,shroom[i].y,364);
+				updateMap(shroom[i].map);
+				continue;
+		}
+	}
+	runScript(363,60000);
+}

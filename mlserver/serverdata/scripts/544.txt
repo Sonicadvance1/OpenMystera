@@ -1,0 +1,197 @@
+struct reward
+{
+	int min_wager;
+	int cost;
+	int item_id;
+	int item_qty;
+	int rarity;
+};
+
+reward rewards[] = 
+{
+	{10000 ,2500 ,624 ,-1    ,200 },
+	{5000  ,0    ,1   ,500   ,200 },
+	{1000  ,0    ,1   ,100   ,200 },
+	{500   ,0    ,1   ,50    ,200 },
+	{100000,0    ,1   ,10000 ,200 },
+	{10000 ,0    ,1   ,1000  ,200 },
+	{10000 ,1000 ,620 ,-1    ,200 }
+};
+
+const int num_rewards = sizeof(rewards)/sizeof(reward);
+
+bool get_prize(int wager, int num_entrants)
+{
+	bool prize = false;
+	
+	if(num_entrants <= 1)
+	{
+		return false;
+	}
+	
+	for(int i = 0; i < num_rewards; i++)
+	{
+		if(rewards[i].min_wager <= wager)
+		{
+			prize = true;
+			break;
+		}
+	}
+	
+	if(prize && getRand(2))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+int nameToId(char* name)
+{
+	cPlayer *pPlayer;
+	char playerName[64];
+
+	strcpy(playerName,stringLower(name));
+	for(int i=0;i<playerLen();i++)
+	{
+		pPlayer=playerStruct(i);
+		if(pPlayer->access>0 && strcmp(stringLower(pPlayer->name),playerName)==0)
+			return i;
+	}
+	return -1;
+}
+struct entrant
+{
+	int id;
+	int amount;
+};
+
+void main()
+{
+	int num_gold       = 0;
+	int time_remaining = 0;
+	int temp_gold      = 0;
+	int winner         = 0;
+	int total_gold     = 0;
+	int num_entered    = 0;
+	int total_online_gold = 0;
+	entrant *entrants;
+	cPlayer *player;
+	char global_value[256];
+	char global_name[256];
+	char num_global_name[256];
+	char player_name[256];
+	
+	sprintf(global_name, "WishingWellTime%d",1387);
+	if(isGlobal(global_name))
+	{
+		time_remaining = globalInt(global_name);
+		time_remaining--;
+		if(time_remaining <= 0)
+		{
+			freeGlobal(global_name);
+			sprintf(global_name, "WishingWell%d", 1387);
+			if(!DBisGlobal(global_name))
+			{
+				sendChatf(-1, "^RNobody entered the lottery!");
+				DBdeleteGlobal(global_name);
+				winner = -1;
+			}
+			else
+			{
+				sscanf(DBselectGlobal(global_name), "%d %d", &total_gold, &num_entered);
+			}
+
+			if(num_entered > 0)
+			{
+				entrants = new entrant[num_entered];
+				for(int i = 0; i < num_entered; i++)
+				{
+					sprintf(num_global_name,"%s %d", global_name, i);
+					if(DBisGlobal(num_global_name))
+					{
+						sscanf(DBselectGlobal(num_global_name), "%s %d", &player_name, &temp_gold);
+						entrants[i].id = nameToId(player_name);
+						entrants[i].amount = temp_gold;
+						if(entrants[i].id > -1)
+						{
+							total_online_gold += temp_gold;
+						}
+					}
+				}
+				
+				if(total_online_gold > 0)
+				{
+					winner = getRand(total_online_gold) + 1;
+					for(int i = 0; i < num_entered; i++)
+					{
+						if(entrants[i].id > -1)
+						{
+							player = playerStruct(entrants[i].id);
+							if(winner > num_gold && winner < num_gold + entrants[i].amount)
+							{
+								if(get_prize(total_gold,num_entered))
+								{
+									int prize = -1;
+									while(prize == -1)
+									{
+										prize = getRand(num_rewards);
+										if(rewards[prize].min_wager <= total_gold && getRand(1000) <= rewards[prize].rarity)
+										{
+											cItem *item = itemTemplateStruct(rewards[prize].item_id);
+											total_gold -= rewards[prize].cost;
+											sendChatf(-1, "^G%s won ^Y%d^G gold in the lottery!", player->name, total_gold);
+											sendChatf(-1, "^GAs a special bonus, the winner also received a %s!", item->name);
+											makeItem(1,total_gold,player->map,player->x,player->y);
+											makeItem(rewards[prize].item_id,rewards[prize].item_qty,player->map,player->x,player->y);
+										}
+										else
+										{
+											prize = -1;
+										}
+									}
+								}
+								else
+								{
+									sendChatf(-1, "^G%s won ^Y%d^G gold in the lottery!", player->name, total_gold);
+									makeItem(1,total_gold,player->map,player->x,player->y);
+								}
+							}
+							num_gold += entrants[i].amount;
+						}
+						sprintf(num_global_name,"%s %d", global_name, i);
+						if(DBisGlobal(num_global_name))
+						{
+							DBdeleteGlobal(num_global_name);
+						}
+						sprintf(num_global_name,"%s %d", global_name, i);
+					}
+					DBdeleteGlobal(global_name);
+				}
+				else
+				{
+					sendChatf(-1, "^RNobody is online to collect winnings? What a shame, the pot will carry over to the next lottery.");
+				}
+				
+				delete [] entrants;
+			}
+		}
+		else
+		{
+			if(time_remaining % 5 == 0)
+			{
+				sendChatf(-1, "^R%d minutes remain in the lottery.", time_remaining);
+			}
+			setGlobalInt(global_name, time_remaining);
+		}
+	}
+	else
+	{
+		time_remaining = 60;
+		sendChatf(-1,"^GThe lottery has started! %d minutes remain! Report to the Wishing Well to enter!", time_remaining);
+		setGlobalInt(global_name, time_remaining);
+	}
+	runScript(myScript(), 1000 * 60);
+}

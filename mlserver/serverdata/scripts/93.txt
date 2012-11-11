@@ -1,0 +1,63 @@
+
+/*
+	Paralyze Spell
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	November 23, 2003
+*/
+
+/*
+	Description: This spell makes the targeted creature unable to move
+*/
+
+int SPELL_COST = 50;
+int SPELL_DURATION = 10000;
+int SPELL_EFFECT = 3;
+int MOVEMENT_SCRIPT_ID = 94;
+int RELEASE_SCRIPT_ID = 95;
+
+void main()
+{
+	if (getAccess(getPlayer()) == 1)
+		{
+		string Msg;
+		Msg = getName(getPlayer());
+		Msg += " ^RIS CHEATING BY USING AN ADMIN PARALYZE ITEM.";
+		sendChat(Msg, -1);
+		return;
+		}
+
+	int PlayerID;
+	int TargetID;
+	int PlayerMP;
+	string GlobalVarName;
+
+	PlayerID = getPlayer();
+	PlayerMP = getMP(PlayerID);
+
+	if (PlayerMP < SPELL_COST)
+		{
+		sendChat("^RNot enough mana.", PlayerID);
+		return;
+		}
+
+	TargetID = getMTarget(PlayerID);
+
+	if (TargetID == -1)
+		{
+		sendChat("^RNo target selected.", PlayerID);
+		return;
+		}
+
+	PlayerMP -= SPELL_COST;
+	setMP(PlayerID, PlayerMP);
+
+	makeEffect(getMap(TargetID), getX(TargetID), getY(TargetID), SPELL_EFFECT);
+
+	setMoveScript(TargetID, MOVEMENT_SCRIPT_ID);
+
+	GlobalVarName = "Paralyze";
+	GlobalVarName += itos(PlayerID);
+	setGlobalInt(GlobalVarName, TargetID);
+	runScript(RELEASE_SCRIPT_ID, SPELL_DURATION);
+}

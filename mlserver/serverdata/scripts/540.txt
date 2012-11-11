@@ -1,0 +1,65 @@
+//Warp to lower levels/upper levels
+#include"mapping.h"
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int dir=player->dir;
+	int x=player->x;
+	int y=player->y;
+	int mapid;
+	cMap *map;
+	
+	if(dir==DIR_UP)
+		y--;
+	else if(dir==DIR_DOWN)
+		y++;
+	else if(dir==DIR_LEFT)
+		x--;
+	else if(dir==DIR_RIGHT)
+		x++;	
+		
+	if(player->map<UNDERSTART)
+	{
+		mapid=player->map+TOTALMAPS;
+		map=mapStruct(mapid);
+		if(tilearound(map,player->x,player->y,DUG_DIRT))
+		{
+			if(map->map[y][x].type==TILE_TYPE_NONE && map->map[y][x].space == -1)
+			{
+				setPos(id,mapid,x,y);
+			}
+			else
+			{
+				sendChat("^rSomething is in the way!",id);
+			}
+		}
+		else
+		{
+			if(map->map[y][x].tile[0]!=WATER_TILE)
+			{
+				map->map[y][x].type=TILE_TYPE_NONE;
+				map->map[y][x].tile[0]=DUG_DIRT;
+				savemap(mapid);
+				setPos(id,mapid,x,y);
+			}
+			else
+			{
+				sendChat("^rAn underground water source is in the way..",id);
+			}
+		}
+	}
+	else
+	{
+		mapid=player->map-TOTALMAPS;
+		map=mapStruct(mapid);
+		if(map->map[y][x].type==TILE_TYPE_NONE)
+		{
+			setPos(id,mapid,x,y);
+		}
+		else
+		{
+			sendChat("^rSomething is in the way!",id);
+		}
+	}
+}

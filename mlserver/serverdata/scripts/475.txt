@@ -1,0 +1,178 @@
+//taming movement script
+#include <math.h>
+
+
+
+
+void main()
+{
+	int id=getPlayer();
+	int dir;
+	cPlayer *player=playerStruct(id);
+	cPlayer *master=playerStruct(player->target_at);
+	if(master->access<1 || player->target==player->target_at)
+	{
+		player->move_script=-1;
+		return;
+	}
+	if(master->map!=player->map)
+	{
+		cMap *map=mapStruct(player->map);
+		if(map->n==master->map)
+			dir=1;
+		else if(map->e==master->map)
+			dir=3;
+		else if(map->s==master->map)
+			dir=0;
+		else if(map->w==master->map)
+			dir=2;
+		else
+		{
+			player->move_script=-1;
+			return;
+		}
+		int oldx=player->x;
+		int oldy=player->y;
+		if(dir==1&&player->y==0)
+		{
+			player->map=master->map;
+			player->y=14;
+			map->map[oldy][oldx].space=-1;
+			return;
+		}
+		if(dir==0&&player->y==14)
+		{
+			player->map=master->map;
+			player->y=0;
+			map->map[oldy][oldx].space=-1;
+			return;
+		}
+		if(dir==3&&player->x==19)
+		{
+			player->map=master->map;
+			player->x=0;
+			map->map[oldy][oldx].space=-1;
+			return;
+		}
+		if(dir==2&&player->x==0)
+		{
+			player->map=master->map;
+			player->x=19;
+			map->map[oldy][oldx].space=-1;
+			return;
+		}
+		npcMove(id,dir);
+		if(player->x==oldx && player->y==oldy)
+		{
+			//wall evasion
+			if(dir==0)
+				dir=getRand(2)+2;
+			else if(dir==1)
+				dir=getRand(2)+2;
+			else if(dir==2)
+				dir=getRand(2);
+			else if(dir==3)
+				dir=getRand(2);	
+			npcMove(id,dir);
+		}	
+		return;
+	}
+	int dx=-1,dy;
+	cPlayer *target;
+	int tgt=-1;
+	int len=mapListLen(master->map);
+	for(int x=0;x<len;x++)
+	{
+		target=playerStruct(mapList(master->map,x));
+		if(target->target==player->target_at && target->total_time==0)
+		{
+			dx=target->x - player->x;
+			dy=target->y - player->y;
+			tgt=mapList(master->map,x);
+			break;
+		}
+	}
+	if(dx==-1)
+	{
+		if(player->target!=-1)
+		{
+			target=playerStruct(player->target);
+			if(target->map!=player->map || target->access<1)
+			{
+				dx=master->x - player->x;
+				dy=master->y - player->y;
+			}
+			else
+			{
+				dx=target->x - player->x;
+				dy=target->y - player->y;
+				tgt=player->target;
+			}
+		}
+		else
+		{
+			dx=master->x - player->x;
+			dy=master->y - player->y;
+		}
+	}
+	if(tgt!=-1 && abs(dx)+abs(dy)==1)//attack
+	{
+		if(     dy<=0&&dx>=dy&&dx<=-dy)
+			player->dir=1;
+		else if(dy>=0&&dx<=dy&&dx>=-dy)
+			player->dir=0;
+		else if(dx<=0&&dy>=dx&&dy<=-dx)
+			player->dir=2;
+		else if(dx>=0&&dy<=dx&&dy>=-dx)
+			player->dir=3;
+		int dmg=player->atk-target->def;
+		if(target->type==0)
+			dmg-=equippedDefense(target);
+		//apply randomness
+		dmg+=rand()%5-2;
+		if(dmg<0)
+			dmg=0;
+		if(target->hp-dmg <= 0)
+			target->hp = 0;
+		else
+			target->hp-=dmg;
+		if(target->type==0)
+			target->target=id;
+		//send blood/miss effect out
+		if(dmg>0)
+			makeEffect(player->map,target->x,target->y,0);
+		else
+			makeEffect(player->map,target->x,target->y,4);
+		//send hp bar
+		sendHPbar(player->map,tgt);
+		if(target->type==0)
+			sendHP(tgt);
+		return;
+	}
+	
+
+	if(     dy<=0&&dx>=dy&&dx<=-dy)
+		dir=1;
+	else if(dy>=0&&dx<=dy&&dx>=-dy)
+		dir=0;
+	else if(dx<=0&&dy>=dx&&dy<=-dx)
+		dir=2;
+	else if(dx>=0&&dy<=dx&&dy>=-dx)
+		dir=3;
+	int oldx=player->x;
+	int oldy=player->y;
+	npcMove(id,dir);
+	if(player->x==oldx && player->y==oldy)
+	{
+		//wall evasion
+		if(dir==0)
+			dir=getRand(2)+2;
+		else if(dir==1)
+			dir=getRand(2)+2;
+		else if(dir==2)
+			dir=getRand(2);
+		else if(dir==3)
+			dir=getRand(2);	
+		npcMove(id,dir);
+	}	
+}

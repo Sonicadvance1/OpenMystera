@@ -1,0 +1,61 @@
+// Chance
+
+void main()
+{
+	int PlayerID=getPlayer();
+	int MapID=getMap(PlayerID);
+	int x=getX(PlayerID);
+	int y=getY(PlayerID);
+	switch (getRand(16))
+	{
+		case 0:
+			sendMapChatf(MapID,"^C%s^G: Advance to St. Charles Place - If you pass go collect $200.",getName(PlayerID));
+			break;
+		case 1:
+			sendMapChatf(MapID,"^C%s^G: Advance to Illinois Ave.",getName(PlayerID));
+			break;
+		case 2:
+			sendMapChatf(MapID,"^C%s^G: This card may be kept until needed or sold. - GET OUT OF JAIL FREE",getName(PlayerID));
+			makeItem(455,1,MapID,x,y);
+			break;
+		case 3:
+			sendMapChatf(MapID,"^C%s^G: GO DIRECTLY TO JAIL - Do NOT pass go. Do NOT collect $200.",getName(PlayerID));
+			break;
+		case 4:
+			sendMapChatf(MapID,"^C%s^G: Pay poor tax of $15.",getName(PlayerID));
+			break;
+		case 5:
+			sendMapChatf(MapID,"^C%s^G: Go back 3 spaces.",getName(PlayerID));
+			break;
+		case 6:
+			sendMapChatf(MapID,"^C%s^G: You have been elected Chairman of the Board - Pay each player $50.",getName(PlayerID));
+			break;
+		case 7:
+			sendMapChatf(MapID,"^C%s^G: Advance to nearest utility. If UNOWNED you may buy it from bank. If OWNED throw dice and pay owner a total ten times the amount thrown.",getName(PlayerID));
+			break;
+		case 8:
+			sendMapChatf(MapID,"^C%s^G: Advance to go. (collect $200)",getName(PlayerID));
+			break;
+		case 9:
+			sendMapChatf(MapID,"^C%s^G: Make general repairs on all your property. For each house pay $25 - For each hotel $100.",getName(PlayerID));
+			break;
+		case 10:
+			sendMapChatf(MapID,"^C%s^G: Advance to the nearest railroad and pay owner twice the rental to which he is otherwise entitled. If railroad is unowned you may buy it from the bank.",getName(PlayerID));
+			break;
+		case 11:
+			sendMapChatf(MapID,"^C%s^G: Your building and loan matures. Collect $150.",getName(PlayerID));
+			break;
+		case 12:
+			sendMapChatf(MapID,"^C%s^G: Take a walk on the board walk. Advance to board walk.",getName(PlayerID));
+			break;
+		case 13:
+			sendMapChatf(MapID,"^C%s^G: Advance to the nearest railroad and pay owner twice the rental to which he is otherwise entitled. If railroad is unowned you may buy it from the bank.",getName(PlayerID));
+			break;
+		case 14:
+			sendMapChatf(MapID,"^C%s^G: Bank pays you dividend of $50.",getName(PlayerID));
+			break;
+		case 15:
+			sendMapChatf(MapID,"^C%s^G: Take a ride on the reading - if you pass go collect $200.",getName(PlayerID));
+			break;
+	}
+}

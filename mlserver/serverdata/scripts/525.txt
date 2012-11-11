@@ -1,0 +1,15 @@
+// Sewer Maze Door
+
+void main()
+{
+	int id=getPlayer();
+	int lvl=getLvl(id);
+	if(lvl>=65)
+	{
+		setPos(id,616,10,13);
+	}
+	else
+	{
+		sendChat("^RYou are not yet powerful enough to enter. Return once you have become more experienced!",id);
+	}
+}

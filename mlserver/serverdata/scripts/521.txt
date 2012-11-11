@@ -1,0 +1,28 @@
+//Sewer Maze Prize
+
+void main()
+
+{
+	int RandomNumber;
+	RandomNumber = getRand(8);
+
+	if (RandomNumber == 0)
+	makeItem(1,10000,617,3,4);
+	if (RandomNumber == 1)
+	makeItem(346,1,617,3,4);
+	if (RandomNumber == 2)	
+	makeItem(601,1,617,3,4);
+	if (RandomNumber == 3)
+	makeItem(602,1,617,3,4);
+
+	if (RandomNumber == 4)
+	makeItem(255,1,617,3,4);
+	if (RandomNumber == 5)
+	makeItem(603,1,617,3,4);
+	if (RandomNumber == 6)
+	makeItem(604,1,617,3,4);
+	if (RandomNumber == 7)
+	makeItem(573,1,617,3,4);
+
+	setPos(getPlayer(),617,13,6);			  
+}

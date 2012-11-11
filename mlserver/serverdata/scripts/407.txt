@@ -1,0 +1,61 @@
+// Community Chest
+
+void main()
+{
+	int PlayerID=getPlayer();
+	int MapID=getMap(PlayerID);
+	int x=getX(PlayerID);
+	int y=getY(PlayerID);
+	switch (getRand(16))
+	{
+		case 0:
+			sendMapChatf(MapID, "^C%s^G: Get out of jail free. This card may be kept until needed or sold.",getName(PlayerID));
+			makeItem(455,1,MapID,x,y);
+			break;
+		case 1:
+			sendMapChatf(MapID,"^C%s^G: You are assessed for street repairs. $40 per house - $115 per hotel.",getName(PlayerID));
+			break;
+		case 2:
+			sendMapChatf(MapID,"^C%s^G: You inherit $100.",getName(PlayerID));
+			break;
+		case 3:
+			sendMapChatf(MapID,"^C%s^G: Grand Opera Opening - Collect $50 from every player for opening night seats.",getName(PlayerID));
+			break;
+		case 4:
+			sendMapChatf(MapID,"^C%s^G: Life insurance matures - collect $100.",getName(PlayerID));
+			break;
+		case 5:
+			sendMapChatf(MapID,"^C%s^G: GO TO JAIL - Go DIRECTLY to jail. Do NOT pass go. Do NOT collect $200.",getName(PlayerID));
+			break;
+		case 6:
+			sendMapChatf(MapID,"^C%s^G: Advance to go. (collect $200)",getName(PlayerID));
+			break;
+		case 7:
+			sendMapChatf(MapID,"^C%s^G: X-Mas fun matures - collect $100.",getName(PlayerID));
+			break;
+		case 8:
+			sendMapChatf(MapID,"^C%s^G: You have won second prize in a beauty contest - collect $10.",getName(PlayerID));
+			break;
+		case 9:
+			sendMapChatf(MapID,"^C%s^G: Bank error in your favor - collect $200.",getName(PlayerID));
+			break;
+		case 10:
+			sendMapChatf(MapID,"^C%s^G: From sale of stock you get $45.",getName(PlayerID));
+			break;
+		case 11:
+			sendMapChatf(MapID,"^C%s^G: Pay school tax of $150.",getName(PlayerID));
+			break;
+		case 12:
+			sendMapChatf(MapID,"^C%s^G: Receive for services $25.",getName(PlayerID));
+			break;
+		case 13:
+			sendMapChatf(MapID,"^C%s^G: Pay hospital $100.",getName(PlayerID));
+			break;
+		case 14:
+			sendMapChatf(MapID,"^C%s^G: Income tax refund - collect $20.",getName(PlayerID));
+			break;
+		case 15:
+			sendMapChatf(MapID,"^C%s^G: Doctor's fee - pay $50.",getName(PlayerID));
+			break;
+	}
+}

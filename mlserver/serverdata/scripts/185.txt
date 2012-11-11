@@ -1,0 +1,71 @@
+/*
+	Chess Script
+	December 13, 2003
+*/
+
+const int CHESS_MAP_ID = 558;
+const int CHESS_OFFSET_X = 11;
+const int CHESS_OFFSET_Y = 2;
+
+const int WHITE_PAWN = 180;
+const int WHITE_KNIGHT = 181;
+const int WHITE_BISHOP = 182;
+const int WHITE_ROOK = 183;
+const int WHITE_KING = 184;
+const int WHITE_QUEEN = 185;
+const int BLACK_PAWN = 186;
+const int BLACK_KNIGHT = 187;
+const int BLACK_BISHOP = 188;
+const int BLACK_ROOK = 189;
+const int BLACK_KING = 190;
+const int BLACK_QUEEN = 191;
+
+
+void main()
+{
+	/*makeNPC(84, 558, BOARD_OFFSET_X + 3, BOARD_OFFSET_Y + 0);
+	makeNPC(85, 558, BOARD_OFFSET_X + 4, BOARD_OFFSET_Y + 7);*/
+
+	int x;
+	int y;
+	int ItemID;
+
+	// Clear chess board
+	/*for (y = 0; y < 8; y++)
+		{
+		for (x = 0; x < 8; x++)	
+			{
+			while (true)
+				{
+				ItemID = getItemAt(0, CHESS_MAP_ID, CHESS_OFFSET_X + x, CHESS_OFFSET_Y + y);
+				if (ItemID == 0)
+					break;
+				clearItem(ItemID, CHESS_MAP_ID, CHESS_OFFSET_X + x, CHESS_OFFSET_Y + y);
+				}
+			}
+		}*/
+
+	// Set up white pieces
+	for (x = 0; x < 8; x++)
+		makeItem(WHITE_PAWN, 1, CHESS_MAP_ID, CHESS_OFFSET_X + x, CHESS_OFFSET_Y + 6);
+	makeItem(WHITE_ROOK, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 0, CHESS_OFFSET_Y + 7);	
+	makeItem(WHITE_KNIGHT, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 1, CHESS_OFFSET_Y + 7);	
+	makeItem(WHITE_BISHOP, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 2, CHESS_OFFSET_Y + 7);	
+	makeItem(WHITE_QUEEN, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 3, CHESS_OFFSET_Y + 7);	
+	makeItem(WHITE_KING, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 4, CHESS_OFFSET_Y + 7);	
+	makeItem(WHITE_BISHOP, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 5, CHESS_OFFSET_Y + 7);	
+	makeItem(WHITE_KNIGHT, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 6, CHESS_OFFSET_Y + 7);	
+	makeItem(WHITE_ROOK, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 7, CHESS_OFFSET_Y + 7);	
+
+	// Set up black pieces
+	for (x = 0; x < 8; x++)
+		makeItem(BLACK_PAWN, 1, CHESS_MAP_ID, CHESS_OFFSET_X + x, CHESS_OFFSET_Y + 1);
+	makeItem(BLACK_ROOK, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 0, CHESS_OFFSET_Y + 0);	
+	makeItem(BLACK_KNIGHT, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 1, CHESS_OFFSET_Y + 0);	
+	makeItem(BLACK_BISHOP, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 2, CHESS_OFFSET_Y + 0);	
+	makeItem(BLACK_QUEEN, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 3, CHESS_OFFSET_Y + 0);	
+	makeItem(BLACK_KING, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 4, CHESS_OFFSET_Y + 0);	
+	makeItem(BLACK_BISHOP, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 5, CHESS_OFFSET_Y + 0);	
+	makeItem(BLACK_KNIGHT, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 6, CHESS_OFFSET_Y + 0);	
+	makeItem(BLACK_ROOK, 1, CHESS_MAP_ID, CHESS_OFFSET_X + 7, CHESS_OFFSET_Y + 0);	
+}

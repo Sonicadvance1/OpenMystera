@@ -1,0 +1,39 @@
+/*
+	Tranor's light switch
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	December 14, 2003
+*/
+
+const int MAP_ID = 563;
+
+void main()
+{
+	int LightIndex;
+	int MusicIndex;
+	string GlobalVarName;
+	int TimerID;
+
+	LightIndex = getMapLighting(MAP_ID);
+	MusicIndex = getMapMusic(MAP_ID);
+
+	switch (LightIndex)
+		{
+		case -10:
+			LightIndex = -60;
+			MusicIndex = 30;
+			break;
+		case -60:
+			LightIndex = -10;
+			MusicIndex = 32;
+			break;
+		default:
+			LightIndex = -10;
+			MusicIndex = 32;
+			break;
+		}
+
+	setMapLighting(MAP_ID, LightIndex);
+	setMapMusic(MAP_ID, MusicIndex);
+	updateMap(MAP_ID);
+}
