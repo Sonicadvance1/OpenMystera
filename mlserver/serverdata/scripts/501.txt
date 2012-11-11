@@ -1,7 +1,0 @@
-//Mana Potion Heal
-
-void main()
-{
-	int id=getPlayer();
-	setMP(id,getMP(id)+80);
-}

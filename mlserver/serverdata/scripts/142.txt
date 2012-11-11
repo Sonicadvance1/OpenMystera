@@ -1,7 +1,0 @@
-//Galebrook North Player Shanty Sign
-void main()
-{
-	int id=getPlayer();
-	if(getPlayerType(id)==0)
-		sendChat("^RDO NOT KILL THE VAMPS. This in in direct violation of the renters 		code.",id);
-}

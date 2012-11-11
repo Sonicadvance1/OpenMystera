@@ -1,8 +1,0 @@
-//Statue
-void main()
-{
-	int id=getPlayer();
-	if(getPlayerType(id)==0)
-		sendChat("^g*The statue towers above you. Its design perfect in the way it gives you a feeling of being safe.*",id);
-
-}

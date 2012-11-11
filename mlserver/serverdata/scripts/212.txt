@@ -1,8 +1,0 @@
-// Healing Ankh
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getHP(id)+100);
-	sendChat("^rThe powers of the Ankh mend your wounds",id);
-}

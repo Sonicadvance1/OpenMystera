@@ -1,8 +1,0 @@
-// death message
-
-void main()
-{
-	int id=getPlayer();
-	sendChat("^RDIE DIE DIE",id);
-	setHP(id,0);
-}

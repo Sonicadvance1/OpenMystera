@@ -1,7 +1,0 @@
-//Snowman Mountain Sign
-void main()
-{
-	int id=getPlayer();
-	if(getPlayerType(id)==0)
-		sendChat("^yNorth: ^WSnowman Mountain^y|East: ^gWestern Woods",id);
-}

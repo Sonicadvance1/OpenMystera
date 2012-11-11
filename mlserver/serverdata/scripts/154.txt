@@ -1,8 +1,0 @@
-//Pillar
-void main()
-{
-	int id=getPlayer();
-	if(getPlayerType(id)==0)
-		sendChat("^g***This is a pillar... It's not very interesting...***",id);
-
-}

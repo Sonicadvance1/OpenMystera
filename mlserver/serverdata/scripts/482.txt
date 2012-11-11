@@ -1,7 +1,0 @@
-//Red/Blue Potion heal
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getHP(id)+75);
-}

@@ -1,7 +1,0 @@
-//spicy herb heal
-
-void main()
-{
-	int id=getPlayer();
-	setMP(id,getMP(id)+25);
-}

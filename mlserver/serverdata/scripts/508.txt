@@ -1,7 +1,0 @@
- void main()
- {
- sendChat("^cIn loving memory of Krista", getPlayer());
- sendChat("^cR.I.P. 1990 - November 1, 2004", getPlayer());
- sendChat("^c~I will never forget the times we had together in high school, even though I did not know you as well as I     would have liked, I understood your suffering, and I will never, ever forget you", getPlayer());
- sendChat("^c~Robert", getPlayer());
- }

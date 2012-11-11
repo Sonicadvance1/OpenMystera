@@ -1,7 +1,0 @@
-//CC sign
-void main()
-{
-	int id=getPlayer();
-	if(getPlayerType(id)==0)
-		sendChat("^CWelcome to Amber's House. Please make yourself at home, Mi casa es tu casa!!",id);
-}

@@ -1,7 +1,0 @@
-// lack of breath
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getHP(id));
-}

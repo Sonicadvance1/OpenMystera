@@ -1,7 +1,0 @@
-//CC sign
-void main()
-{
-	int id=getPlayer();
-	if(getPlayerType(id)==0)
-		sendChat("^yBy far you, Sunnmann, are fairest of them all!",id);
-}

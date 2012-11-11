@@ -1,8 +1,0 @@
-//super potion
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getMaxHP(id));
-	setMP(id,getMaxMP(id));
-}

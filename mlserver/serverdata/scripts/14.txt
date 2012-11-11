@@ -1,8 +1,0 @@
-//CC start sign
-void main()
-{
-	int id=getPlayer();
-	if(getPlayerType(id)==0)
-		sendChat("^yPress [enter] to chat and enter commands, /quit will exit the game.",id);
-		sendChat("^yThe \\ key broadcasts the message, and the ] key is for private messages.",id);
-}

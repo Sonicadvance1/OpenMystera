@@ -1,7 +1,0 @@
-//mead heal
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getHP(id)+26);
-}

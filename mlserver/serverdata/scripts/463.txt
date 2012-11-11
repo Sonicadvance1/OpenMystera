@@ -1,7 +1,0 @@
-//EVENT LOBBY MAZE PRIZE
-void main()
-{
-	setPos(getPlayer(),690,9,9);
-	makeItem(207,3,1238,12,7);
-	makeItem(1,50,1238,11,7);
-}

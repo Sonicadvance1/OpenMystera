@@ -1,7 +1,0 @@
-//Sweet Potion Heal
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getHP(id)+100);
-}

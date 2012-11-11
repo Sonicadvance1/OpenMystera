@@ -1,8 +1,0 @@
-// warming drink - MINI RPG
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getHP(id)+10);
-	setMP(id,getMP(id)+5);
-}

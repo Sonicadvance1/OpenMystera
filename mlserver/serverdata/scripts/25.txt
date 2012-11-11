@@ -1,8 +1,0 @@
-//candy heal
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getHP(id)+15);
-	setMP(id,getMP(id)+15);
-}

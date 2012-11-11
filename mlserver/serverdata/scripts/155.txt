@@ -1,8 +1,0 @@
-//Table
-void main()
-{
-	int id=getPlayer();
-	if(getPlayerType(id)==0)
-		sendChat("^g***This is a table. I bet you wanna stand on it... You wanna stand on it don'tcha'? Yeah yeah, we know you wanna!***",id);
-
-}

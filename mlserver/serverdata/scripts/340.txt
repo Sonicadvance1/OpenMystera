@@ -1,8 +1,0 @@
-// blubber fish heal
-
-void main()
-{
-	int id=getPlayer();
-	setMP(id,getMP(id)+22);
-	setHP(id,getHP(id)+46);
-}

@@ -1,8 +1,0 @@
-// fish heal
-
-void main()
-{
-	int id=getPlayer();
-	setMP(id,getMP(id)+15);
-	setHP(id,getHP(id)+35);
-}

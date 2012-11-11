@@ -1,8 +1,0 @@
-//restart server
-
-#include <process.h>
-
-void main()
-{
-	exit(0);
-}

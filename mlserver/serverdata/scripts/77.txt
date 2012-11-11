@@ -1,7 +1,0 @@
-//CC sign
-void main()
-{
-	int id=getPlayer();
-	if(getPlayerType(id)==0)
-		sendChat("^C'As you step farther and farther inot this new area you are startled as a voice fills your mind'     ^G You have entered into Sunnmann's Domain. Tread lightly and respect the area!",id);
-}
