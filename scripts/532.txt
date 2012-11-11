@@ -1,0 +1,80 @@
+
+int getItemAt(int map, int x, int y)
+{
+	if(!inBounds(x, y)) { return -1; }
+	for(int i=0; i<itemLen(); i++)
+	{
+		cItem *Item=itemStruct(i);
+		if(Item->owner == -1)
+		{
+			if(Item->map == map && Item->x == x && Item->y == y) { return i; }
+		}
+	}
+	return -1;
+}
+
+void Pulse(int map, int x, int y, int px, int py, bool Grid[15][20])
+{
+	cMap* Map = mapStruct(map);
+	if(Grid[y][x] || !inBounds(x, y) || (x == px && y == py)) { return; }
+	Grid[y][x] = true;
+	if(Map->map[y][x].type != TILE_TYPE_WALL && Map->map[y][x].type != TILE_TYPE_SWITCH && Map->map[y][x].type != TILE_TYPE_WARP)
+	{
+		int ItemID = getItemAt(map, x, y);
+		while(ItemID != -1 && inBounds(px, py))
+		{
+			cItem* Item = itemStruct(ItemID);
+			if(Item->x != px && Item->y != py)
+			{
+				sendRemoveMapItem(Item->map, Item->x, Item->y);
+				Item->map = map;
+				Item->x = px;
+				Item->y = py;
+				sendAddMapItem(Item->graphic, map, px, py);
+				itemSave(ItemID);
+				ItemID = getItemAt(map, x, y);
+			}
+		}
+		bool Grid2[4][15][20];
+		for(int i=0; i<4; i++)
+		{
+			for(int y=0; y<15; y++)
+			{
+				for(int x=0; x<20; x++)
+				{
+					Grid2[i][y][x] = Grid[y][x];
+				}
+			}
+		}
+		Pulse(map, x, y-1, x, y, Grid2[0]);
+		Pulse(map, x+1, y, x, y, Grid2[1]);
+		Pulse(map, x, y+1, x, y, Grid2[2]);
+		Pulse(map, x-2, y, x, y, Grid2[3]);
+	}
+	return;
+}
+
+void main()
+{
+	int PlayerID = getPlayer();
+	cPlayer* Player = playerStruct(PlayerID);
+	bool Grid[4][15][20];
+	for(int i=0; i<4; i++)
+	{
+		for(int y=0; y<15; y++)
+		{
+			for(int x=0; x<20; x++)
+			{
+				Grid[i][y][x] = false;
+			}
+		}
+	}
+	int map = Player->map;
+	int x = Player->x;
+	int y = Player->y;
+	Pulse(map, x, y - 1, x, y, Grid[0]);
+	Pulse(map, x+1, y, x, y, Grid[1]);
+	Pulse(map, x, y+1, x, y, Grid[2]);
+	Pulse(map, x-1, y, x, y, Grid[2]);
+	return;
+}

@@ -1,0 +1,49 @@
+//game script
+
+long hpBonus(long con)
+{
+	return (con-1) * 6;
+}
+
+long manaBonus(long itl)
+{
+	return (itl-1) * 6;
+}
+
+long nextExp(long lvl)
+{
+	return 100*(lvl*lvl);
+}
+
+void main()
+{
+	long id = getPlayer();
+	cPlayer *player = playerStruct(id);
+	
+	long texp= (long)(player->exp-nextExp(player->lvl));
+	player->exp=texp;
+	if(player-> lvl < 60)
+	{
+		player->lvl++;
+			
+		player->hp=player->mhp;
+			
+		player->mp=player->mmp;
+		player->train+=3;
+		playerSave(id);
+		
+		//announce level
+		sendChatf(-1,"^C*** %s has reached experience level %d! ***",player->name,player->lvl);
+		printf("*** %s has reached experience level %d! ***",player->name,player->lvl);
+		player->mhp = hpBonus(player->con) + 100 + ((player->lvl-1) * 10);
+		player->mmp = manaBonus(player->itl) + 80 + ((player->lvl-1) * 10);
+		player->atk = (player->str/2) + 2;
+		player->def = player->con/2;
+		//send level effect out
+		makeEffect(player->map,player->x,player->y,3);
+	}
+	//send new level status
+	sendLevel(id);
+	//send attributes
+	sendAttribute(id);
+}

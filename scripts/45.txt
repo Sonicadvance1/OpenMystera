@@ -1,0 +1,52 @@
+#include "dir.h"
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player = playerStruct(id);
+	int move = move_check(id,player->dir);
+	char toggle[256];
+	int toggle_num;
+	
+	sprintf(toggle,"%d%dtoggle",id, myScript());
+	if(player->total_time == 0)
+	{
+		if(move == 1)
+		{
+			makeEffect(player->map,player->x,player->y, 2);
+			npc_move(id,player->dir);
+		}
+		else
+		{
+			for(int x = player->x - 1; x <= player->x + 1; x++)
+			{
+				for(int y = player->y - 1; y <= player->y + 1; y++)
+				{
+					if(inBounds(x,y))
+					{
+						int victim = getID(player->map,x,y);
+						if(victim != -1)
+						{
+							cPlayer *target = playerStruct(victim);
+							if(target->type != PLAYER_TYPE_NPC)
+                     {
+                        setHP(victim, target->hp - 100);
+                     }
+						}
+						makeEffect(player->map,x,y,2);
+					}
+				}
+			}
+			setHP(id,0);
+		}
+		
+		if(isGlobal(toggle))
+		{
+			runScript(myScript(),350);
+			freeGlobal(toggle);
+		}
+		else
+		{
+			setGlobalInt(toggle,0);
+		}
+	}
+}

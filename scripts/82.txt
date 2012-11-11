@@ -1,0 +1,37 @@
+
+#include"dir.h"
+
+bool fire(int mapid,int &x,int &y,int dir)
+{
+	cMap *map=mapStruct(mapid);
+	dirapply(x,y,dir);
+	int tileone=map->map[y][x].tile[0];
+	makeEffect(mapid,x,y,2);
+	dirapply(x,y,dir);
+	makeEffect(mapid,x,y,2);
+	int tiletwo=map->map[y][x].tile[0];
+	if(tiletwo==tileone)
+	{
+		dirapply(x,y,dir);
+		if(map->map[y][x].type==TILE_TYPE_SCRIPT)
+		{
+			makeEffect(mapid,x,y,3);
+			return true;
+		}
+	}
+	return false;
+}
+
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int x=player->x;
+	int y=player->y;
+	int mapid=player->map;
+	if(fire(mapid,x,y,player->dir))
+	{
+		setPos(id,mapid,x,y);
+		runScript(myScript(),1000);
+	}
+}

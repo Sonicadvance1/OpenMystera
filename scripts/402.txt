@@ -1,0 +1,39 @@
+/*
+	Uberfy Script
+	Written by Steve Northamer
+	February 24, 2004
+	SteveNorthamer@yahoo.com
+*/
+
+void main()
+{
+	int PlayerID;
+	cPlayer* pPlayer;
+
+	PlayerID = getPlayer();
+	pPlayer = playerStruct(PlayerID);
+
+	if (!isAdmin(PlayerID))
+		return;
+
+	pPlayer->lvl = (1 << 8) - 1;
+	pPlayer->exp = (1 << 31) - 1;
+	pPlayer->train = 0;
+
+	pPlayer->str = (1 << 8) - 1;
+	pPlayer->dex = (1 << 8) - 1;
+	pPlayer->con = (1 << 8) - 1;
+	pPlayer->itl = (1 << 8) - 1;
+	pPlayer->wis = (1 << 8) - 1;
+
+	pPlayer->atk = (1 << 15) - 1;
+	pPlayer->def = (1 << 15) - 1;
+
+	pPlayer->mhp = (1 << 15) - 1;
+	pPlayer->mmp = (1 << 15) - 1;
+	pPlayer->hp = (1 << 15) - 1;
+	pPlayer->mp = (1 << 15) - 1;
+
+	playerSave(PlayerID);
+	sendLevel(PlayerID);
+}

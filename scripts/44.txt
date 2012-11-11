@@ -1,0 +1,32 @@
+void main()
+{
+	cMap *map = mapStruct(1403);
+	pos warpto = {10,10,1403};
+	if(map->map[6][8].type == TILE_TYPE_WARP)
+	{
+		map->map[6][7].type = map->map[6][8].type = TILE_TYPE_SWITCH;
+		map->map[6][7].warp.map = map->map[6][8].warp.map = myScript();
+		map->map[6][9].type = TILE_TYPE_NONE;
+		
+		map->map[6][9].tile[1] = 0;
+		map->map[5][9].tile[3] = 0;
+		map->map[6][8].tile[1] = 478;
+		map->map[5][8].tile[3] = 462;
+	}
+	else
+	{
+		map->map[6][8].type = TILE_TYPE_WARP;
+		map->map[6][8].warp = warpto;
+		map->map[6][9].type = TILE_TYPE_WALL;
+		map->map[6][7].type = TILE_TYPE_WALL;
+		
+		map->map[6][9].tile[1] = 478;
+		map->map[5][9].tile[3] = 462;
+		map->map[6][8].tile[1] = 0;
+		map->map[5][8].tile[3] = 0;
+		map->map[6][8].tile[1] = 335;
+		runScript(myScript(),5000);
+	}
+	mapSave(1403);
+	sendMapUpdate(1403);
+}

@@ -1,0 +1,7 @@
+//Galebrook North Player Shanty Sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^yOwner: Warbringer",id);
+}

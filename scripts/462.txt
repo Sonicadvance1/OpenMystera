@@ -1,0 +1,24 @@
+//Steve Rules Origin script
+
+#define STEVE_RULES_ORIGIN 819, 6, 3
+
+void main()
+{
+	int id=getPlayer();	
+	int map,x,y;
+		
+	if(getPlayerType(id)==1) //Make sure its not a NPC
+		return;
+
+	getOrigin(id,map,x,y);
+	if(map==819)
+	{
+		sendChat("^YYou are already a citizen of STEVE RULES!",id);
+		return;
+	}
+
+	setOrigin(id,STEVE_RULES_ORIGIN);
+	setPos(id,STEVE_RULES_ORIGIN);
+	makeEffect(STEVE_RULES_ORIGIN,3);
+	sendChat("^YYou are now a citizen of STEVE RULES!",id);
+}

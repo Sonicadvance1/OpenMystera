@@ -1,0 +1,18 @@
+//build script
+#include"items.h"
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	char *command=getCommand();
+	char item[32];
+	if(strlen(command)>5 && command[5]==' ')
+	{
+		strcpy(item,command+6);
+		builditem(id,item);
+	}
+	else if(strcmp(command,"build")==0)
+	{
+		sendcanbuild(id);
+	}
+}

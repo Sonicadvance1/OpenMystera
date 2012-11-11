@@ -1,0 +1,10 @@
+//Neoball ball script
+
+void main()
+{
+	int id = getPlayer();
+	cPlayer *player = playerStruct(id);
+	cMap *map = mapStruct(player->map);
+	
+	
+}

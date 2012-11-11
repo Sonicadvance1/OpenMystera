@@ -1,0 +1,37 @@
+//Personal area spark spell
+
+void main()
+{
+	int id  = getPlayer();
+	cPlayer *player = playerStruct(id);
+	int cost= 20;
+	int dmg = player->itl;
+	if(player->mp<cost)
+	{
+		sendChat("^RNot enough mana.",id);
+	}
+	else
+	{
+		setMP(id, player->mp - cost);
+		for (int x = player->x-1; x < player->x + 2; x++)
+		{
+			for (int y = player->y-1; y < player->y + 2; y++)
+			{
+				if(inBounds(x,y))
+				{
+					int dist = abs(player->x - x) + abs(player->y - y);
+					if(dist == 1)
+					{
+						int victim = getID(player->map,x,y);
+						if(victim > -1)
+						{
+							cPlayer *target = playerStruct(victim);
+							setHP(victim, target->hp - dmg);
+						}
+						makeEffect(player->map,x,y,2);
+					}
+				}
+			}
+		}
+	}
+}

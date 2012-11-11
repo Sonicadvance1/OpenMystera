@@ -1,0 +1,157 @@
+//Lightning Bug script
+#include "dir.h"
+#define NORMAL_MODE    0
+#define LIGHTNING_MODE 1
+#define EPIC_FAIL      2
+
+#define TOTAL_SPEED    700
+
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player = playerStruct(id);
+	char toggle[256];
+	int mode  = player->unknown;
+	int victim;
+	int counter;
+	int move;
+	bool moved = false;
+	cPlayer *target;
+	int x;
+	int y;
+
+	
+	if(player->target > -1)
+	{
+		target = playerStruct(player->target);
+		if(distance(id,player->target) > player->range || target->map != player->map)
+		{
+			player->target = -1;
+			player->flags = 0;
+			player->unknown = 0;
+		}
+		else if(mode == LIGHTNING_MODE)
+		{
+			if(player->flags > 0)
+			{
+				move = move_check(id,player->dir);
+				
+				if(move != 2 && player->flags <= 5)
+				{
+					npc_follow(id,player->target);
+					x = player->x;
+					y = player->y;
+					int mx= player->x;
+					int my= player->y;
+					dirapply(mx,my,player->dir);
+					
+					if(target->x > player->x)
+					{
+						x++;
+					}
+					else if(target->x < player->x)
+					{
+						x--;
+					}
+					
+					if(target->y > player->y)
+					{
+						y++;
+					}
+					else if(target->y < player->y)
+					{
+						y--;
+					}
+					
+					if(inBounds(x,y))
+					{
+						victim = getID(player->map,x,y);
+						if(victim > -1)
+						{
+							if(x!=mx || y!=my)
+							{
+								setHP(victim,getHP(victim) - 100);
+							}
+							else
+							{
+								setHP(victim,getHP(victim) - 200);
+							}
+						}
+						makeEffect(player->map,x,y,2);
+					}
+				}
+				player->flags --;
+			}
+			else
+			{
+				player->unknown = NORMAL_MODE;
+			}
+		}
+		else if(mode == NORMAL_MODE)
+		{
+			if(player->flags != 0)
+			{
+				player->flags = 0;
+			}
+			
+			if(getRand(20) == 0)
+			{
+				makeEffect(player->map,player->x,player->y,3);
+				player->flags = 10;
+				player->unknown = LIGHTNING_MODE;
+			}
+			else
+			{
+				if(!npc_attack(id,player->target))
+				{
+					npc_follow(id,player->target);
+				}
+			}
+		}
+		else if(mode == EPIC_FAIL)
+		{
+			if(player->flags > 0)
+			{
+				player->flags--;
+			}
+			else
+			{
+				player->unknown = NORMAL_MODE;
+			}
+		}
+	}
+	else
+	{
+		player->target = npc_find_player(id);
+		
+		if(player->target != -1 && distance(id,player->target) < player->range)
+		{
+			npc_follow(id,player->target);
+			player->unknown = NORMAL_MODE;
+		}
+		else
+		{
+			moved = false;
+			counter = 5;
+			while(moved != 1 && counter > 0)
+			{
+				player->dir = getRand(4);
+				move = move_check(id,player->dir);
+				counter--;
+			}
+			npc_move(id,player->dir);
+		}
+	}
+	
+	sprintf(toggle,"%dtoggle%d",myScript(),id);
+	if(!isGlobal(toggle))
+	{
+		runScript(myScript(),350);
+		setGlobalInt(toggle,1);
+	}
+	else
+	{
+		freeGlobal(toggle);
+	}
+	
+}

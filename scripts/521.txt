@@ -1,0 +1,38 @@
+//Sewer Maze Prize
+
+#include "maze.h"
+
+void main()
+{
+	int RandomNumber;
+	RandomNumber = getRand(11);
+
+	if (RandomNumber == 0)
+	makeItem(1,8000,617,3,4);
+	if (RandomNumber == 1)
+	makeItem(346,1,617,3,4);
+	if (RandomNumber == 2)	
+	makeItem(601,1,617,3,4);
+	if (RandomNumber == 3)
+	makeItem(602,1,617,3,4);
+	if (RandomNumber == 4)
+	makeItem(255,1,617,3,4);
+
+	if (RandomNumber == 5)
+	makeItem(603,1,617,3,4);
+	if (RandomNumber == 6)
+	makeItem(604,1,617,3,4);
+	if (RandomNumber == 7)
+	makeItem(605,1,617,3,4);
+	if (RandomNumber == 8)
+	makeItem(606,1,617,3,4);
+	if (RandomNumber == 9)
+	makeItem(607,1,617,3,4);
+
+	setPos(getPlayer(),617,13,6);	
+
+	make_maze(616,10,14,10,0,611,10,1,1000);
+	make_maze(1384,10,14,10,0,611,10,1,1000);
+	make_maze(1385,10,14,10,0,611,10,1,1000);
+	make_maze(1381,10,14,10,0,611,10,1,1000); 	  
+}

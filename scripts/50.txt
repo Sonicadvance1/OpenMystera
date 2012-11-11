@@ -1,0 +1,109 @@
+//SLIME TIME!!!!
+#include"dir.h"
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int len=getRand(4)+4;
+	int x=player->x;
+	int y=player->y;
+	int mapid=player->map;
+	cMap *map=mapStruct(mapid);
+	char global[64];
+	sprintf(global,"%dslimescore",player->id);
+	
+	dirapply(x,y,player->dir);
+	
+	while(inBounds(x,y) && pass(map->map[y][x].type) && len>=0)
+	{
+		int victim=getID(mapid,x,y);
+		int score=0;
+		if(victim>-1)
+		{
+			
+			cPlayer *target=playerStruct(victim);
+			
+			if(target->sprite==12 && player->sprite!=12)
+			{
+				target->sprite=target->unknown;
+				target->unknown=0;
+				makeEffect(mapid,x,y,1);
+				strcpy(target->name,getRealName(victim));
+				score=1;
+			}
+			else if(player->sprite==12 && target->sprite!=12)
+			{
+				target->unknown=target->sprite;
+				target->sprite=12;
+				makeEffect(mapid,x,y,11);
+				if(target->type==PLAYER_TYPE_PC)
+					strcpy(target->name,"Slime");
+				else if(getRand(50)==0)
+					strcpy(target->name,"^RSlime");
+				else if(getRand(20)==0)
+					strcpy(target->name,"^BSlime");
+				else if(getRand(20)==0)
+					strcpy(target->name,"^bSlime");
+				else if(getRand(3)==0)
+					strcpy(target->name,"^WSlime");
+				else
+					strcpy(target->name,"^GSlime");
+				score=1;
+			}
+			if(target->type==PLAYER_TYPE_PC)
+			{
+				char opponentscore[64];
+				sprintf(opponentscore,"%dslimescore",target->id);
+				if(isGlobal(opponentscore))
+				{
+					score=globalInt(opponentscore);
+				}
+				else
+				{
+					score=0;
+				}
+				setGlobalInt(opponentscore,0);
+				
+				for(int i=0;i<inventoryLen();i++)
+				{
+					if(target->inventory[i]>-1)
+					{
+						cItem *item=itemStruct(target->inventory[i]);
+						if(item->item_template==73)
+						{
+							if(player->sprite!=12)
+							{
+								strcpy(item->name,"^yUNSLIMERAY");
+							}
+							else
+							{
+								strcpy(item->name,"^gSLIMERAY");
+							}
+							itemSave(target->inventory[i]);
+						}
+					}
+				}
+				sendChatf(victim,"^R%s stole all your points!!!",player->name);
+				sendChatf(id,"^GYou shot %s! You stole %d points!",target->name,score);
+			}
+
+			if(isGlobal(global))
+			{
+				setGlobalInt(global,globalInt(global)+score);
+			}
+			else
+			{
+				setGlobalInt(global,score);
+			}
+		    sendChatf(id,"^gTotal Points:%d",globalInt(global));
+			
+			playerSave(victim);
+			sendPlayerUpdate(victim);
+			break;
+		}
+		makeEffect(mapid,x,y,fire(player->dir));
+		dirapply(x,y,player->dir);
+		len--;
+	}
+	
+}

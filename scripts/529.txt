@@ -1,0 +1,73 @@
+//Arrows 
+void main() 
+{ 
+	int id =getPlayer(); 
+	cPlayer *player = playerStruct(id);
+	int map=player->map;
+    int x=player->x;
+	int y=player->y;
+	int slot=player->eLeft; 
+	int len=0; 
+	int dex = player->dex;
+	float dmg; 
+	int damage;
+	int acc; 
+	if (slot==itemSlot(id,602) && slot!=-1)//composite bow
+	{ 
+		len=16; 
+		dmg=2; 
+		acc=10; 
+	} 
+	else if( slot==itemSlot(id,142) && slot!=-1 )//longbow
+	{ 
+		len=16; 
+		dmg=1; 
+		acc=50; 
+	} 
+	else if (slot==itemSlot(id,141) && slot!=-1) //bow 
+	{ 
+		len=10; 
+		dmg=1; 
+		acc=40; 
+	} 
+	else if (slot==itemSlot(id,81) && slot!=-1) //short bow
+	{ 
+		len=6; 
+		dmg=1; 
+		acc=30; 
+	} 
+	else //Throw them things.
+	{ 
+		len=4; 
+		dmg=0.5; 
+		acc=60; 
+	} 
+	while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)
+	{
+		int victim=getID(map,x,y); 
+		if(victim!=-1 && victim!=id) 
+		{ 
+			cPlayer *target = playerStruct(victim);
+			int miss=getRand(acc-dex/5); 
+			damage = physicalDamage(abs(player->str*dmg-getRand(player->str+1)),victim);
+			if(miss<=20) 
+			{ 
+				makeEffect(map,x,y,0); 
+				setHP(victim,target->hp-damage); 
+				return;
+			}
+			else 
+			{
+				makeEffect(map,x,y,4); 
+			} 
+       	}
+		makeEffect(map,x,y,player->dir+5); 
+		if(player->dir==0)y++;   
+		else if(player->dir==1)y--;   
+		else if(player->dir==2)x--;   
+		else if(player->dir==3)x++; 
+		len--;  
+	}
+            
+  
+ } 
