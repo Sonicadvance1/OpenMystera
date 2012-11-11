@@ -1,0 +1,12 @@
+// Turtle morph
+
+void main()
+{
+
+	int id=getPlayer();
+	makeEffect(getMap(id), getX(id), getY(id), 11);
+	if (getImg(id)==0)
+		setImg(id,124);
+	else 
+		setImg(id,0);
+}

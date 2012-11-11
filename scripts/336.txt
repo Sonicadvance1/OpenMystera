@@ -1,0 +1,7 @@
+// How to Use Signs
+
+void main()
+{
+	int id=getPlayer();
+	sendChat("^YPress spacebar to read signs. Make sure you read every single one! Type in ^G/info ^Yat any time to see a list of commands.",id);
+}

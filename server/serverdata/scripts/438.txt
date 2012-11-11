@@ -1,0 +1,40 @@
+// pit fire
+#include <stdio.h>
+void main()
+{
+	int id=getPlayer();
+	int map=1103;
+	int x=1;
+	int y=3;
+	switch(getDir(id))
+	{
+		case 0:
+			y++;
+			break;
+		case 1:
+			y--;
+			break;
+		case 2:
+			x--;
+			break;
+		case 3:
+			x++;
+			break;
+	}
+	if(inBounds(x,y))
+	{ 
+		char rcf[256];
+		sprintf(rcf,"rcfire%d",id);
+		if(isGlobal(rcf))
+			return;
+		setGlobalInt(rcf,0);
+		setGlobalInt(strCat("run",rcf),50);
+		char rcfx[256];
+		sprintf(rcfx,"%sx",rcf);
+		char rcfy[256];
+		sprintf(rcfy,"%sy",rcf);
+		setGlobalInt(rcfx,x);
+		setGlobalInt(rcfy,y);
+		runScript(439,200);
+	}
+}

@@ -1,0 +1,46 @@
+// Lesser Mana Leech Spell Part 1
+#include "dir.h"
+void main()
+{
+	int id = getPlayer();
+	cPlayer *player = playerStruct(id);
+	int manadmg = 10;
+	int hpdmg   = 5;
+	int mapid = player->map;
+	int x   = player->x;
+	int y   = player->y;
+	int victim;
+	cPlayer *target;
+	int len = 5;
+	
+	setHP(id, player->hp - hpdmg);
+	
+	while(len > 0 && inBounds(x,y))
+	{
+		dirapply(x,y,player->dir);
+		if(inBounds(x,y))
+		{
+			makeEffect(mapid,x,y,14);
+			victim = getID(mapid,x,y);
+			if(victim > -1)
+			{
+				target = playerStruct(victim);
+				if(target->mp > manadmg)
+				{
+					setMP(victim,target->mp - manadmg);
+					if(player->mp + manadmg < player->mmp)
+					{
+						setMP(id,player->mp + manadmg);
+					}
+					target->target = id;
+					if(target->type== PLAYER_TYPE_PC)
+					{
+						playerSave(victim);
+					}
+					makeEffect(target->map,target->x,target->y,9);
+				}
+			}
+		}
+		len--;
+	}
+}

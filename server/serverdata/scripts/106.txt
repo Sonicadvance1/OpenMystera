@@ -1,0 +1,22 @@
+/*
+	Turkey end spawning script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	November 30, 2003
+*/
+
+void main()
+{
+	int TimerID;
+	int PlayerID;
+
+	PlayerID = getPlayer();
+
+	TimerID = globalInt("TurkeyTimerID");
+
+	haltScript(TimerID);
+
+	freeGlobal("TurkeyTimerID");
+
+	sendChat("^YTurkeys are now done spawning", PlayerID);
+}

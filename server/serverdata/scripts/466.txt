@@ -1,0 +1,68 @@
+//teh beast
+
+void main()
+{
+	int id = getPlayer();
+	
+	cPlayer *player = playerStruct(id);
+
+	if(rand()%60==0)// 1/60 chance to warp to random location and map
+	{
+		int mapid = rand()%1335;
+		npc_warp(id,mapid,rand()%20,rand()%15);
+		while(!move_check(id,player->dir))
+			npc_warp(id,rand()%1335,rand()%20,rand()%15);
+	}
+	else if(rand()%30==0)// 1/30 chance to warp to random location on map
+	{
+		npc_warp(id,player->map,rand()%20,rand()%15);
+		while(!move_check(id,player->dir))
+		{
+			npc_warp(id,player->map,rand()%20,rand()%15);
+			if(rand()%60==0)
+				break;
+		}
+	}
+	
+	if(player->target != -1) //under attack!
+	{
+		if(player->hp > player->mhp/2) //at least half health, fight!
+		{
+			int res=npc_follow(id,player->target);//attempt to chase
+
+			if(res == 0)
+				player->target = -1; //reset target if lost
+			else
+			{
+				if( distance(id,player->target) > 5 && rand()%2==0) //1/2 spell chance
+					npc_spell(id,player->target,2,-20);//cast distance lightning
+
+				npc_attack(id,player->target);//melee
+			}
+			
+		}
+		else //run away!
+		{
+			if(rand()%5==0)//1/5 chance of healing self
+				npc_spell(id,id,1,30);
+
+			npc_move(id,player->dir);
+			if(rand()%8==0)//1/8 chance of changing dir
+				player->dir = rand()%4;
+		}		
+	}
+	else
+	{
+		if(rand()%5==0) //1/5 chance of healing a player or self if damaged
+		{	
+			if(player->hp < player->mhp)
+				npc_spell(id,id,1,30);
+			else
+				npc_spell(id,npc_find_player(id),1,30);
+		}
+	
+		npc_move(id,player->dir);
+		if(rand()%8==0)//1/8 chance of changing dir
+			player->dir = rand()%4;
+	}
+}

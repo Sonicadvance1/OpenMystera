@@ -1,0 +1,121 @@
+/*
+	Holy Light spell
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	January 7, 2004
+*/
+
+const int HOLY_LIGHT_EFFECT = 23;
+const int SPELL_COST = 20;
+
+const int DIR_DOWN = 0;
+const int DIR_UP = 1;
+const int DIR_LEFT = 2;
+const int DIR_RIGHT = 3;
+
+// This is here until James fixes the real getID function :-)
+int TempGetID(int xMapID, int xPosX, int xPosY)
+{
+	int i;
+	int ListLen;
+	int CharID;
+
+	ListLen = mapListLen(xMapID);
+
+	for (i = 0; i < ListLen; i++)
+		{
+		CharID = mapList(xMapID, i);
+		if (getX(CharID) == xPosX && getY(CharID) == xPosY)
+			return CharID;
+		}
+
+	return -1;
+}
+
+void Rotate(int xDir, int* xpOffsetX, int* xpOffsetY)
+{
+	/*
+		This function assumes you are programming the spell
+		to fire downwards and you want to rotate the effect
+		from the downward orientation to the orientation specified by xDir
+	*/
+
+	int OldX;
+	int OldY;
+
+	OldX = *xpOffsetX;
+	OldY = *xpOffsetY;
+
+	switch (xDir)
+		{
+		case DIR_DOWN:
+			// Everything is already oriented downwards
+			break;
+		case DIR_UP:
+			// Rotate 180 degrees
+			*xpOffsetX = -OldX;
+			*xpOffsetY = -OldY;
+			break;
+		case DIR_LEFT:
+			// Rotate clockwise 90 degrees
+			*xpOffsetX = -OldY;
+			*xpOffsetY = OldX;
+			break;
+		case DIR_RIGHT:
+			// Rotate counter-clockwise 90 degrees
+			*xpOffsetX = OldY;
+			*xpOffsetY = -OldX;
+			break;
+		}
+}
+
+void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerX;
+	int PlayerY;
+	int PlayerMP;
+	int PlayerDir;
+	int i;
+	int LightX;
+	int LightY;
+	int TargetID;
+
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+	PlayerMP = getMP(PlayerID);
+	PlayerDir = getDir(PlayerID);
+
+	if (PlayerMP < SPELL_COST)
+		{
+		sendChat("^RNot enough mana.", PlayerID);
+		return;
+		}
+
+	PlayerMP -= SPELL_COST;
+	setMP(PlayerID, PlayerMP);
+
+	i = 1;
+	while (true)
+		{
+		LightX = 0;
+		LightY = i;
+		Rotate(PlayerDir, &LightX, &LightY);
+		LightX += PlayerX;
+		LightY += PlayerY;
+
+		if (!inBounds(LightX, LightY))
+			return;
+
+		makeEffect(PlayerMapID, LightX, LightY, HOLY_LIGHT_EFFECT);
+
+		TargetID = getID(PlayerMapID, LightX, LightY);
+		if (TargetID != -1)
+			setHP(TargetID, getHP(TargetID) - magicDamage(PlayerID) * 1.5);
+
+		i++;
+		}
+}

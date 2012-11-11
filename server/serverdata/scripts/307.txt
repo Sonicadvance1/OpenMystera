@@ -1,0 +1,80 @@
+// Tree Grow Script
+
+//const int DIR_DOWN = 0;
+//const int DIR_UP = 1;
+//const int DIR_LEFT = 2;
+//const int DIR_RIGHT = 3;
+
+void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerDir;
+	int PlayerX;
+	int PlayerY;
+	int TreeMapID;
+	int TreeX;
+	int TreeY;
+	int i;
+
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerDir = getDir(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+
+	TreeMapID = PlayerMapID;
+	TreeX = PlayerX;
+	TreeY = PlayerY;
+	switch (PlayerDir)
+		{
+		case DIR_DOWN:
+			TreeY++;
+			break;
+		case DIR_UP:
+			TreeY--;
+			break;
+		case DIR_LEFT:
+			TreeX--;
+			break;
+		case DIR_RIGHT:
+			TreeX++;
+			break;
+		}
+		{
+			if (getTile(TreeMapID,TreeX,TreeY,1) == 302)
+			{
+				if (PlayerMapID == 501)
+				{
+					sendMapChatf(PlayerMapID, "%s:^G*lays down fertilizer*", getName(PlayerID));
+					setTile(TreeMapID,TreeX,TreeY,1,301);
+					setTileType(TreeMapID,TreeX,TreeY,2);
+					updateMap(PlayerMapID);
+				}
+				else
+				{
+					sendChat("^rYou can't fertilize there!",PlayerID);
+				}
+			}
+			else
+			{
+				if (getTile(TreeMapID,TreeX,TreeY,1) == 301)
+				{
+					if (PlayerMapID == 501)
+					{
+						sendMapChatf(PlayerMapID, "%s:^G*lays down fertilizer*", getName(PlayerID));
+						setTile(TreeMapID,TreeX,TreeY,1,300);
+						updateMap(PlayerMapID);
+					}
+					else
+					{
+						sendChat("^rYou can't fertilize there!",PlayerID);
+					}
+				}
+				else
+				{
+					sendChat("^rYou can't fertilize there!",PlayerID);
+				}
+			}
+		}
+}

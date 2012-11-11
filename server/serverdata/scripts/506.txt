@@ -1,0 +1,51 @@
+// Long Bow   
+      #include   <math.h> 
+      void main()   
+      {   
+           int id =getPlayer();   
+           int map=getMap(id);   
+           int x  =getX(id);   
+           int y  =getY(id);   
+           int slot=itemSlot(id,80);   
+           int x1 =getX(id);  
+           int y1 =getY(id);  
+           int len=16;   
+           if(slot>0)   
+           {   
+                int qty=qtyAt(id,slot);   
+                if(qty<1)   
+            { 
+                 sendChat("^RNo ammo!",id); 
+            } 
+            else 
+            { 
+                 int qty=qtyAt(id,slot); 
+                 setQty(id,slot,qty-1); 
+                 while(inBounds(x,y) && getTileType(map,x,y) != 2 && len>0)                    
+            {   
+                          if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)   
+                          {   
+                               int victim=getID(map,x,y);   
+                               int dist=sqrt((pow((x1-x),2))+(pow((y1-y),2)));  
+                               int dex=getDex(id);   
+                               int str=getStr(id);   
+                               int miss=getRand(dist)-dex/5;   
+                               if(miss<=20)   
+                               {   
+                                    makeEffect(map,x,y,0);   
+                                    setHP(victim,getHP(victim)-abs(dist); 
+                        break;   
+                               }   
+                               else   
+                               makeEffect(map,x,y,4);   
+                          }   
+                          makeEffect(map,x,y,getDir(id)+5);   
+                          if(getDir(id)==0)y++;   
+                          if(getDir(id)==1)y--;   
+                          if(getDir(id)==2)x--;   
+                          if(getDir(id)==3)x++;   
+                          len--;   
+                     }   
+                }   
+           }  
+      }

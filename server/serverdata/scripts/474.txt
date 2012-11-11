@@ -1,0 +1,38 @@
+//tame spell
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int pet=getMTarget(id);
+	int cost=50;
+
+	if (pet == -1)
+	{
+		sendChatf(id,"No target selected!");
+		return;
+	}
+	if(getMP(id)<cost)
+	{
+		sendChat("^RNot enough mana.",id);
+		return;
+	}
+	cPlayer *target = playerStruct(pet);
+
+	if(target->type==0 || target->state==3 || target->move_script!=-1)
+	{
+		sendChat("^RCan't tame that!",id);
+		return;
+	}
+	if((player->itl + player->wis) * 3 < target->worth/3)
+	{
+		sendChat("^CYou aren't smart enough to tame that..",id);
+		return;
+	}
+	setMP(id,getMP(id)-cost);
+	
+	target->move_script=475;
+	target->target_at=id;
+	target->target=-1;
+	makeEffect(player->map,target->x,target->y,3);
+	
+}

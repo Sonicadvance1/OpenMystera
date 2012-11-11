@@ -1,0 +1,75 @@
+// Wheat Farming Script
+
+//const int DIR_DOWN = 0;
+//const int DIR_UP = 1;
+//const int DIR_LEFT = 2;
+//const int DIR_RIGHT = 3;
+
+void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerDir;
+	int PlayerX;
+	int PlayerY;
+	int WheatMapID;
+	int WheatX;
+	int WheatY;
+	int i;
+
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerDir = getDir(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+
+	WheatMapID = PlayerMapID;
+	WheatX = PlayerX;
+	WheatY = PlayerY;
+	switch (PlayerDir)
+		{
+		case DIR_DOWN:
+			WheatY++;
+			break;
+		case DIR_UP:
+			WheatY--;
+			break;
+		case DIR_LEFT:
+			WheatX--;
+			break;
+		case DIR_RIGHT:
+			WheatX++;
+			break;
+		}
+		{
+			if (getTile(WheatMapID,WheatX,WheatY,1) == 963 && getTileType(WheatMapID,WheatX,WheatY) == 2)
+			{
+				if (PlayerMapID == 928)
+				{
+					/*sendMapChatf(PlayerMapID, "%s:^G*chops down some wheat*", getName(PlayerID));
+					giveItem(PlayerID,434,1);
+					setTile(WheatMapID,WheatX,WheatY,1,0);
+					setTileType(WheatMapID,WheatX,WheatY,1);
+					sendMapUpdate(PlayerMapID);
+					updateMap(PlayerMapID);*/
+
+					//cMap* pMap;
+					//pMap = mapStruct(PlayerMapID);
+					//pMap->map[WheatY][WheatX].tile[1] = 0;
+					//pMap->map[WheatY][WheatX].type = 1;
+					sendMapChatf(PlayerMapID, "%s:^G*chops down some wheat*", getName(PlayerID));
+					giveItem(PlayerID,434,1);
+					//mapSave(PlayerMapID);
+					//sendMapUpdate(PlayerMapID);
+				}
+				else
+				{
+					sendChat("^rThere's no wheat there!",PlayerID);
+				}
+			}
+			else
+			{
+				sendChat("^rThere's no wheat there!",PlayerID);
+			}
+		}
+}

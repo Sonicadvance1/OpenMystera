@@ -1,0 +1,7 @@
+//Lothal's House Sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^RYOu have been placed here because an Admin may be running a player check. PLease do not be alarmed and do not spam the world chat.",id);
+}

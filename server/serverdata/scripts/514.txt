@@ -1,0 +1,23 @@
+//Heal Script
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int vc=getMTarget(id);
+	int cost=20;
+
+	if (vc == -1)
+		vc = id;
+
+	if(getMP(id)<cost)
+		{
+		sendChat("^RNot enough mana.",id);
+		}
+	else
+		{
+		setMP(id,getMP(id)-cost);
+		setHP(vc,getHP(vc)+(magicDamage(id)/1.5));
+		makeEffect(map,getX(vc),getY(vc),1);
+		}
+}

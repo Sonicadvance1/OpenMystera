@@ -1,0 +1,260 @@
+//returns slot of topmost item at map coordinates
+int topmostItemAt(int map,int x,int y)
+{
+	int i=itemLen()-1;
+	cItem *item = itemStruct(i);
+	while(i>=0)
+	{
+		item = itemStruct(i);
+		if(item->qty!=0 &&  //not empty
+		   item->map==map &&//same map
+		   item->x==x &&    //same x
+		   item->y==y)      //same y
+			return i;//this is it
+		i--;
+	}
+	return -1;
+}
+
+long nextItem()
+{
+	long i;
+	for(i = 0; i< itemLen(); i++)
+	{
+		cItem *item = itemStruct(i);
+		if(item->qty = 0)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void unequipSlot(int id,int slot)
+{
+	cPlayer *player = playerStruct(id);
+	char flag=0;
+	if(player->eLeft == slot)
+	{
+		player->eLeft=-1;
+		flag=1;
+	}
+	if(player->eRight == slot)
+	{
+		player->eRight=-1;
+		flag=1;
+	}
+	if(player->eHead == slot)
+	{
+		player->eHead=-1;
+		flag=1;
+	}
+	if(player->eBody == slot)
+	{
+		player->eBody=-1;
+		flag=1;
+	}
+	if(player->eSpecial == slot)
+	{
+		player->eSpecial=-1;
+		flag=1;
+	}
+	if(flag)
+	{
+		playerSave(id);
+		sendEquip(id);
+	}
+}
+
+
+void doDrop(long id, long slot)
+{
+	cPlayer *player = playerStruct(id);
+	long itemid=player->inventory[slot];
+	cItem *item;
+
+	if(itemid<0 || itemid>=itemLen())
+		return;
+	
+	item = itemStruct(itemid);
+
+	if(item->qty==0)//cant drop empty
+		return;
+	
+	//unequip
+	
+	unequipSlot(id,slot);
+	
+
+	//drop item on map
+	sendAddMapItem(item->graphic,player->map,player->x,player->y);
+	
+	//remove from player inventory
+	
+	item->owner=-1;
+	item->map=player->map;
+	item->x=player->x;
+	item->y=player->y;
+	itemSave(itemid);
+	player->inventory[slot]=-1;
+	
+	//remove from client inventory
+	takeItem(id,slot);
+}
+
+void doDrop(long id, long slot, long qty)
+{
+	cPlayer *player = playerStruct(id);
+	int itemid=player->inventory[slot];
+    long insert = nextItem();
+	if(insert == -1)
+	{
+		itemResize(itemLen() * 2);
+		insert = nextItem();
+	}
+
+	if(itemid==-1 || qty<=0)
+		return;
+	cItem *item = itemStruct(itemid);
+	//quantity same or more so drop all
+	if(qty >= item->qty)
+	{
+		doDrop(id,slot);
+		return;
+	}
+
+	if(player->access<=0 || //no access
+	   item->qty<=0) //cant drop portion of single or empty
+		return;
+	
+	//drop item on map
+	sendAddMapItem(item->graphic,player->map,player->x,player->y);
+	
+	//remove some from player inventory
+	cItem portion = *item;
+	portion.qty  = qty;
+	portion.x    = player->x;
+	portion.y    = player->y;
+	portion.owner= -1;
+	portion.map  = player->map;
+	sendAddMapItem(portion.graphic,portion.map,portion.x,portion.y);
+	itemInsert(insert);
+	
+	item->qty-=qty;
+	itemSave(itemid);
+	//item=ml_items.addMapItem(player->map,player->x,player->y,portion);
+	//addItem(item);
+	//makeItem(item->item_template,qty,player->map,player->x,player->y);
+
+	//remove some from client inventory
+	sendInventoryQty(id,slot,qty);
+}
+
+int nextInventorySlot(int id)
+{
+	cPlayer *player = playerStruct(id);
+	for(int i=0;i<inventoryLen();i++)
+	{
+		if(player->inventory[i]==-1)
+			return i;
+	}
+	return -1;
+}
+
+void main()
+{
+	long id = getPlayer();
+	cPlayer *player = playerStruct(id);
+	long slot,qty;
+	cItem *slotitem;
+	cItem *item;
+	char *command = getCommand();
+	
+	if (sscanf(command, "drop %d %d", &slot, &qty) == 2)
+	{
+		if(slot < 0 || slot >= inventoryLen())
+			return;
+		item = itemStruct(player->inventory[slot]);
+		sendChatf(id, "^wYou dropped %s", item->name);
+		if (player->map == 1387 && player->y == 5 && (player->x == 9 || player->x == 10))
+		{
+			if (strcmp(item->name,"^yGold") == 0)
+			{
+				runScript(543,-1);
+			}
+		}
+		// Trash script
+		runScript(447,1);
+	}
+	
+	
+	if(strcmp(player->name,"Mark") != 0)
+		return;
+	/*long slot,qty;
+	cItem *slotitem;
+	cItem *item;
+	char *command = getCommand();
+	
+	//sendMapChatf(player->map,"PICK UP YOU STUPID THING!!!");
+	if(sscanf(command, "drop %d %d", &slot, &qty) == 2)
+	{
+		slot--;
+		if(slot < 0 || slot >= inventoryLen())
+			return;
+		item = itemStruct(player->inventory[slot]);
+		if(item->qty > -1)
+		{
+			item->qty -= qty;
+		}
+	}
+	else
+	{
+		//get slot of item at player
+		slot = topmostItemAt(player->map,player->x,player->y);
+		//sendMapChatf(player->map, "%d is the item, i see it.", itemLen());
+		//return if no items
+		if(slot == -1)
+			return;
+			
+		cItem *item = itemStruct(slot);
+
+		int invSlot=-1;
+		int qty=item->qty;
+
+		//check if can stack
+		if(item->qty>0)
+		{
+			invSlot = itemSlot(id,item->item_template);
+			if(invSlot!=-1)
+			{
+				//combine and remove
+				slotitem = itemStruct(invSlot);
+				slotitem->qty+=item->qty;
+				itemSave(player->inventory[invSlot]);
+				itemDelete(slot);
+			}
+		}
+		//check for empty space for new item if space not found
+		if(invSlot==-1)
+			invSlot=nextInventorySlot(id);
+
+		//if past inventory limit then exit
+		if(invSlot==-1)
+			return;
+		
+		//if not combined and removed then move item into inventory from map
+		if(item->qty!=0)
+		{
+			item->map=-1;
+			item->owner=id;
+			item->slot=invSlot;
+			item->life=10;
+			itemSave(slot);
+			player->inventory[invSlot]=slot;
+			slotitem = itemStruct(player->inventory[invSlot]);
+		}
+		//update clients
+		sendInventoryAdd(id,slotitem->graphic,slotitem->name,invSlot,qty);
+		sendRemoveMapItem(player->map,player->x,player->y);
+	}*/
+}

@@ -1,0 +1,39 @@
+// Random Skeleton Script (under construction) 
+      
+    void main()  
+    {  
+         int id =getPlayer();  
+         int map=getMap(id);  
+         int x=getX(id);  
+         int y=getY(id);   
+         int cost=50; 
+         int x1=getX(id); 
+         int y1=getY(id); 
+         int map1=getMap(id);
+         int dex=getDex(id); 
+         int str=getStr(id);  
+         int len=(dex/5+str/10+1);   
+         while(len>0)
+                   {  
+                      if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+                        {  
+                             int victim=getID(map,x,y);   
+                             {  
+                                  
+                                  makeEffect(map,x,y,0);  
+                                  setHP(victim,getHP(victim)-abs(str*1.5+dex/1.5));  
+                                  setPos(victim,map1,x1,y1);
+                                  setPos(id,map,x,y);
+                             }  
+                          
+                         
+                         
+                        if(getDir(id)==0)y++;  
+                        if(getDir(id)==1)y--;  
+                        if(getDir(id)==2)x--;  
+                        if(getDir(id)==3)x++;  
+                        makeEffect(map,x,y,9); 
+                        len--;  
+                        }
+                   }  
+              }

@@ -1,0 +1,11 @@
+// shadow scan
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int vc=getMTarget(id);
+	if(vc==-1)
+	return;
+	sendChatf(id,"^YThe ^C%s^Y has %s/%s HP and %s/%s MP.",getName(vc),getHP(vc),getMaxHP(vc),getMP(vc),getMaxMP(vc));
+}

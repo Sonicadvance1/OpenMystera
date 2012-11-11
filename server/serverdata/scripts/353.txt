@@ -1,0 +1,37 @@
+/*
+	Monster Hunt Start/Stop script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	January 20, 2004
+*/
+
+const int MONSTER_SPAWN_SCRIPT_ID = 354;
+#define GLOBAL_TIMER_ID "MonsterHuntTimerID"
+#define GLOBAL_ADMIN_ID "MonsterHuntAdminID"
+
+void main()
+{
+	int PlayerID;
+	int TimerID;
+
+	PlayerID = getPlayer();
+
+	// If monster hunt in progress
+	if (isGlobal(GLOBAL_TIMER_ID))
+		{
+		// Stop monster hunt
+		sendChat("^YStopping Monster Hunt", PlayerID);
+		TimerID = globalInt(GLOBAL_TIMER_ID);
+		freeGlobal(GLOBAL_TIMER_ID);
+		freeGlobal(GLOBAL_ADMIN_ID);
+		haltScript(TimerID);
+		return;
+		}
+
+	// Start monster hunt
+	sendChat("^YStarting Monster Hunt", PlayerID);
+	setGlobalInt(GLOBAL_ADMIN_ID, PlayerID);
+
+	TimerID = runScript(MONSTER_SPAWN_SCRIPT_ID, 1);
+	setGlobalInt(GLOBAL_TIMER_ID, TimerID);
+}

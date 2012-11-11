@@ -1,0 +1,25 @@
+// Loaded Dice Script
+
+void main()
+{
+	int id=getPlayer();
+	int vc=getMTarget(id);
+	int map=getMap(id);
+	if(map==0 || map==463 || map==466 || map==2 || map==5 || map==605 || map==749 || map==750 || map==751 || map==843)
+	{
+		if(vc>-1)
+		{
+			int dice=getRand(4)+3;
+			sendChatf(id,"^CYou rolled a %d with your rigged dice.",dice);
+			sendChatf(vc,"^Y%s^C rolled a  %d.",getName(id),dice);
+		}
+		else
+		{
+			sendChat("^RYou must first target someone to gamble with!",id);
+		}
+	}
+	else
+	{
+		sendChat("^RGambling is not permitted here!",id);
+	}
+}

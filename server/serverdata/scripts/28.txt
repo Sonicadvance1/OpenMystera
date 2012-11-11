@@ -1,0 +1,18 @@
+//castle quest game script
+
+#include "maze.h"
+
+void main()
+{
+	setPos(getPlayer(),136,15,6);
+
+	makeItem(52,1,136,2,11);
+	makeItem(1,600,136,14,10);
+	makeItem(1,600,136,16,10);
+
+	make_maze(133,2,13,12,5,133,2,13,6);
+	make_maze(134,12,5,8,13,133,2,13,6);
+
+	//24 10 16
+
+}

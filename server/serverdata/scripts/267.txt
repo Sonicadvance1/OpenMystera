@@ -1,0 +1,8 @@
+// Race Finish
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	sendMapChatf(map,"^c%s ^ghas finished the race!",getName(id));
+}

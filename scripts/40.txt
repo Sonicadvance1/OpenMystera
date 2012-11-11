@@ -1,0 +1,130 @@
+#include"mapping.h"
+#include"time.h"
+#define NUM_STORMS 100
+struct storm
+{
+	storm()
+	{
+		mapid = -1;
+		dur   = 0;
+	}
+	int mapid;
+	int dur;
+};
+
+storm storms[NUM_STORMS];
+
+bool occupied(int mapid)
+{
+	for(int i = 0; i < NUM_STORMS; i++)
+	{
+		if(storms[i].mapid == mapid)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+int getNewMap()
+{
+	int mapid = -1;
+	while(mapid == -1)
+	{
+		mapid = getRand(TOTALMAPS) + STARTMAP;
+		if(occupied(mapid))
+		{
+			mapid = -1;
+		}
+	}
+	return mapid;
+}
+
+void main()
+{
+	int i;
+	srand(time(0));
+	for(i = 0; i < NUM_STORMS; i++)
+	{
+		if(storms[i].mapid == -1)
+		{
+			storms[i].mapid = getNewMap();
+		}
+		/*if(getRand(100) == 0)
+		{
+			sendChatf(getPlayer(),"%d",storms[i].mapid);
+		}*/
+		cMap *map = mapStruct(storms[i].mapid);
+		if(map->npc[4].qty > -80 && storms[i].dur > -1)
+		{
+			map->npc[4].qty -= 5;
+			mapSave(storms[i].mapid);
+			sendMapUpdate(storms[i].mapid);
+		}
+		else if(storms[i].dur == -1)
+		{
+			if(map->npc[4].qty < 1)
+			{
+				map->npc[4].qty += 5;
+			}
+			else
+			{
+				map->npc[4].qty = 1;
+				int new_map;
+				switch(getRand(4))
+				{
+					case DIR_UP:
+						new_map = map->n;
+						break;
+					case DIR_DOWN:
+						new_map = map->s;
+						break;
+					case DIR_LEFT:
+						new_map = map->e;
+						break;
+					default:
+						new_map = map->w;
+				}
+				if(new_map >= STARTMAP && new_map < STARTMAP + TOTALMAPS && !occupied(new_map))
+				{
+					storms[i].mapid = new_map;
+				}
+				else
+				{
+					storms[i].mapid = getNewMap();
+				}
+				//sendMapChatf(storms[i].mapid, "Attemping to change:%d %d >= %d < %d !%d", new_map, storms[i].mapid, STARTMAP,STARTMAP+TOTALMAPS,occupied(new_map,storms));
+				storms[i].dur = 0;
+			}
+			mapSave(storms[i].mapid);
+			sendMapUpdate(storms[i].mapid);
+		}
+		
+		for(int x = 0; x< 20; x++)
+		{
+			for(int y = 0; y < 15; y++)
+			{
+				if(getRand((700) - (abs(map->npc[4].qty) * 6)) == 0)
+				{
+					if(getRand(100) < 10)
+					{
+						makeEffect(storms[i].mapid,x,y,2);
+					}
+					else
+					{
+						makeEffect(storms[i].mapid,x,y,31);
+					}
+				}
+			}
+		}
+		if(storms[i].dur > -1)
+		{
+			storms[i].dur++;
+			if(getRand(5000) < storms[i].dur)
+			{
+				storms[i].dur = -1;
+			}
+		}
+	}
+	runScript(myScript(), 500);
+}

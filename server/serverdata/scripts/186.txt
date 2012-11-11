@@ -1,0 +1,8 @@
+/*
+	Chess Movement Script
+	December 13, 2003
+*/
+
+void main()
+{
+}

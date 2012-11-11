@@ -1,0 +1,145 @@
+/*
+	Consolidated Wall Switch Script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	December 12, 2003
+*/
+
+/*
+	Description: This script consolidates all sign scripts by looking up
+	which sign text to display using the sign's world coordinates
+*/
+
+const int DIR_DOWN = 0;
+const int DIR_UP = 1;
+const int DIR_LEFT = 2;
+const int DIR_RIGHT = 3;
+
+struct SWITCH_TEXT
+{
+	int MapID;
+	int X;
+	int Y;
+	char* pText;
+};
+
+// ADD NEW SIGNS TO THE LIST BELOW!
+SWITCH_TEXT gSwitch[] = {
+	{ 2, 4, 1, {
+	if (getTile(2,5,1,1)==0)   // change from wall to torch
+	{
+		setTile(2,5,1,1,262);
+		setTile(2,3,1,1,262);
+		setTile(2,3,9,1,262);
+		setTile(2,6,10,1,262);
+		setTile(2,8,10,1,262);
+		setTile(2,11,10,1,262);
+		setTile(2,13,10,1,262);
+		setTile(2,7,6,1,262);
+		setTile(2,12,6,1,262);
+		setTile(2,16,9,1,262);
+		setTile(2,17,1,1,262);
+		setTile(2,13,1,1,262);
+		setTile(2,5,12,3,262);
+		setTile(2,14,12,3,262);
+		setMapLighting(2,0);
+	}
+        else
+	{
+		setTile(2,5,1,1,0); // change from torch to wall
+		setTile(2,3,1,1,0);
+		setTile(2,3,9,1,0);
+		setTile(2,6,10,1,0);
+		setTile(2,8,10,1,0);
+		setTile(2,11,10,1,0);
+		setTile(2,13,10,1,0);
+		setTile(2,7,6,1,0);
+		setTile(2,12,6,1,0);
+		setTile(2,16,9,1,0);
+		setTile(2,17,1,1,0);
+		setTile(2,13,1,1,0);
+		setTile(2,5,12,3,0);
+		setTile(2,14,12,3,0);
+		setMapLighting(2,-70);
+	}
+	updateMap(getMap(getPlayer()));
+}
+},
+{ 236, 3, 1, {
+	if (getTile(236,6,2,3)==0)   // change from wall to torch
+	{
+		setTile(236,6,2,3,262);
+		setTile(236,10,2,3,262);
+		setTile(236,10,4,3,262);
+		setTile(236,6,4,3,262);
+		setMapLighting(236,0);
+	}
+        else
+	{
+		setTile(236,6,2,3,0); // change from torch to wall
+		setTile(236,10,2,3,0);
+		setTile(236,10,4,3,0);
+		setTile(236,6,4,3,0);
+		setMapLighting(236,-70);
+	}
+	updateMap(getMap(getPlayer()));
+}
+},
+	
+	};
+
+const int NUM_SIGNS = sizeof(gSigns) / sizeof(SWITCH_TEXT);
+
+void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerDir;
+	int PlayerX;
+	int PlayerY;
+	int SignMapID;
+	int SignX;
+	int SignY;
+	int i;
+
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerDir = getDir(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+
+	// TODO: Why do the other sign scripts check if getPlayerType() == 0 ?
+
+	// Get coordinates for sign the player is facing
+	SignMapID = PlayerMapID;
+	SignX = PlayerX;
+	SignY = PlayerY;
+	switch (PlayerDir)
+		{
+		case DIR_DOWN:
+			SignY++;
+			break;
+		case DIR_UP:
+			SignY--;
+			break;
+		case DIR_LEFT:
+			SignX--;
+			break;
+		case DIR_RIGHT:
+			SignX++;
+			break;
+		}
+
+	// Search sign list for coordinates
+	for (i = 0; i < NUM_SIGNS; i++)
+		{
+		if (gSigns[i].MapID != SignMapID || gSigns[i].X != SignX || gSigns[i].Y != SignY)
+			continue;
+		
+		sendChat(gSigns[i].pText, PlayerID);
+		return;
+		}
+
+	// If script 156 was invoked, but there is no corresponding sign in list, there is a problem
+	sendChat("^RError in script 156: No sign text defined at specified coordinates", PlayerID);
+}

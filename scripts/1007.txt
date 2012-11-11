@@ -1,0 +1,1160 @@
+// Command processing script
+
+#include <string.h>
+#include <time.h>
+#include "safeMaps.h"
+#include "houses.h"
+#include "ignore.h"
+
+struct WARP_LOCATION
+{
+	char* pName;
+	int MapID;
+	int x;
+	int y;
+};
+
+WARP_LOCATION gpWarpLocations[] = {
+	{ "cc", 0, 5, 5 }
+	};
+const int gNumWarpLocations = sizeof(gpWarpLocations) / sizeof(WARP_LOCATION);
+
+
+struct GUILD_MEMBER
+{
+	char* pGuildName;
+	char* pPlayerName;
+};
+
+GUILD_MEMBER gpGuildMembers[] = {
+	
+        { "Guildname", "Membername" }, // Guild Leader
+
+	};
+
+
+
+const int NUM_GUILD_MEMBERS = sizeof(gpGuildMembers) / sizeof(GUILD_MEMBER);
+
+int nameToId(char* name)
+{
+	cPlayer *pPlayer;
+	char playerName[64];
+
+	strcpy(playerName,stringLower(name));
+	for(int i=0;i<playerLen();i++)
+	{
+		pPlayer=playerStruct(i);
+		if(pPlayer->access>0 && strcmp(stringLower(pPlayer->name),playerName)==0)
+			return i;
+	}
+	return -1;
+}
+
+int totalExpOf(int index)
+{
+	cPlayer *player=playerStruct(index);
+	int exp=player->exp;
+	for(int c=1;c<player->lvl;c++)
+		exp+=levelUpExp(c);
+	return exp;
+}
+
+char* classOf(int index)
+{
+	cPlayer *player=playerStruct(index);
+	int s[5];
+	s[0] = player->str;
+	s[1] = player->dex;
+	s[2] = player->con;
+	s[3] = player->itl;
+	s[4] = player->wis;
+	int m=-1,m2=-1,r=1;
+	for(int i=0;i<5;i++)
+	{
+		if(s[i]>r)
+		{
+			r=s[i];
+			m=i;
+		}
+	}
+	r=1;
+	for(i=0;i<5;i++)
+	{
+		if(i!=m && s[i]>r)
+		{
+			r=s[i];
+			m2=i;
+		}
+	}
+	if(m==0 && m2==1)return "Rogue";
+	if(m==0 && m2==2)return "Warrior";
+	if(m==0 && m2==3)return "BattleMage";
+	if(m==0 && m2==4)return "Knight";
+
+	if(m==1 && m2==0)return "Ninja";
+	if(m==1 && m2==2)return "Assassin";
+	if(m==1 && m2==3)return "Thief";
+	if(m==1 && m2==4)return "Ranger";
+
+	if(m==2 && m2==0)return "Barbarian";
+	if(m==2 && m2==1)return "Samurai";
+	if(m==2 && m2==3)return "Monk";
+	if(m==2 && m2==4)return "Cleric";
+
+	if(m==3 && m2==0)return "Warlock";
+	if(m==3 && m2==1)return "Sorcerer";
+	if(m==3 && m2==2)return "Wizard";
+	if(m==3 && m2==4)return "Prophet";
+
+	if(m==4 && m2==0)return "Paladin";
+	if(m==4 && m2==1)return "Mystic";
+	if(m==4 && m2==2)return "Shaman";
+	if(m==4 && m2==3)return "Druid";
+	return "Multi-Class";
+}
+
+void main()
+{
+	int PlayerID;
+	cPlayer* pPlayer;
+	char* pCommand;
+	long nums[5];
+	char strs[5][128];
+	char playerName[COMMAND_LENGTH];
+
+	PlayerID = getPlayer();
+	pCommand = getCommand();
+
+	// Player commands
+
+	if(sscanf(pCommand, "use %d", &nums[0]) == 1)
+	{
+		//int slot=atoi(pm1);
+		pPlayer = playerStruct(PlayerID);
+		if(isSafe(pPlayer->map))
+		{
+			return;
+		}
+		cItem *item;
+		if(nums[0] < 0 || nums[0] >= inventoryLen())
+			return;
+
+		long itemid = pPlayer->inventory[nums[0]];
+		if(itemid>-1)
+		{
+			item = itemStruct(itemid);
+			if(item->type==IT_ITEM)//USE NORMAL ITEM
+			{
+				if(item->use_script>-1)
+					runScriptAs(item->use_script,0,PlayerID);
+					
+				if(item->uses>0)
+				{	
+					if(item->qty<0)
+					{
+						itemDelete(itemid);
+						pPlayer->inventory[nums[0]]=-1;
+						sendInventoryQty(PlayerID, nums[0], 0);
+					}
+					else
+					{
+						item->qty--;
+						if(item->qty==0)
+						{
+							itemDelete(itemid);
+							pPlayer->inventory[nums[0]]=-1;
+							sendInventoryQty(PlayerID, nums[0], 0);
+						}
+						else
+						{
+							itemSave(itemid);
+						}
+					}
+	
+					sendInventoryQty(PlayerID, nums[0], item->qty);
+				}
+			}
+			else if(item->type==IT_HAND)//EQUIP ONE HAND ITEM
+			{
+				if(pPlayer->eLeft==-1 && pPlayer->eRight!=nums[0])
+					pPlayer->eLeft=nums[0];
+				else if(pPlayer->eLeft==nums[0])
+					pPlayer->eLeft=-1;
+				else if(pPlayer->eRight==-1)
+					pPlayer->eRight=nums[0];
+				else if(pPlayer->eRight==nums[0])
+					pPlayer->eRight=-1;
+				playerSave(PlayerID);
+				sendEquip(PlayerID);
+			}
+			else if(item->type==IT_2HAND)//EQUIP 2 HAND ITEM
+			{
+				if(pPlayer->eLeft==-1&&pPlayer->eRight==-1)
+				{
+					pPlayer->eLeft=nums[0];
+					pPlayer->eRight=nums[0];
+				}
+				else if(pPlayer->eLeft==nums[0])
+				{
+					pPlayer->eLeft=-1;
+					pPlayer->eRight=-1;
+				}
+				playerSave(PlayerID);
+				sendEquip(PlayerID);
+			}
+			else if(item->type==IT_ARMOR)//EQUIP ARMOR
+			{
+				
+				if(pPlayer->eBody==-1)
+				{
+					pPlayer->eBody=nums[0];
+				}
+				else if(pPlayer->eBody==nums[0])
+					pPlayer->eBody=-1;
+					
+				playerSave(PlayerID);
+				sendEquip(PlayerID);
+			}
+			else if(item->type==IT_HELMET)//EQUIP HELM
+			{
+				
+				if(pPlayer->eHead==-1)
+				{
+					pPlayer->eHead=nums[0];
+				}
+				else if(pPlayer->eHead==nums[0])
+					pPlayer->eHead=-1;
+				playerSave(PlayerID);
+				sendEquip(PlayerID);
+			}
+			else if(item->type==IT_SPECIAL)//EQUIP SPECIAL
+			{
+				
+				if(pPlayer->eSpecial==-1)
+				{
+					pPlayer->eSpecial=nums[0];
+				}
+				else if(pPlayer->eSpecial==nums[0])
+					pPlayer->eSpecial=-1;
+				playerSave(PlayerID);
+				sendEquip(PlayerID);
+			}
+		}
+	}
+	else if (strcmp(pCommand, "retrain") == 0)
+	{
+		pPlayer = playerStruct(PlayerID);
+		if(pPlayer->map == 69)
+		{
+			long train = (pPlayer->lvl-1) * 3;
+			pPlayer->str = 1;
+			pPlayer->dex = 1;
+			pPlayer->itl = 1;
+			pPlayer->wis = 1;
+			pPlayer->con = 1;
+			pPlayer->mhp = 100 + ((pPlayer->lvl-1) * 10);
+			pPlayer->mmp = 80  + ((pPlayer->lvl-1)  * 10);
+			
+			if(pPlayer->hp > pPlayer->mhp)
+			{
+				pPlayer->hp = pPlayer->mhp;
+			}
+			
+			if(pPlayer->mp > pPlayer->mmp)
+			{
+				pPlayer->mp = pPlayer->mmp;
+			}
+			
+			pPlayer->train = train;
+			pPlayer->atk = 2;
+			pPlayer->def = 0;
+			sendChatf(PlayerID,"^GYour stats have been reset.");
+			playerSave(PlayerID);
+			sendPlayerUpdate(PlayerID);
+			sendLevel(PlayerID);
+			sendAttribute(PlayerID);
+		}
+		else
+		{
+			sendChatf(PlayerID,"^rYou must be in the retraining room to retrain! (warp from Galebrook City Center)");
+		}
+	}
+	else if (strcmp(pCommand, "who") == 0)
+	{
+		int numPlayers=0;
+		
+		char inf[1024];
+		char plist[1024];
+		
+		strcpy(plist,"^g");
+		for(int i=0;i<playerLen();i++)
+		{
+			pPlayer=playerStruct(i);
+			if(pPlayer->access>0 && pPlayer->type==0)
+			{
+				if(strlen(plist) >= 235)//too long lets split it up!
+				{
+					sendChatf(PlayerID,plist);
+					strcpy(plist,"^g");
+				}
+				sprintf(inf,"%s(%d), ",pPlayer->name,pPlayer->lvl);
+				strcat(plist,inf);
+				numPlayers++;
+			}
+		}
+		strcat(plist,itos(numPlayers));
+		strcat(plist," players online.");
+		sendChatf(PlayerID,plist);
+		
+		
+	}
+	else if (strcmp(pCommand, "stats") == 0)
+	{
+		cPlayer *player = playerStruct(PlayerID);
+		sendChatf(PlayerID,"^BATK:%d+%d (%d) DEF:%d+%d (%d) EXP:%d TNL:%d TRAIN:%d AGE:%d BOUNTY:%d",player->atk+player->str/3,attackOf(PlayerID)-(player->atk+player->str/3),attackOf(PlayerID),player->def+player->con/4,defenseOf(PlayerID)-(player->def+player->con/4),defenseOf(PlayerID),totalExpOf(PlayerID),levelUpExp(player->lvl)-player->exp,player->train,17+(player->total_time/324000),player->worth);
+		sendChatf(PlayerID,"^BCLASS:%s STR:%d DEX:%d CON:%d INT:%d WIS:%d SERENITY:%d",classOf(PlayerID),player->str,player->dex,player->con,player->itl,player->wis,player->serenity/4);
+		
+	}
+	else if (strcmp(pCommand, "rm") == 0)
+	{
+		cPlayer *player = playerStruct(PlayerID);
+		sendMapUpdate(player->map);
+		
+	}
+	else if (strcmp(pCommand, "bc") == 0)
+	{
+		cPlayer *player = playerStruct(PlayerID);
+		unsigned long bcmask = 0x00000001;
+		player->flags ^= bcmask;
+		if((player->flags & bcmask)==0)
+			sendChat("^mBroadcast channel on.",PlayerID);
+		else
+			sendChat("^mBroadcast channel off.",PlayerID);
+		
+	}
+	else if(strcmp(pCommand, "ignorelist") == 0)
+	{
+		sendIgnoreList(PlayerID);
+	}
+	else if(strcmp(pCommand, "unignoreall") == 0)
+	{
+		unIgnoreAll(PlayerID);
+		sendChatf(PlayerID,"^GYou are now ignoring no one.");
+	}
+	else if(sscanf(pCommand, "ignore %s" , &strs[0]) == 1)
+	{
+		if(nameToId(strs[0]) != -1)
+			ignore(PlayerID, strs[0]);
+	}
+	else if(sscanf(pCommand, "unignore %s" , &strs[0]) == 1)
+	{
+		unIgnore(PlayerID, strs[0]);
+	}
+	/*else if(sscanf(pCommand, "unignore %d" , &nums[0]) == 1)
+	{
+		unIgnore(PlayerID, nums[0]);
+	}*/
+	else if(strlen(pCommand)>2 && pCommand[0]=='b' && pCommand[1]==' ')//broadcast
+	{
+		pPlayer = playerStruct(PlayerID);
+		char chat[256];
+		sprintf(chat,"^M%s:%s",pPlayer->name,pCommand+2);
+		int len=playerLen();
+		cPlayer *pl;
+		unsigned long bcmask = 0x00000001;
+		for(int x=0;x<len;x++)
+		{
+			pl=playerStruct(x);
+			if(pl->access>0 && pl->type==0 && (pl->flags & bcmask)==0 && !isIgnored(x,pPlayer->name))
+				sendChat(chat,x);
+		}
+
+		printf("[BR]%s:%s\n",pPlayer->name,chat);
+		
+	}
+	else if(strlen(pCommand)>2 && pCommand[0]=='e' && pCommand[1]==' ')//emote
+	{
+		pPlayer = playerStruct(PlayerID);
+		char chat[256];
+		strcpy(chat,pCommand+2);
+		int i;
+		for(i=0;i<256;i++) if(chat[i]=='%') chat[i]='/'; //get rid of percent crashes
+		sendMapChatf(pPlayer->map,"^C>%s %s",pPlayer->name,chat);
+		printf("^C>%s %s\n",pPlayer->name,chat);
+		
+	}
+	else if(strlen(pCommand)>2 && pCommand[0]=='t' && pCommand[1]==' ')//tell
+	{
+		pPlayer = playerStruct(PlayerID);
+		char thename[128];
+		strcpy(thename,pPlayer->name);
+		char pm1[128];
+		if(sscanf(pCommand,"t %s",&playerName)!=1)
+			return;
+		strcpy(playerName,stringLower(playerName));
+		for(int i=0;i<playerLen();i++)
+		{
+			pPlayer=playerStruct(i);
+			if(pPlayer->access>0 && pPlayer->type==0 && strcmp(stringLower(pPlayer->name),playerName)==0)
+			{
+				if(isIgnored(i, thename))
+					return;
+
+				char chat[256];
+				if(strlen(pCommand)>(unsigned int(3)+unsigned int(strlen(pPlayer->name))))
+				{
+					strcpy(chat,pCommand+3+strlen(pPlayer->name));
+					sendChatf(i,"^G%s:%s",thename,chat);
+					sendChatf(PlayerID,"^G%s:%s",thename,chat);
+					printf("[%s-%s]%s\n",thename,pPlayer->name,chat);
+				}
+				return;
+			}
+		}
+		sendChatf(PlayerID,"^wNo such player online...");
+		
+	}
+	else if (strcmp(pCommand, "moveout") == 0)
+	{
+		int id=getPlayer();
+		cPlayer *player=playerStruct(id);
+	
+		// Get coordinates for sign the player is facing
+		int sx = player->x;
+		int sy = player->y;
+		if(player->dir==DIR_DOWN)
+			sy++;
+		else if(player->dir==DIR_UP)
+			sy--;
+		else if(player->dir==DIR_LEFT)
+			sx--;
+		else if(player->dir==DIR_RIGHT)
+			sx++;
+		int i;
+		for(i=0;i<NUM_HOUSES;i++)
+		{
+			if(house[i].map==player->map && house[i].x==sx && house[i].y==sy)
+			{
+				char name[64];
+				char value[128];
+				
+				sprintf(name,"hs`%d`%d`%d",house[i].map,house[i].x,house[i].y);
+				if(DBisGlobal(name))
+				{
+					strcpy(value,DBselectGlobal(name));
+					char chat[128];
+					char temps[128];
+					int temp;
+					sscanf(value,"hs`%[^`]`%d`%s`Owner:%s",&temps,&temp,&strs[0],&chat);
+					if(strcmp(temps,player->name)==0)
+					{
+						//cancel ownership
+						DBdeleteGlobal(name);
+						sendChatf(id,"Ownership cancelled.");
+					}
+				}
+			}
+		}
+		
+	}
+	else if (sscanf(pCommand, "d %s", &strs[0]) == 1)
+	{
+		int id=getPlayer();
+		cPlayer *player=playerStruct(id);
+	
+		// Get coordinates for sign the player is facing
+		int sx = player->x;
+		int sy = player->y;
+		if(player->dir==DIR_DOWN)
+			sy++;
+		else if(player->dir==DIR_UP)
+			sy--;
+		else if(player->dir==DIR_LEFT)
+			sx--;
+		else if(player->dir==DIR_RIGHT)
+			sx++;
+
+		int i;
+		for(i=0;i<NUM_HOUSES;i++)
+		{
+			if(house[i].map==player->map && house[i].x==sx && house[i].y==sy)
+			{
+				char name[64];
+				char value[128];
+				
+				sprintf(name,"hs`%d`%d`%d",house[i].map,house[i].x,house[i].y);
+				if(DBisGlobal(name))
+				{
+					strcpy(value,DBselectGlobal(name));
+					char chat[128];
+					char owner[128];
+					int timeleft;
+					int keycode;
+					sscanf(value,"hs`%[^`]`%d`%[^`]`Owner:%s",&owner,&timeleft,&strs[1],&chat);
+					if(strcmp(strs[0],strs[1]) == 0)
+					{
+						//send inside house
+						cMap *map = mapStruct(player->map);
+						map->map[player->y][player->x].space=-1;
+						player->map=house[i].dmap;
+						player->x=house[i].dx;
+						player->y=house[i].dy;
+						map = mapStruct(player->map);
+						map->map[player->y][player->x].space=id;
+						sendPosition(id);
+						
+					}
+				}
+			}
+		}
+		
+	}
+	else if (sscanf(pCommand, "keycode %s", &strs[0]) == 1)
+	{
+		srand(time(0));
+		int id=getPlayer();
+		cPlayer *player=playerStruct(id);
+	
+		// Get coordinates for sign the player is facing
+		int sx = player->x;
+		int sy = player->y;
+		if(player->dir==DIR_DOWN)
+			sy++;
+		else if(player->dir==DIR_UP)
+			sy--;
+		else if(player->dir==DIR_LEFT)
+			sx--;
+		else if(player->dir==DIR_RIGHT)
+			sx++;
+		int i;
+		for(i=0;i<NUM_HOUSES;i++)
+		{
+			if(house[i].map==player->map && house[i].x==sx && house[i].y==sy)
+			{
+				char name[64];
+				char value[128];
+				
+				sprintf(name,"hs`%d`%d`%d",house[i].map,house[i].x,house[i].y);
+				if(DBisGlobal(name))
+				{
+					strcpy(value,DBselectGlobal(name));
+					char chat[128];
+					char owner[128];
+					int timeleft;
+					sscanf(value,"hs`%[^`]`%d`%[^`]`Owner:%s",&owner,&timeleft,&strs[1],&chat);
+					if(strcmp(owner,player->name)==0)
+					{
+						//update keycode
+						sprintf(value,"hs`%s`%d`%s`Owner:%s",owner,timeleft,&strs[0],chat);
+						DBupdateGlobal(name,value);
+						sendChatf(id,"New house key created:%s",strs[0]);
+					}
+				}
+			}
+		}
+		
+	}
+	else if (strcmp(pCommand, "info") == 0)
+	{
+		sendChatf(PlayerID, "^YPress the ^GArrow Keys^Y to move your character");
+		sendChatf(PlayerID, "^YPress the ^GSpacebar^Y to read signs and interact with objects");
+		sendChatf(PlayerID, "^YPress ^GShift^Y to pick up items from the ground");
+		sendChatf(PlayerID, "^YPress ^GEnter^Y to open a chat box and press ^GEnter^Y again to send a message");
+		sendChatf(PlayerID, "^YType ^G/who^Y in the chat box to see who is online");
+		sendChatf(PlayerID, "^YType ^G/train^Y in the chat box after you level up to advance your character");
+		sendChatf(PlayerID, "^YType ^G/quit^Y in the chat box to exit Mystera Legends");
+		
+	}
+	else if(strlen(pCommand)>11 && strncmp(pCommand,"changepass",10) == 0 && pCommand[10]==' ')
+	{
+		pPlayer = playerStruct(PlayerID);
+		char chat[256];
+		strcpy(chat,pCommand+11);
+		if(strlen(chat)<4 || strlen(chat)>16)
+		{
+			sendChatf(PlayerID,"^BPassword must be between 4 and 16 characters in length.");
+			
+		}
+		char query[256];
+		sprintf(query,"UPDATE ACCOUNTS SET pass=MD5('%s') WHERE char1=%d OR char2=%d OR char3=%d OR char4=%d",chat,pPlayer->id,pPlayer->id,pPlayer->id,pPlayer->id);
+		DBsendQuery(query);
+		sendChatf(PlayerID,"^wPassword changed.");		
+		
+	}	
+	else if (strncmp(pCommand, "admin ", 6) == 0)
+	{
+		int AdminID;
+		int NumPlayerIDs;
+		bool AdminFound;
+
+		pPlayer = playerStruct(PlayerID);
+		NumPlayerIDs = playerLen();
+		AdminFound = false;
+		for (AdminID = 0; AdminID < NumPlayerIDs; AdminID++)
+		{
+			if (isAdmin(AdminID))
+				{
+				sendChatf(AdminID, "^C%s:%s", pPlayer->name, pCommand + 6);
+				AdminFound = true;
+				}
+		}
+		if (AdminFound)
+		{
+			if (!isAdmin(PlayerID))	// If an admin sent the message, don't display it twice
+				sendChatf(PlayerID, "^C%s:%s", pPlayer->name, pCommand + 6);
+		}
+		else
+			sendChatf(PlayerID, "^RSorry, there are currently no administrators online");
+
+		
+	}
+	else if(isAdmin(PlayerID))
+	{
+		int MapID;
+		if (strcmp(pCommand, "resync") == 0)
+		{
+			const int RESYNC_SCRIPT_ID = 401;
+			runScript(RESYNC_SCRIPT_ID, 1);
+			
+		}
+		else if (strcmp(pCommand, "playerinfo") == 0)
+		{
+			const int PLAYER_INFO_SCRIPT_ID = 403;
+			runScript(PLAYER_INFO_SCRIPT_ID, 1);
+					
+		}
+		else if (strcmp(pCommand, "expforme") == 0)
+		{
+			cPlayer *myplayer = playerStruct(getPlayer());
+			myplayer->exp+=500000;
+			
+		}
+		else if (sscanf(pCommand, "wm %d", &MapID) == 1)
+		{
+			setPos(PlayerID,MapID,7,7);
+		}
+		else if (strncmp(pCommand, "warp", 4) == 0)
+		{
+			bool Warp = false;
+			int TargetID;
+			int x;
+			int y;
+			char pWarpName[COMMAND_LENGTH];
+			char pTargetName[COMMAND_LENGTH];
+			pWarpName[0] = '\0';
+			pTargetName[0] = '\0';
+
+			if (sscanf(pCommand, "warpme %d %d %d", &MapID, &x, &y) == 3)
+			{
+				Warp = true;
+				TargetID = PlayerID;
+			}
+			else if (sscanf(pCommand, "warpme %s", pWarpName) == 1)
+			{
+				Warp = true;
+				TargetID = PlayerID;
+			}
+			else if (sscanf(pCommand, "warp %d %d %d %d", &TargetID, &MapID, &x, &y) == 4)
+			{
+				Warp = true;
+			}
+			else if (sscanf(pCommand, "warp %d %s", &TargetID, pWarpName) == 2)
+			{
+				Warp = true;
+			}
+			/*else if (sscanf(pCommand, "warp %s %s", pTargetName, pWarpName) == 2)
+				{
+				Warp = true;
+				}*/
+
+			if (Warp)
+			{
+				// Look up warp location
+				if (pWarpName[0] != '\0')
+				{
+					int i;
+					WARP_LOCATION* pWarpLocation;
+
+					if (strcmp(pWarpName, "here") == 0)
+					{
+						MapID = pPlayer->map;
+						x = pPlayer->x;
+						y = pPlayer->y;
+					}
+					else
+					{
+						pWarpLocation = gpWarpLocations;
+						for (i = 0; i < gNumWarpLocations; i++)
+						{
+							if (strcmp(pWarpName, pWarpLocation->pName) == 0)
+								break;
+							pWarpLocation++;
+						}
+
+						if (i == gNumWarpLocations)
+						{
+							sendChat("^RUnknown warp location", PlayerID);
+							
+						}
+
+						MapID = pWarpLocation->MapID;
+						x = pWarpLocation->x;
+						y = pWarpLocation->y;
+					}
+				}
+
+				// Clear tile's player id
+				if(MapID < mapLen())
+				{
+					setPos(TargetID, MapID, x, y);
+				}
+				else
+				{
+					sendChatf(PlayerID, "^RMap is above available existing maps. Please choose a map index under %d.", mapLen());
+				}
+			}
+		}
+		else if (strcmp(pCommand, "u") == 0)
+		{
+			// Clear tile's player id
+			cMap* pMap;
+			pPlayer = playerStruct(PlayerID);
+			pMap = mapStruct(pPlayer->map);
+			pMap->map[pPlayer->y][pPlayer->x].space = -1;
+
+			pPlayer->y--;
+
+			// Set new tile's player id
+			pMap = mapStruct(pPlayer->map);
+			pMap->map[pPlayer->y][pPlayer->x].space = PlayerID;
+
+			// Send client notification
+			if (pPlayer->type == PLAYER_TYPE_PC)
+				sendPosition(PlayerID);
+
+			
+		}
+		else if (strcmp(pCommand, "d") == 0)
+		{
+			// Clear tile's player id
+			cMap* pMap;
+			pPlayer = playerStruct(PlayerID);
+			pMap = mapStruct(pPlayer->map);
+			pMap->map[pPlayer->y][pPlayer->x].space = -1;
+
+			pPlayer->y++;
+
+			// Set new tile's player id
+			pMap = mapStruct(pPlayer->map);
+			pMap->map[pPlayer->y][pPlayer->x].space = PlayerID;
+
+			// Send client notification
+			if (pPlayer->type == PLAYER_TYPE_PC)
+				sendPosition(PlayerID);
+
+			
+		}
+		else if (strcmp(pCommand, "l") == 0)
+		{
+			// Clear tile's player id
+			cMap* pMap;
+			pPlayer = playerStruct(PlayerID);
+			pMap = mapStruct(pPlayer->map);
+			pMap->map[pPlayer->y][pPlayer->x].space = -1;
+
+			pPlayer->x--;
+
+			// Set new tile's player id
+			pMap = mapStruct(pPlayer->map);
+			pMap->map[pPlayer->y][pPlayer->x].space = PlayerID;
+
+			// Send client notification
+			if (pPlayer->type == PLAYER_TYPE_PC)
+				sendPosition(PlayerID);
+
+			
+		}
+		else if (strcmp(pCommand, "r") == 0)
+		{
+			// Clear tile's player id
+			cMap* pMap;
+			pPlayer = playerStruct(PlayerID);
+			pMap = mapStruct(pPlayer->map);
+			pMap->map[pPlayer->y][pPlayer->x].space = -1;
+
+			pPlayer->x++;
+
+			// Set new tile's player id
+			pMap = mapStruct(pPlayer->map);
+			pMap->map[pPlayer->y][pPlayer->x].space = PlayerID;
+
+			// Send client notification
+			if (pPlayer->type == PLAYER_TYPE_PC)
+				sendPosition(PlayerID);
+
+			
+		}
+		else if (strcmp(pCommand, "invis") == 0)
+		{
+			pPlayer = playerStruct(PlayerID);
+			if (pPlayer->state == 1)
+				{
+				pPlayer->state = 0;
+				sendChat("^wYou are now visible", PlayerID);
+				}
+			else
+				{
+				pPlayer->state = 1;
+				sendChat("^wYou are now invisible", PlayerID);
+				}
+			playerSave(PlayerID);
+			sendPlayerUpdate(PlayerID);
+			
+		}
+		else if (sscanf(pCommand, "deletescript %s", strs[0]) == 1)
+		{
+			sprintf(strs[1], "del serverdata\\scripts\\%s", strs[0]);
+			system(strs[1]);
+			sendChatf(PlayerID, "^wScript %s deleted", strs[0]);
+			
+		}
+		else if (strncmp(pCommand, "!scout", strlen("!scout")) == 0)
+		{
+			int i;
+			int LastMapID;
+			cMap* pMap;
+
+			// Find unused map
+			LastMapID = mapLen();
+			for (i = 0; i < LastMapID; i++)
+				{
+				pMap = mapStruct(i);
+
+				if (strncmp(pMap->name, "_EMPTY_", 7) == 0)
+					break;
+				}
+
+			sendChatf(PlayerID, "^wNext unused map ID: %d", i);
+
+			
+		}
+		else if (strcmp(pCommand, "map") == 0)
+		{
+			int i;
+			int LastMapID;
+			cMap* pMap;
+
+			// Find unused map
+			LastMapID = mapLen();
+			for (i = 0; i < LastMapID; i++)
+				{
+				pMap = mapStruct(i);
+
+				if (strncmp(pMap->name, "_EMPTY_", 7) == 0)
+					break;
+				}
+
+			// Set name of map to mark it used
+			pMap = mapStruct(i);
+			strcpy(pMap->name, "New map");
+
+			mapSave(i);
+			sendMapUpdate(PlayerID);
+
+			// Warp player to new map
+			pPlayer->map = i;
+			pPlayer->x = MAP_WIDTH / 2;
+			pPlayer->y = MAP_HEIGHT / 2;
+
+			sendPosition(PlayerID);
+
+			
+		}
+		else if (sscanf(pCommand, "id %s", &playerName) == 1)
+		{
+			
+			int index=nameToId(playerName);
+			if(index==-1)
+			{
+				sendChatf(PlayerID,"No such player!");
+				return;
+			}
+			pPlayer=playerStruct(index);
+			cMap *pMap = mapStruct(pPlayer->map);
+			sendChatf(PlayerID,"^Y[ %d ] Access %d at %d %d %d (%s) standing still for %d loops. IP:%s",
+				index,
+				pPlayer->access,
+				pPlayer->map,
+				pPlayer->x,
+				pPlayer->y,
+				pMap->name,
+				pPlayer->stationary,
+				pPlayer->ip);
+			
+		}
+		else if (sscanf(pCommand, "mapword %s", &playerName) == 1)
+		{
+			cMap *pMap;
+			strcpy(playerName,stringLower(playerName));
+			for(int i=0;i<mapLen();i++)
+			{
+				pMap=mapStruct(i);
+				if(strstr(stringLower(pMap->name),playerName)!=0)
+					sendChatf(PlayerID,"[ %d ] %s",i,pMap->name);
+			}
+			
+		}
+		else if(strlen(pCommand)>2 && pCommand[0]=='s' && pCommand[1]==' ')//broadcast
+		{
+			pPlayer = playerStruct(PlayerID);
+			char chat[256];
+			strcpy(chat,pCommand+2);
+			sendChatf(-1,"%s",chat);
+			printf("%s\n",chat);
+			
+		}
+		else if (strcmp(pCommand, "crashserver") == 0)
+		{
+			int x=0;
+			x=x/x;
+			
+		}
+		else if(sscanf(pCommand,"item %d",&nums[0]) == 1)
+		{
+			cItem *item = itemTemplateStruct(nums[0]);
+			if(!item)
+			{
+				sendChatf(PlayerID,"Invalid item...");
+				
+			}
+			sendChatf(PlayerID,"That's %s^W. use_script:%d",item->name,item->use_script);
+			
+		}
+		else if(sscanf(pCommand,"itemword %s",&playerName) == 1)
+		{
+			cItem *item;
+			strcpy(playerName,stringLower(playerName));
+			for(int i=0;i<itemTemplateLen();i++)
+			{
+				item = itemTemplateStruct(i);
+				if(strstr(stringLower(item->name),playerName)!=0)
+					sendChatf(PlayerID,"[ %d ] %s",i,item->name);
+			}
+			
+		}
+		else if(sscanf(pCommand,"npc %d",&nums[0]) == 1)
+		{
+			pPlayer = playerTemplateStruct(nums[0]);
+			if(!pPlayer)
+			{
+				sendChatf(PlayerID,"Invalid NPC...");
+				
+			}
+			sendChatf(PlayerID,"That's the %s.",pPlayer->name);
+			
+		}
+		else if(sscanf(pCommand,"npcword %s",&playerName) == 1)
+		{
+			strcpy(playerName,stringLower(playerName));
+			for(int i=0;i<playerTemplateLen();i++)
+			{
+				pPlayer = playerTemplateStruct(i);
+				if(strstr(stringLower(pPlayer->name),playerName)!=0)
+					sendChatf(PlayerID,"[ %d ] %s",i,pPlayer->name);
+			}
+			
+		}
+		else if(sscanf(pCommand,"makemore %d %d",&nums[0],&nums[1]) == 2)
+		{
+			int i=0;
+			cItem *item;
+			while(1)
+			{
+				item=itemStruct(i);
+				if(item->qty==0)
+					break;
+				i++;
+				if(i==itemLen())
+				{
+					sendChatf(PlayerID,"Sorry...item list has no open slots, try again soon.");
+					
+				}
+			}
+			pPlayer = playerStruct(PlayerID);
+			if(nums[0]<0 || nums[0]>=itemTemplateLen())
+				return;
+			*item = *itemTemplateStruct(nums[0]);
+			if(item->stack==1)
+				item->qty=nums[1];
+			else
+				item->qty=-1;
+			item->owner=-1;
+			item->map=pPlayer->map;
+			item->x=pPlayer->x;
+			item->y=pPlayer->y;
+			itemInsert(i);
+			sendAddMapItem(item->graphic,item->map,item->x,item->y);
+			
+		}
+		else if(sscanf(pCommand,"make %d",&nums[0]) == 1)
+		{
+			int i=0;
+			cItem *item;
+			while(1)
+			{
+				item=itemStruct(i);
+				if(item->qty==0)
+					break;
+				i++;
+				if(i==itemLen())
+				{
+					sendChatf(PlayerID,"Sorry...item list has no open slots, try again soon.");
+					return;
+				}
+			}
+			pPlayer = playerStruct(PlayerID);
+			if(nums[0]<0 || nums[0]>=itemTemplateLen())
+				return;
+			*item = *itemTemplateStruct(nums[0]);
+			if(item->stack==1)
+				item->qty=1;
+			else
+				item->qty=-1;
+			item->owner=-1;
+			item->map=pPlayer->map;
+			item->x=pPlayer->x;
+			item->y=pPlayer->y;
+			itemInsert(i);
+			sendAddMapItem(item->graphic,item->map,item->x,item->y);
+			
+		}
+		else if (strcmp(pCommand, "showinv") == 0)
+		{
+			pPlayer = playerStruct(PlayerID);
+			if(pPlayer->target_at == -1)
+			{
+				sendChatf(PlayerID,"Target someone first.");
+				
+			}
+			cItem *pItem;
+			int itemIndex;
+			cPlayer *target = playerStruct(pPlayer->target_at);
+			sendChatf(PlayerID,"%s's Inventory:",target->name);
+			for(int i=0;i<inventoryLen();i++)
+			{
+				itemIndex = inventoryItem(pPlayer->target_at,i);
+				if(itemIndex==-1)
+					continue;
+				pItem = itemStruct(itemIndex);
+				if(pItem->qty < 0)
+				{
+					if(target->eLeft==i||
+						target->eRight==i||
+						target->eHead==i||
+						target->eBody==i||
+						target->eSpecial==i)
+						sendChatf(PlayerID,"[ %d ] %s ^Y(Equipped)",i,pItem->name);
+					else
+						sendChatf(PlayerID,"[ %d ] %s",i,pItem->name);
+				}
+				else if(pItem->qty > 0)
+				{
+					sendChatf(PlayerID,"[ %d ] %s[%d]",i,pItem->name,pItem->qty);
+				}
+			}
+			
+		}
+		else if (sscanf(pCommand, "showinvof %d",&nums[0]) == 1)
+		{
+			pPlayer = playerStruct(PlayerID);
+			
+			cItem *pItem;
+			int itemIndex;
+			cPlayer *target = playerStruct(nums[0]);
+			sendChatf(PlayerID,"%s's Inventory:",target->name);
+			for(int i=0;i<inventoryLen();i++)
+			{
+				itemIndex = inventoryItem(nums[0],i);
+				if(itemIndex==-1)
+					continue;
+				pItem = itemStruct(itemIndex);
+				if(pItem->qty < 0)
+				{
+					if(target->eLeft==i||
+						target->eRight==i||
+						target->eHead==i||
+						target->eBody==i||
+						target->eSpecial==i)
+						sendChatf(PlayerID,"[ %d ] %s ^Y(Equipped)",i,pItem->name);
+					else
+						sendChatf(PlayerID,"[ %d ] %s",i,pItem->name);
+				}
+				else if(pItem->qty > 0)
+				{
+					sendChatf(PlayerID,"[ %d ] %s[%d]",i,pItem->name,pItem->qty);
+				}
+			}
+			
+		}
+		else if (sscanf(pCommand, "itemat %d %d", &nums[0], &nums[1]) == 2)
+		{
+			sendChatf(PlayerID, "%d", ((nums[0] - (nums[0] % 32))/32) + (((nums[1] - (nums[1] % 32))/32) * 16));
+		}
+		else if (sscanf(pCommand, "getidat %d %d %d", &nums[0], &nums[1], &nums[2]) == 3)
+		{
+			sendChatf(PlayerID,"%d is there.", getID(nums[0],nums[1],nums[2]));
+		}
+		else if (strcmp(pCommand, "evict") == 0)
+		{
+			int id=getPlayer();
+			cPlayer *player=playerStruct(id);
+		
+			
+			int sx = player->x;
+			int sy = player->y;
+			if(player->dir==DIR_DOWN)
+				sy++;
+			else if(player->dir==DIR_UP)
+				sy--;
+			else if(player->dir==DIR_LEFT)
+				sx--;
+			else if(player->dir==DIR_RIGHT)
+				sx++;
+		
+			int i;
+			for(i=0;i<NUM_HOUSES;i++)
+			{
+				if(house[i].map==player->map && house[i].x==sx && house[i].y==sy)
+				{
+					char name[64];
+					char value[128];
+					
+					sprintf(name,"hs`%d`%d`%d",house[i].map,house[i].x,house[i].y);
+					if(DBisGlobal(name))
+					{
+						DBdeleteGlobal(name);
+					}
+				}
+			}
+		}
+		else if(strcmp(pCommand,"tilecheck") == 0)
+		{
+
+			cPlayer *player = playerStruct(PlayerID);
+			cMap *map = mapStruct(player->map);
+			for(int l = 0; l < 4; l++)
+			{
+				sendChatf(PlayerID,"Layer%d:%d",l,map->map[player->y][player->x].tile[l]);
+			}
+		}
+		else
+		{
+			sendChat("^RInvalid command", PlayerID);
+		}
+	}
+	else
+	{
+		sendChat("^RInvalid command", PlayerID);
+	}
+}

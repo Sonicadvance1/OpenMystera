@@ -1,0 +1,99 @@
+// Odd Mushroom
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x=getX(id);
+	int y=getY(id);
+	makeEffect(map,x,y,17);
+	switch (getRand(20))
+	{
+		case 0:
+			sendChat("^GYou eat the mushroom... and you feel GREAT!",id);
+			setHP(id,getMaxHP(id));
+			setMP(id,getMaxMP(id));
+			break;
+		case 1:
+			sendChat("^GYou eat the mushroom... and you feel GREAT!",id);
+			setHP(id,getMaxHP(id));
+			setMP(id,getMaxMP(id));
+			break;
+		case 2:
+			sendChat("^GYou eat the mushroom... and you feel GREAT!",id);
+			setHP(id,getMaxHP(id));
+			setMP(id,getMaxMP(id));
+			break;
+		case 3:
+			sendChat("^GYou eat the mushroom... and you feel GREAT!",id);
+			setHP(id,getMaxHP(id));
+			setMP(id,getMaxMP(id));
+			break;
+		case 4:
+			sendChat("^GYou eat the mushroom... and you feel a bit better.",id);
+			setHP(id,getHP(id)+50);
+			setMP(id,getMP(id)+50);
+			break;
+		case 5:
+			sendChat("^GYou eat the mushroom... and you feel a bit better.",id);
+			setHP(id,getHP(id)+50);
+			setMP(id,getMP(id)+50);
+			break;
+		case 6:
+			sendChat("^GYou eat the mushroom... and you feel a bit better.",id);
+			setHP(id,getHP(id)+50);
+			setMP(id,getMP(id)+50);
+			break;
+		case 7:
+			sendChat("^YYou eat the mushroom... nothing happens.",id);
+			break;
+		case 8:
+			sendChat("^YYou eat the mushroom... nothing happens.",id);
+			break;
+		case 9:
+			sendChat("^YYou eat the mushroom... nothing happens.",id);
+			break;
+		case 10:
+			sendChat("^YYou eat the mushroom... nothing happens.",id);
+			break;
+		case 11:
+			sendChat("^RYou eat the mushroom... and you feel a bit sick.",id);
+			setHP(id,getHP(id)-75);
+			setMP(id,getMP(id)-75);
+			break;
+		case 12:
+			sendChat("^RYou eat the mushroom... and you feel a bit sick.",id);
+			setHP(id,getHP(id)-75);
+			setMP(id,getMP(id)-75);
+			break;
+		case 13:
+			sendChat("^RYou eat the mushroom... and you feel a bit sick.",id);
+			setHP(id,getHP(id)-75);
+			setMP(id,getMP(id)-75);
+			break;
+		case 14:
+			sendChat("^RYou eat the mushroom... this one was fatally poisonous!",id);
+			setHP(id,0);
+			break;
+		case 15:
+			sendChat("^RYou eat the mushroom... this one was fatally poisonous!",id);
+			setHP(id,0);
+			break;
+		case 16:
+			sendChat("^RYou eat the mushroom... the poison drains your magical force!",id);
+			setMP(id,0);
+			break;
+		case 17:
+			sendChat("^RYou eat the mushroom... the poison drains your magical force!",id);
+			setMP(id,0);
+			break;
+		case 18:
+			sendChat("^GYou eat the mushroom... you cough something back up, GOLD!!",id);
+			giveItem(id,1,100);
+			break;
+		case 19:
+			sendChat("^GYou eat the mushroom... you cough something back up, GOLD!!",id);
+			giveItem(id,1,100);
+			break;
+	}
+}

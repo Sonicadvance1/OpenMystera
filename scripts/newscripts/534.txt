@@ -1,0 +1,23 @@
+
+#include"mapping.h"
+int i=STARTMAP;
+void main()
+{
+	int chance=7;
+	while(getRand(10)>=chance)
+	{
+		makelake(i,6);
+		chance++;
+	}
+	
+	if(i<ENDMAP)
+	{
+		i++;
+		runScript(myScript(),10);
+	}
+	else
+	{
+		i=STARTMAP;
+		runScript(535,1000);
+	}
+}

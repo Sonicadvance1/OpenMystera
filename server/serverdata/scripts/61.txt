@@ -1,0 +1,10 @@
+// Transvestite
+
+void main()
+{
+	int id=getPlayer();
+	setHair(id,0);
+	setBody(id,16);
+	setClothes(id,71);
+	sendChat("^RBWAHAHAHAHAHA",id);
+}

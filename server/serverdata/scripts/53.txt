@@ -1,0 +1,7 @@
+//Galebrook Market Booth 3 Sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^yRent for 25 gold!",id);
+}

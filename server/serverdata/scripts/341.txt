@@ -1,0 +1,55 @@
+// Fish Cooking
+
+const int DIR_DOWN = 0;
+const int DIR_UP = 1;
+const int DIR_LEFT = 2;
+const int DIR_RIGHT = 3;
+
+void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerDir;
+	int PlayerX;
+	int PlayerY;
+	int FireMapID;
+	int FireX;
+	int FireY;
+	int i;
+
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerDir = getDir(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+
+	FireMapID = PlayerMapID;
+	FireX = PlayerX;
+	FireY = PlayerY;
+	switch (PlayerDir)
+		{
+		case DIR_DOWN:
+			FireY++;
+			break;
+		case DIR_UP:
+			FireY--;
+			break;
+		case DIR_LEFT:
+			FireX--;
+			break;
+		case DIR_RIGHT:
+			FireX++;
+			break;
+		}
+		{
+			if (getTile(FireMapID,FireX,FireY,1) == 520)
+			{
+				sendChat("^gYou cook the fish to perfection!",PlayerID);
+				giveItem(PlayerID,362,1);
+			}
+			else
+			{
+				sendChat("^rYou can't cook fish without a fire, you just wasted a fish!",PlayerID);
+			}
+		}
+}

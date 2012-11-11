@@ -1,0 +1,25 @@
+// Willy's pickpocket
+
+void main()
+{
+	int id=getPlayer();
+	int victim=getMTarget(id);
+	int gold1=itemSlot(victim,1);
+	if(gold1>-1)
+	{
+		int gold2=qtyAt(victim,gold1);
+		if(gold2>50)
+		{
+			setQty(victim,gold1,gold2-50);
+			giveItem(id,1,50);
+		}
+		else
+		{
+			sendChat("^rThey don't have enough gold!",id);
+		}
+	}
+	else
+	{		
+		sendChat("^rThey don't have any gold!",id);
+	}
+}

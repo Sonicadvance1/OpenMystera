@@ -1,0 +1,7 @@
+//Donation sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^yPlease donate any items you do not need here.",id);
+}

@@ -1,0 +1,8 @@
+// Mana Crystal
+
+void main()
+{
+	int id=getPlayer();
+	setMP(id,getMP(id)+50);
+	sendChat("^gThe soothing water recovers some of your magical power.",id);
+}

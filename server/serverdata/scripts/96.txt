@@ -1,0 +1,77 @@
+
+/*
+	Incognito Spell
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	November 23, 2003
+*/
+
+/*
+	Description: This spell temporarily gives the caster a
+	random appearance and new name
+*/
+
+int SPELL_COST = 50;
+int REQUIRED_INTELLIGENCE = 1;
+int SPELL_DURATION = 60000;
+int SPELL_EFFECT = 1;
+int NUM_BODY_GRAPHICS = 19;
+int NUM_CLOTHES_GRAPHICS = 76;
+int NUM_HAIR_GRAPHICS = 90;
+int RELEASE_SCRIPT_ID = 97;
+
+void main()
+{
+ if (getAccess(getPlayer()) == 1)
+     {
+     string Msg;
+     Msg = getName(getPlayer());
+     Msg += " ^RIS CHEATING BY USING AN ADMIN INCOGNITO ITEM.";
+     sendChat(Msg, -1);
+     return;
+     }
+	int PlayerID;
+	int PlayerMP;
+	string Msg;
+
+	PlayerID = getPlayer();
+	PlayerMP = getMP(PlayerID);
+
+	if (PlayerMP < SPELL_COST)
+		{
+		sendChat("Not enough mana.", PlayerID);
+		return;
+		}
+
+	if (getInt(PlayerID) < REQUIRED_INTELLIGENCE)
+		{
+		Msg = "This spell is beyond your understanding.  You must have at least ";
+		Msg = strCat(Msg, itos(REQUIRED_INTELLIGENCE));
+		Msg = strCat(Msg, " intelligence.");
+		sendChat(Msg, PlayerID);
+		return;
+		}
+
+	PlayerMP -= SPELL_COST;
+	setMP(PlayerID, PlayerMP);
+
+	/*
+		TODO: Before this script will work, this function needs to be created:
+
+			void setName(int id, string name) ... if possible
+	*/
+	
+	// TODO: Allow player to type in new name
+
+	makeEffect(getMap(PlayerID), getX(PlayerID), getY(PlayerID), SPELL_EFFECT);
+
+	setGlobalInt(strCat("IncognitoBody", itos(PlayerID)), getBody(PlayerID));
+	setGlobalInt(strCat("IncognitoClothes", itos(PlayerID)), getClothes(PlayerID));
+	setGlobalInt(strCat("IncognitoHair", itos(PlayerID)), getHair(PlayerID));
+
+	/*setBody(getRand(NUM_BODY_GRAPHICS));
+	setClothes(getRand(NUM_CLOTHES_GRAPHICS));
+	setHair(getRand(NUM_HAIR_GRAPHICS));*/
+
+	runScript(RELEASE_SCRIPT_ID, SPELL_DURATION);
+}

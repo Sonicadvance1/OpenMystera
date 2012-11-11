@@ -1,0 +1,33 @@
+// Rarshanka's Orb
+
+void main()
+{
+	int id=getPlayer();
+	int cost=7;
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	if(getMP(id)<cost)
+	{
+		sendChat("^RNot enough mana.",id);
+	}
+	else
+	{
+		setMP(id,getMP(id)-cost);
+		while(inBounds(x,y) && getTileType(map,x,y) != 2)
+		{
+			if(getID(map,x,y)!=-1 && getID(map,x,y)!=id)
+			{
+				int victim=getID(map,x,y);
+				makeEffect(map,x,y,0);
+				setHP(victim,getHP(victim)-magicDamage(id)-magicDamage(id)/2);
+				break;
+			}
+			makeEffect(map,x,y,19);
+			if(getDir(id)==0)y++;
+			if(getDir(id)==1)y--;
+			if(getDir(id)==2)x--;
+			if(getDir(id)==3)x++;
+		}
+	}
+}

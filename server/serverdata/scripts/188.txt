@@ -1,0 +1,67 @@
+//pickpocket spell
+
+#include <math.h>
+
+void main()
+{
+	int id=getPlayer();
+	int target=getMTarget(id);
+	int x=getX(id);
+	int y=getY(id);
+	int tx=getX(target);
+	int ty=getY(target);
+	if(abs(x-tx) < 2 && abs(y-ty) < 2)
+	{
+		int amount = getRand(getDex(id))+1;
+		if(amount >getMP(id))
+		{
+			sendChat("^wYou lack the focus.",id);
+			return;
+		}
+		setMP(id,getMP(id)-amount);
+		
+		//noticed or not
+		if(getRand(getDex(id)/5)<2)
+		{
+			sendChatf(target,"^YYou notice %s clumsily taking gold from you.",getName(id));
+			sendChatf(id,"^Y%s notices you clumsily taking gold from them.",getName(target));
+		}
+		else if(getRand(getDex(id)/5)<4)
+		{
+			sendChatf(target,"^YYou notice someone has brushed against you.");
+			sendChatf(id,"^Y%s seems to feel your presence.",getName(target));
+		}
+
+		int ItemID,Quantity,theAmount=amount;
+		for (int i = 0; i < inventoryLen(); i++)
+		{
+			ItemID = itemAt(target, i);
+			Quantity = qtyAt(target, i);
+
+			if(Quantity == 0)
+				continue;
+			
+			if(ItemID==1)//gold
+			{
+				if(Quantity>=amount)
+				{
+					setQty(target,i,Quantity-amount);
+					giveItem(id,1,amount);
+					return;
+				}
+				else
+				{
+					amount-=Quantity;
+					setQty(target,i,0);
+					giveItem(id,1,Quantity);
+				}
+			}
+		}
+		if(theAmount == amount)
+			sendChat("^wNo gold was found.",id);
+	}
+	else
+	{
+		sendChat("^wYou cant reach.",id);
+	}	
+}

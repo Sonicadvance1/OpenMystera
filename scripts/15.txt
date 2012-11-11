@@ -1,0 +1,14 @@
+//snake pit quest game script
+
+#include "maze.h"
+
+void main()
+{
+	setPos(getPlayer(),48,9,9);
+	
+	makeItem(12,1,48,6,6);
+	makeItem(1,200,48,7,6);
+	makeItem(1,200,48,6,7);
+
+	make_maze(47,0,6,16,0,47,0,6,1);
+}

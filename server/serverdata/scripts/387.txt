@@ -1,0 +1,9 @@
+// Steve's static var test script
+
+
+static int gCounter = 0;
+
+void main()
+{
+	sendChatf(getPlayer(), "Counter = %d", gCounter++);
+}

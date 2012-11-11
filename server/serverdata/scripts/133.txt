@@ -1,0 +1,8 @@
+//walnuts heal
+
+void main()
+{
+	int id=getPlayer();
+	setHP(id,getHP(id)+32);
+	setMP(id,getMP(id)+8);
+}

@@ -1,0 +1,19 @@
+// Garden Picking
+
+void main()
+{
+	int id=getPlayer();
+	int num=getRand(8);
+	if(num==5)
+	{
+		sendChat("^gOoh! An herb!",id);
+		giveItem(id,5,1);
+	}
+	else if(num==6)
+	{
+		sendChat("^gOoh! A spicy herb!",id);
+		giveItem(id,514,1);
+	}
+	else
+		sendChat("^gNothing...",id);
+}

@@ -1,0 +1,12 @@
+// Abyssal Charge
+
+void main()
+{
+	int id=getPlayer();
+	cPlayer* pPlayer=playerStruct(id);
+	pPlayer->mhp+=30;
+	pPlayer->mmp+=30;
+	playerSave(id);
+	sendLevel(id);
+	sendChat("^wA dark power rushes over you...",id);
+}

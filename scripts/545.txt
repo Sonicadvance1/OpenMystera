@@ -1,0 +1,12 @@
+// acid damage
+
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player = playerStruct(id);
+	if(player->type == PLAYER_TYPE_PC)
+	{
+		sendChat("^ROUCH! IT BURNS!!",id);
+		setHP(id,getHP(id)-100);
+	}
+}

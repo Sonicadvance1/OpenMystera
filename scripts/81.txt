@@ -1,0 +1,20 @@
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int x=player->x;
+	int y=player->y;
+	int mapid=player->map;
+	cMap *map=mapStruct(mapid);
+	int grid[4];
+	grid[0]=map->map[y][x+1].tile[0];
+	grid[1]=map->map[y+1][x].tile[0];
+	grid[2]=map->map[y][x-1].tile[0];
+	grid[3]=map->map[y-1][x].tile[0];
+	map->map[y][x+1].tile[0]=grid[3];
+	map->map[y+1][x].tile[0]=grid[0];
+	map->map[y][x-1].tile[0]=grid[1];
+	map->map[y-1][x].tile[0]=grid[2];
+	mapSave(mapid);
+	sendMapUpdate(mapid);
+}

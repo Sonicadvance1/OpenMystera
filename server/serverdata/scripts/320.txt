@@ -1,0 +1,132 @@
+
+/*
+	Fire Snake spell
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	November 28, 2003
+*/
+
+const int FIRE_SNAKE_LENGTH = 15;
+const int FIRE_SNAKE_EFFECT = 12;
+const int SPELL_COST = 10;
+
+//const int DIR_DOWN = 0;
+//const int DIR_UP = 1;
+//const int DIR_LEFT = 2;
+//const int DIR_RIGHT = 3;
+
+void Rotate(int xDir, int* xpOffsetX, int* xpOffsetY)
+{
+	/*
+		This function assumes you are programming the spell
+		to fire downwards and you want to rotate the effect
+		from the downward orientation to the orientation specified by xDir
+	*/
+
+	int OldX;
+	int OldY;
+
+	OldX = *xpOffsetX;
+	OldY = *xpOffsetY;
+
+	switch (xDir)
+		{
+		case DIR_DOWN:
+			// Everything is already oriented downwards
+			break;
+		case DIR_UP:
+			// Rotate 180 degrees
+			*xpOffsetX = -OldX;
+			*xpOffsetY = -OldY;
+			break;
+		case DIR_LEFT:
+			// Rotate clockwise 90 degrees
+			*xpOffsetX = -OldY;
+			*xpOffsetY = OldX;
+			break;
+		case DIR_RIGHT:
+			// Rotate counter-clockwise 90 degrees
+			*xpOffsetX = OldY;
+			*xpOffsetY = -OldX;
+			break;
+		}
+}
+
+int Snake(int x)
+{
+	/*
+		Function to make the following repeating pattern:
+
+		 XX
+		X  X  X
+		    XX
+	*/
+
+	if (x % 6 >= 3)
+		return -Snake(x - 3);
+
+	switch (x % 3)
+		{
+		case 0:
+			return 0;
+		case 1:
+			return -1;
+		case 2:
+			return -1;
+		}
+	
+}
+
+void main()
+{
+	int PlayerID;
+	int PlayerMapID;
+	int PlayerX;
+	int PlayerY;
+	int PlayerMP;
+	int PlayerDir;
+	int i;
+	int FireX;
+	int FireY;
+	bool Flip;
+	int TargetID;
+
+	PlayerID = getPlayer();
+	PlayerMapID = getMap(PlayerID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+	PlayerMP = getMP(PlayerID);
+	PlayerDir = getDir(PlayerID);
+	Flip = (bool)getRand(2);
+
+	if (PlayerMP < SPELL_COST)
+		{
+		sendChat("^RNot enough mana.", PlayerID);
+		return;
+		}
+
+	PlayerMP -= SPELL_COST;
+	setMP(PlayerID, PlayerMP);
+
+	for (i = 1; i < FIRE_SNAKE_LENGTH; i++)
+		{
+		FireX = Snake(i);
+		if (Flip)
+			FireX = -FireX;
+		FireY = i;
+		Rotate(PlayerDir, &FireX, &FireY);
+		FireX += PlayerX;
+		FireY += PlayerY;
+
+		if (!inBounds(FireX, FireY))
+			return;
+
+		makeEffect(PlayerMapID, FireX, FireY, FIRE_SNAKE_EFFECT);
+
+		TargetID = getID(PlayerMapID, FireX, FireY);
+		if (TargetID == -1)
+			continue;
+
+		setHP(TargetID, getHP(TargetID) - 0);
+		}
+}

@@ -1,0 +1,7 @@
+//Snowman Boneyard Sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^ySnowman Mountain Boneyard",id);
+}

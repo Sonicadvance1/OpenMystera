@@ -1,0 +1,27 @@
+// BBQ Meat
+
+void main()
+{
+	int id=getPlayer();
+	int cmeat=itemSlot(id,360);
+	int sherb=itemSlot(id,514);
+	if(cmeat>-1 && sherb>-1)
+	{
+		int mqty=qtyAt(id,cmeat);
+		int hqty=qtyAt(id,sherb);
+		if(mqty>=5 && hqty>=2)
+		{
+			setQty(id,cmeat,mqty-5);
+			setQty(id,sherb,hqty-2);
+			giveItem(id,513,5);
+		}
+		else
+		{
+			sendChat("^RNot enough ingredients!",id);
+		}
+	}
+	else
+	{
+		sendChat("^RNot enough ingredients!",id);
+	}
+}

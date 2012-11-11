@@ -1,0 +1,33 @@
+// vampire Guild House
+
+#include <math.h>
+
+void main()
+{
+	//Change these for a unique door
+	string door="VampGuild1";
+	int dMap=147;
+	int dX  =10;
+	int dY  =2;
+
+	//The rest should work unchanged...
+	if(isGlobal(door))
+	{
+		setTileType(dMap,dX,dY,2);//blocked
+		setTile(dMap,dX,dY,1,globalInt(door));
+		updateMap(dMap);
+		freeGlobal(door);	
+	}
+	else //nope lets try to open it
+	{
+		int id=getPlayer();
+		if(dMap==getMap(id) && (abs(getX(id)-dX) + abs(getY(id)-dY))==1)
+		{
+			setGlobalInt(door,getTile(dMap,dX,dY,1));
+			setTileType(dMap,dX,dY,0);
+			setTile(dMap,dX,dY,1,0);
+			updateMap(dMap);
+			runScript(202,800);	
+		}
+	}
+}

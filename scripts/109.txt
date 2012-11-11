@@ -1,0 +1,88 @@
+#include"dir.h"
+#include"time.h"
+void main()
+{
+	int id=getPlayer();
+	int midX=9;
+	int midY=7;
+	int mapid=1461;
+	cPlayer *player=playerStruct(id);
+	cMap *map=mapStruct(mapid);
+	int x=player->x;
+	int y=player->y;
+	char global[64];
+	sprintf(global,"%dtoggler",id);
+	while(x!=midX || y!=midY)
+	{
+		if(x<midX)
+			x++;
+		else if(x>midX)
+			x--;
+			
+		if(y<midY)
+			y++;
+		else if(y>midY)
+			y--;
+		makeEffect(player->map,x,y,10);
+	}
+	if(player->unknown==0)
+	{
+		int xspawn,yspawn;
+		do
+		{
+			yspawn=getRand(13)+1;
+			xspawn=getRand(18)+1;
+			int rand=getRand(4);
+			if(rand==0)
+			{
+				xspawn=1;
+				player->dir=DIR_UP;
+			}
+			else if(rand==1)
+			{
+				xspawn=18;
+				player->dir=DIR_DOWN;
+			}
+			else if(rand==2)
+			{
+				yspawn=1;
+				player->dir=DIR_RIGHT;
+			}
+			else
+			{
+				yspawn=13;
+				player->dir=DIR_LEFT;
+			}
+		}
+		while(map->map[yspawn][xspawn].space!=-1);
+		map->map[player->y][player->x].space=-1;
+		player->x=xspawn;
+		player->y=yspawn;
+		map->map[yspawn][xspawn].space=id;
+		mapSave(mapid);
+		
+		player->unknown=1;	
+		playerSave(id);
+	}
+	if(!move_check(id,player->dir))
+	{
+		if(player->dir==DIR_UP)
+			player->dir=DIR_RIGHT;
+		else if(player->dir==DIR_RIGHT)
+			player->dir=DIR_DOWN;
+		else if(player->dir==DIR_LEFT)
+			player->dir=DIR_UP;
+		else
+			player->dir=DIR_LEFT;
+	}
+	if(isGlobal(global))
+	{
+		freeGlobal(global);
+	}
+	else
+	{
+		runScript(myScript(),330);
+		setGlobalInt(global,1);
+	}
+	npc_move(id,player->dir);
+}

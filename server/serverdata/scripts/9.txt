@@ -1,0 +1,27 @@
+//switch
+
+void main()
+{
+DISABLE_SCRIPT
+
+	int id=getPlayer();
+	int cost=15;
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	if(getDir(id)==0)y++;
+	if(getDir(id)==1)y--;
+	if(getDir(id)==2)x--;
+	if(getDir(id)==3)x++;
+	if(getMP(id)<cost)
+	{
+		sendChat("^RNot enough mana.",id);
+	}
+	else if(inBounds(x,y) && getID(map,x,y)!=-1)
+	{
+		setMP(id,getMP(id)-cost);
+		int victim=getID(map,x,y);
+		setPos(victim,map,getX(id),getY(id));
+		setPos(id,map,x,y);
+	}
+}

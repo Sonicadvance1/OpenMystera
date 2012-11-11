@@ -1,0 +1,16 @@
+// swamp damage
+
+void main()
+{
+	int id=getPlayer();
+	if(strCon(getName(id),"Green") || strCon(getName(id),"Swamp Snake") || strCon(getName(id),"Cobra"))
+		return;
+	else
+	{
+		setHP(id,getHP(id)-10);
+		sendHP(id);
+	}
+}
+
+
+

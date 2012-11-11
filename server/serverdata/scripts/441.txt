@@ -1,0 +1,10 @@
+// Rock Explosion Trick
+
+void main()
+{
+	makeEffect(1106,10,9,10);
+	setTileType(1106,10,9,1);
+	setTile(1106,10,9,1,0);
+	mapSave(1106);
+	sendMapUpdate(1106);
+}

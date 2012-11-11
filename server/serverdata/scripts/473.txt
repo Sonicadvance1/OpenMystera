@@ -1,0 +1,14 @@
+//taunt script
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	cPlayer *target;
+	int x,len=mapListLen(player->map);
+	for(x=0;x<len;x++)
+	{
+		target=playerStruct(mapList(player->map,x));
+		if(target->type==1 && target->state!=3)
+			target->target=id;
+	}
+}

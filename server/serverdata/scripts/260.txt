@@ -1,0 +1,82 @@
+/*
+	Forest Master Walk Script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	December 27, 2003
+*/
+
+
+//const enum ML_DIRECTION { DIR_DOWN, DIR_UP, DIR_LEFT, DIR_RIGHT };
+
+//const int MAP_WIDTH = 20;
+//const int MAP_HEIGHT = 15;
+
+const int IMAGE_MAN = 29;
+const int IMAGE_ANIMAL = 4;
+
+void Transform()
+{
+	int MonsterID;
+
+	MonsterID = getPlayer();
+
+	if (getImg(MonsterID) == IMAGE_MAN)
+		{
+		sendMapChatf(getMap(MonsterID), "%s:^BSapere Forma Animus!", getName(MonsterID));
+		setImg(MonsterID, IMAGE_ANIMAL);
+		}
+	else
+		{
+		sendMapChatf(getMap(MonsterID), "%s:^BAnimus Forma Sapere!", getName(MonsterID));
+		setImg(MonsterID, IMAGE_MAN);
+		}
+}
+
+void main()
+{
+	int MonsterID = getPlayer();
+	int MapID = getMap(MonsterID);
+	int PlayerID = mapList(MapID, 0);
+	if (PlayerID == MonsterID)
+		PlayerID = mapList(MapID, 1);
+
+	int MonsterX;
+	int MonsterY;
+	int PlayerX;
+	int PlayerY;
+
+	MonsterX = getX(MonsterID);
+	MonsterY = getY(MonsterID);
+	PlayerX = getX(PlayerID);
+	PlayerY = getY(PlayerID);
+
+	if (getRand(40) == 0)
+		Transform();
+
+	if (getImg(MonsterID) == IMAGE_MAN)
+		{
+		}
+	else
+		{
+		if (MonsterX < PlayerX)
+			{
+			npcMove(MonsterID, DIR_RIGHT);
+			return;
+			}
+		if (MonsterX > PlayerX)
+			{
+			npcMove(MonsterID, DIR_LEFT);
+			return;
+			}
+		if (MonsterY < PlayerY)
+			{
+			npcMove(MonsterID, DIR_DOWN);
+			return;
+			}
+		if (MonsterY > PlayerY)
+			{
+			npcMove(MonsterID, DIR_UP);
+			return;
+			}
+		}
+}

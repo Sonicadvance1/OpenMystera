@@ -1,0 +1,104 @@
+//mining
+#include"skills.h"
+#include"items.h"
+#include"mapping.h"
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int x=player->x;
+	int y=player->y;
+	int mapid=player->map;
+	int dir=player->dir;
+	cMap *map=mapStruct(mapid);
+	int giveid=-1;
+	int giveamt=0;
+	int getexp=-1;
+	int skillevel=getSkill(id,MINING);
+	int pickaxe=itemAt(id,player->eRight);
+	int basechance=10;
+	int amountposs=-1;
+	int sound = 40;
+	
+	makeSound(player->map,sound);
+	makeSound(map->n,sound);
+	makeSound(map->s,sound);
+	makeSound(map->e,sound);
+	makeSound(map->w,sound);
+	
+	if(skillevel==-1)
+	{
+		setSkill(id,MINING,1);
+		skillevel=1;
+	}
+	
+	if(dir==DIR_UP)
+		y--;
+	else if(dir==DIR_DOWN)
+		y++;
+	else if(dir==DIR_LEFT)
+		x--;
+	else if(dir==DIR_RIGHT)
+		x++;
+		
+	if(pickaxe==STONE_PICKAXE)
+	{
+		basechance=20+skillevel;
+	}
+	else if(pickaxe==COPPER_PICKAXE)
+	{
+		basechance=25+skillevel;
+	}
+	else if(pickaxe==IRON_PICKAXE)
+	{
+		basechance=30+skillevel;
+	}
+	else
+	{
+		basechance=10+skillevel/2;
+	}
+	if(map->map[y][x].tile[1]==ROCK_TILE)
+		amountposs=5;
+	else if(map->map[y][x].tile[1]==LARGE_ROCK)
+		amountposs=10;
+	if(amountposs>0)
+	{
+		int rand=getRand(100);
+		giveamt=getRand(amountposs);
+		if(rand<basechance/6)
+		{
+			giveid=GOLD;
+			getexp=getRand(20)+10;
+		}
+		else if(rand<basechance/4)
+		{
+			giveid=COPPER;
+			getexp=getRand(15)+5;
+		}
+		else if(rand<basechance/2)
+		{
+			giveid=IRON;
+			getexp=getRand(10)+5;
+		}
+		else if(rand<basechance)
+		{
+			giveid=STONE;
+			getexp=getRand(5)+5;
+		}
+	}
+	if(giveamt>0)
+	{
+		giveItem(id,giveid,giveamt);
+	}
+	
+	if(getexp>0)
+	{
+		int exp=getSkill(id,MINING_EXP)+getexp;
+		setSkill(id,MINING_EXP,exp);
+		if(exp>levelUpExp(skillevel))
+		{
+			setSkill(id,MINING,skillevel+1);
+			sendChatf(id,"^GYou have reached the mining level of %d!",skillevel+1);
+		}
+	}
+}

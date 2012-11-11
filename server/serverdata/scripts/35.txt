@@ -1,0 +1,33 @@
+// Admindoor1 Key Script
+
+#include <math.h>
+
+void main()
+{
+	//Change these for a unique door
+	string door="admindoor1"; //unique door name
+	int dMap=3;          //door's coordinates
+	int dX  =5;
+	int dY  =13;
+
+	//The rest should work unchanged...
+	if(isGlobal(door))//is door open?
+	{
+		setTileType(dMap,dX,dY,2);//blocked
+		setTile(dMap,dX,dY,1,globalInt(door));//door closed
+		updateMap(dMap);
+		freeGlobal(door);	
+	}
+	else //nope lets try to open it
+	{
+		int id=getPlayer();
+		if(dMap==getMap(id) && (abs(getX(id)-dX) + abs(getY(id)-dY))==1)
+		{
+			setGlobalInt(door,getTile(dMap,dX,dY,1));
+			setTileType(dMap,dX,dY,1);//vacant
+			setTile(dMap,dX,dY,1,0);//door open(layer 1 is door graphic)
+			updateMap(dMap);
+			runScript(35,500);//2 seconds til closing	
+		}
+	}
+}

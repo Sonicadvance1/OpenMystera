@@ -1,0 +1,13 @@
+// ogre-non ogre
+void main()
+{
+	int id=getPlayer();
+	if(getImg(id)==64)
+	{
+		setImg(id,0);
+	}
+	else
+	{
+		setImg(id,64);
+	}
+}

@@ -1,0 +1,62 @@
+#include"mapping.h"
+//DIRT script
+void main()
+{
+
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int dir=player->dir;
+	int mapid=player->map;
+	int x=player->x;
+	int y=player->y;
+	cMap *map=mapStruct(mapid);
+	int tiletype;
+	
+	if(dir==DIR_UP)
+		y--;
+	else if(dir==DIR_DOWN)
+		y++;
+	else if(dir==DIR_LEFT)
+		x--;
+	else if(dir==DIR_RIGHT)
+		x++;
+		
+	if(mapid<ENDMAP/2)
+		tiletype=GRASS_TILE;
+	else
+		tiletype=DUG_DIRT;
+		
+	if(map->map[y][x].tile[0]==WATER_TILE)
+	{
+		if(x==0||y==0||x==19||y==14)
+		{
+			extendtonext(map,x,y,tiletype,TILE_TYPE_NONE,TILE_TYPE_WALL);
+		}
+		map->map[y][x].tile[0]=tiletype;
+		map->map[y][x].tile[1]=0;
+		map->map[y][x].type=TILE_TYPE_NONE;
+		smootharound(mapid,map,x,y);
+		savemap(mapid);
+	}
+	else if(map->map[y][x].tile[0]==DUG_DIRT&&mapid>ENDMAP/2 - 1)
+	{
+		map->map[y][x].type=TILE_TYPE_WALL;
+		map->map[y][x].tile[0]=DIRT_TILE;
+		extendtonext(map,x,y,DIRT_TILE,TILE_TYPE_WALL,TILE_TYPE_NONE);
+		savemap(mapid);
+	}
+	else if(map->map[y][x].tile[1]==STAIR_DOWN && mapid<ENDMAP/2)
+	{
+		map->map[y][x].type=TILE_TYPE_NONE;
+		map->map[y][x].tile[1]=0;
+		map=mapStruct(mapid+1200);
+		map->map[y][x].type=TILE_TYPE_NONE;
+		map->map[y][x].tile[1]=0;
+		savemap(mapid);
+		savemap(mapid+ENDMAP/2);
+	}
+	else
+	{
+		sendChat("It's dirt.. use it on stuff.",id);
+	}
+}

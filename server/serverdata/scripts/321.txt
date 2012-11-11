@@ -1,0 +1,186 @@
+/*
+Dragon Breath Spell
+Written by Timothy Chandler
+January 2 2004
+*/
+
+void main()
+{
+	int pc=getPlayer();
+	int pcMP=getMP(pc);
+	int dir=getDir(pc);
+	int map=getMap(pc);
+	int x=getX(pc);
+	int y=getY(pc);
+	int effect=13;
+	int MPcost=100;
+	int reqInt=40;
+	int pcInt=getInt(pc);
+	int DamMod1=getCon(pc)/3;
+	int DamMod2=pcInt/2;
+	int damage=500;
+	int range=5;
+	int cRange=0;
+	int origX=getX(pc);
+	int origY=getY(pc);
+	int tmpX1;
+	int tmpX2;
+	int tmpY1;
+	int tmpY2;
+
+{
+		setMP(pc,pcMP-MPcost);
+		while(inBounds(x,y) && getTileType(map,x,y) != 2)
+		{
+			if (cRange<1)
+			{
+				if (dir==0)
+				{
+					y++;					//down
+					makeEffect(map,x,y,effect);
+				}
+				else if (dir==1)
+				{
+					y--;					//up
+					makeEffect(map,x,y,effect);
+				}
+				else if (dir==2)
+				{
+					x--;					//left (Think L&R ended up back-to-front O_o)
+					makeEffect(map,x,y,effect);
+				}
+				else if (dir==3)
+				{
+					x++;					//right (Think L&R ended up back-to-front O_o)
+					makeEffect(map,x,y,effect);
+				}
+				if(getID(map,x,y)!=-1 && getID(map,x,y)!=pc)
+				{
+					int victim=getID(map,x,y);
+					makeEffect(map,x,y,0);
+					setHP(victim,getHP(victim)-damage);
+				}
+			}
+			else if (cRange!=range)
+			{
+				if (dir==0)
+				{
+					tmpX1=origX;
+					while (tmpX1!=origX-cRange)
+					{
+						makeEffect(map,tmpX1,y,effect);
+						if(getID(map,tmpX1,y)!=-1 && getID(map,tmpX1,y)!=pc)
+						{
+							int victim=getID(map,tmpX1,y);
+							makeEffect(map,tmpX1,y,0);
+							setHP(victim,getHP(victim)-damage);
+						}
+						tmpX1--;
+					}
+					tmpX2=origX+1;
+					while (tmpX2!=origX+cRange)
+					{
+						makeEffect(map,tmpX2,y,effect);
+						if(getID(map,tmpX2,y)!=-1 && getID(map,tmpX2,y)!=pc)
+						{
+							int victim=getID(map,tmpX2,y);
+							makeEffect(map,tmpX2,y,0);
+							setHP(victim,getHP(victim)-damage);
+						}
+						tmpX2++;
+					}
+					y++;
+				}
+				else if (dir==1)
+				{
+					tmpX1=origX;
+					while (tmpX1!=origX-cRange)
+					{
+						makeEffect(map,tmpX1,y,effect);
+						if(getID(map,tmpX1,y)!=-1 && getID(map,tmpX1,y)!=pc)
+						{
+							int victim=getID(map,tmpX1,y);
+							makeEffect(map,tmpX1,y,0);
+							setHP(victim,getHP(victim)-damage);
+						}
+						tmpX1--;
+					}
+					tmpX2=origX+1;
+					while (tmpX2!=origX+cRange)
+					{
+						makeEffect(map,tmpX2,y,effect);
+						if(getID(map,tmpX2,y)!=-1 && getID(map,tmpX2,y)!=pc)
+						{
+							int victim=getID(map,tmpX2,y);
+							makeEffect(map,tmpX2,y,0);
+							setHP(victim,getHP(victim)-damage);
+						}
+						tmpX2++;
+					}
+					y--;
+				}
+				else if (dir==3)
+				{
+					tmpY1=origY;
+					while (tmpY1!=origY-cRange)
+					{
+						makeEffect(map,x,tmpY1,effect);
+						if(getID(map,x,tmpY1)!=-1 && getID(map,x,tmpY1)!=pc)
+						{
+							int victim=getID(map,x,tmpY1);
+							makeEffect(map,x,tmpY1,0);
+							setHP(victim,getHP(victim)-damage);
+						}
+						tmpY1--;
+					}
+					tmpY2=origY+1;
+					while (tmpY2!=origY+cRange)
+					{
+						makeEffect(map,x,tmpY2,effect);
+						if(getID(map,x,tmpY2)!=-1 && getID(map,x,tmpY2)!=pc)
+						{
+							int victim=getID(map,x,y);
+							makeEffect(map,x,tmpY2,0);
+							setHP(victim,getHP(victim)-damage);
+						}
+						tmpY2++;
+					}
+					x++;
+				}
+				else if (dir==2)
+				{
+					tmpY1=origY;
+					while (tmpY1!=origY-cRange)
+					{
+						makeEffect(map,x,tmpY1,effect);
+						if(getID(map,x,tmpY1)!=-1 && getID(map,x,tmpY1)!=pc)
+						{
+							int victim=getID(map,x,tmpY1);
+							makeEffect(map,x,tmpY1,0);
+							setHP(victim,getHP(victim)-damage);
+						}
+						tmpY1--;
+					}
+					tmpY2=origY+1;
+					while (tmpY2!=origY+cRange)
+					{
+						makeEffect(map,x,tmpY2,effect);
+						if(getID(map,x,tmpY2)!=-1 && getID(map,x,tmpY2)!=pc)
+						{
+							int victim=getID(map,x,tmpY2);
+							makeEffect(map,x,tmpY2,0);
+							setHP(victim,getHP(victim)-damage);
+						}
+						tmpY2++;
+					}
+					x--;
+				}
+			}
+			else if (cRange==range)
+			{
+				break;
+			}
+			cRange++;
+		}
+	}
+}

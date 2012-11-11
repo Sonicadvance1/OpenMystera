@@ -1,0 +1,23 @@
+// landmine
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x=getX(id);
+	int y=getY(id);
+	int dex=getDex(id);
+	if(dex>50)
+	{
+		makeEffect(map,x,y,4);
+	}
+	else
+	{
+		int mhurt=50-getDex(id);
+		makeEffect(map,x,y,15);
+		setHP(id,getHP(id)-mhurt);
+	}
+	setTileType(map,x,y,1);
+	mapSave(map);
+	sendMapUpdate(map);
+}

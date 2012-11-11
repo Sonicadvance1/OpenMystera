@@ -1,0 +1,70 @@
+//Shovel
+#include"mapping.h"
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int x=player->x;
+	int y=player->y;
+	int mapid=player->map;
+	bool takeitem = false;
+	int dir=player->dir;
+	cMap *map=mapStruct(mapid);
+	
+	if(dir==DIR_UP)
+		y--;
+	else if(dir==DIR_DOWN)
+		y++;
+	else if(dir==DIR_LEFT)
+		x--;
+	else if(dir==DIR_RIGHT)
+		x++;
+		
+	if(!inBounds(x,y) || x == 19 || y == 14 || y ==0 || x==0 || mapid < STARTMAP || mapid >= ENDMAP)
+		return;
+		
+	cMap *undermap=mapStruct(mapid+TOTALMAPS);
+	bool wateround=tilearound(map,x,y,WATER_TILE);
+	if(mapid < UNDERSTART && mapid >= STARTMAP)
+	{
+		if(map->map[y][x].type==TILE_TYPE_NONE && map->map[y][x].tile[1]==0 && !wateround)
+		{
+			if(undermap->map[y][x].tile[0]!=WATER_TILE)
+			{
+				map->map[y][x].type=TILE_TYPE_SCRIPT;
+				map->map[y][x].warp.map=STAIRSCRIPT;
+				map->map[y][x].tile[1]=STAIR_DOWN;
+				undermap->map[y][x].tile[1]=STAIR_UP;
+				undermap->map[y][x].type=TILE_TYPE_SCRIPT;
+				undermap->map[y][x].warp.map=STAIRSCRIPT;
+				undermap->map[y][x].tile[0]=DUG_DIRT;
+				savemap(mapid+TOTALMAPS);
+				savemap(mapid);
+				takeitem = true;
+			}
+		}
+	}
+	else if(mapid < ENDMAP)
+	{
+		cMap *overmap=mapStruct(mapid-TOTALMAPS);
+		bool wateround=(tilearound(map,x,y,WATER_TILE) || overmap->map[y][x].tile[0] == WATER_TILE);
+		if(map->map[y][x].type==TILE_TYPE_NONE)
+		{
+			map->map[y][x].type=TILE_TYPE_SCRIPT;
+			map->map[y][x].warp.map=STAIRSCRIPT;
+			map->map[y][x].tile[1]=STAIR_UP;
+			overmap->map[y][x].tile[1]=STAIR_DOWN;
+			overmap->map[y][x].type=TILE_TYPE_SCRIPT;
+			overmap->map[y][x].warp.map=STAIRSCRIPT;
+			savemap(mapid-TOTALMAPS);
+			savemap(mapid);
+			takeitem = true;
+		}
+	}
+	
+	if(takeitem)
+	{
+		int item = itemSlot(id,11);
+		setQty(id,item,0);
+	}
+}

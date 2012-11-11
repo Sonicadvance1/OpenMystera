@@ -1,0 +1,12 @@
+// death mushroom
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x=getX(id);
+	int y=getY(id);
+	makeEffect(map,x,y,17);
+	sendChat("^RYou eat the mushroom... this one was fatally poisonous!",id);
+	setHP(id,0);
+}

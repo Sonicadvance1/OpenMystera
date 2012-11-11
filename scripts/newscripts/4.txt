@@ -1,0 +1,13 @@
+#include"mapping.h"
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int chance=6;
+	while(getRand(10)>=chance)
+	{
+		makelake(player->map,6);
+		chance++;
+	}
+	watersmoothmap(player->map);
+}

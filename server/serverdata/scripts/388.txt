@@ -1,0 +1,11 @@
+//get IP of targetted player
+void main()
+{
+	int vc=getMTarget(getPlayer());
+	if(vc>-1)
+	{
+		cPlayer* pPlayer;
+ 		pPlayer = playerStruct(vc);
+ 		sendChatf(getPlayer(), "^C%s^Y's IP = %s", getName(vc), pPlayer->ip);
+	}
+}

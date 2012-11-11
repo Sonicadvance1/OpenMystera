@@ -1,0 +1,53 @@
+/*
+Strip search
+Written by Steve Northamer
+SteveNorthamer@yahoo.com
+May 9, 2004
+*/
+
+void main()
+{
+int PlayerID;
+int TargetID;
+int ItemID;
+int i;
+cPlayer* pPlayer;
+cPlayer* pTarget;
+cItem* pItem;
+
+PlayerID = getPlayer();
+pPlayer = playerStruct(PlayerID);
+TargetID = getMTarget(PlayerID);
+
+if (TargetID == -1)
+{
+sendChatf(PlayerID, "^RNo target selected!");
+return;
+}
+
+pTarget = playerStruct(TargetID);
+
+for (i = 0; i < inventoryLen(); i++)
+{
+ItemID = pTarget->inventory[i];
+if (ItemID == -1)
+continue;
+
+pItem = itemStruct(ItemID);
+if (pItem->qty == 0)
+continue;
+
+pTarget->inventory[i] = -1;
+pItem->owner = -1;
+pItem->map = pPlayer->map;
+pItem->x = pPlayer->x;
+pItem->y = pPlayer->y;
+
+playerSave(TargetID);
+itemSave(ItemID);
+
+sendInventoryQty(TargetID, i, 0);
+sendAddMapItem(pItem->graphic, pItem->map, pItem->x, pItem->y);
+}
+}
+

@@ -1,0 +1,87 @@
+//barber say script -James Hamer
+#include <stdio.h>
+
+string TempGetWord(char* xpString, int xWordIndex)
+{
+	char* pBeginWord;
+	char* pEndWord;
+	int i;
+	string Word;
+
+	i = 0;
+	pBeginWord = xpString;
+	while (true)
+		{
+		pEndWord = strchr(pBeginWord, ' ');
+
+		if (i == xWordIndex)
+			break;
+		if (pEndWord == NULL)
+			return Word;
+
+		pBeginWord = pEndWord + 1;
+		i++;
+		}
+
+	if (pEndWord != NULL)
+		*pEndWord = '\0';
+
+	Word = pBeginWord;
+
+	if (pEndWord != NULL)
+		*pEndWord = ' ';
+
+	return Word;
+}
+
+int takeGold(int amount,int TargetID)
+{
+	int ItemID,Quantity;
+	for (int i = 0; i < inventoryLen(); i++)
+	{
+		ItemID = itemAt(TargetID, i);
+		Quantity = qtyAt(TargetID, i);
+
+		if (Quantity == 0)
+			continue;
+
+		if(ItemID == 1 && Quantity >= amount)
+		{
+			setQty(TargetID,i,Quantity-amount);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+void main()
+{
+	int id=getPlayer();
+	int player=getChatPlayer();
+	int newhair;
+	string chat=getChat();
+		
+	if(getY(player) <4 && chat[0]>= '0' && chat[0]<='9')
+	{
+		if(getImg(player)!=0)
+		{
+			sendMapChatf(754,"Barber:I cant cut your hair with your costume on!");
+			return;
+		}
+		chat=TempGetWord(chat, 0);
+		sscanf(chat,"%d",&newhair);
+		if(newhair <0 || newhair > 89) 
+		{
+			sendMapChatf(754,"Barber:I do not know that hair style.");
+			return;
+		}
+
+		if(takeGold(1000,player))
+		{	
+			sendMapChatf(754,"Barber:Ok, I will change your hair from %d to %s. Thank you.",getHair(player),chat);	
+			setHair(player,newhair);
+		}
+		else
+			sendMapChatf(754,"Barber:Sorry, you dont have enough money.");
+	}	
+}

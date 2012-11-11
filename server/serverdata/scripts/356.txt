@@ -1,0 +1,12 @@
+// lava damage
+
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player = playerStruct(id);
+	if(player->type == PLAYER_TYPE_PC)
+	{
+		sendChat("^ROUCH! HOT!!",id);
+		setHP(id,getHP(id)-100);
+	}
+}

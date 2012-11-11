@@ -1,0 +1,45 @@
+#include"summoning.h"
+#include"npccommands.h"
+#include"dir.h"
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	if(player->worth>0)
+	{
+		player->worth=0;
+	}
+	int masterid=player->target_at;
+	if(masterid>-1)
+	{
+		cPlayer *master=playerStruct(masterid);
+		if(player->target>-1)
+		{
+			int target=player->target;
+			cPlayer *victim=playerStruct(target);
+			if((victim->serenity==0&&master->serenity==0)||victim->type==PLAYER_TYPE_NPC)
+			{
+				if(distance(id,target)>1)
+					npc_follow(id,target,true);
+			}
+			else
+			{
+				player->target=-1;
+			}
+		}
+		else
+		{
+			if(master->map==player->map)
+			{
+				if(distance(id,masterid)>1)
+				{
+					npc_follow(id,masterid,true);
+				}
+			}
+		}
+	}
+	else
+	{
+		player->move_script=-1;
+	}
+}

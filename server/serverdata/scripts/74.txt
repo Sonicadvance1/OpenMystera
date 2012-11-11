@@ -1,0 +1,50 @@
+//Poison script
+#include <stdio.h>
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	char psn[256];
+	sprintf(psn,"poison%d",id);
+	char runpsn[256];
+	sprintf(runpsn,"run%s",psn);
+	if(isGlobal(psn))
+	{
+		int victim=globalInt(psn);
+		cPlayer *vic = playerStruct(victim);
+		makeEffect(getMap(victim),getX(victim),getY(victim),11);
+		int sethp=getHP(victim)-(magicDamage(id)/2);
+		setHP(victim,sethp);
+		if(sethp<=0 || vic->total_time)//is dead kill poison script
+		{
+			freeGlobal(psn);
+			freeGlobal(runpsn);
+		}
+		else
+		{
+			setGlobalInt(runpsn,globalInt(runpsn)-1);
+			int wis=getWis(id);
+			if(wis<6)
+			runScript(myScript(),3500);
+			else if(wis>=6 && wis<=11)
+			runScript(myScript(),3150);
+			else if(wis>=12 && wis<=18)
+			runScript(myScript(),2800);
+			else if(wis>=19 && wis<=27)
+			runScript(myScript(),2450);
+			else if(wis>=28 && wis<=36)
+			runScript(myScript(),2100);
+			else if(wis>=37 && wis<=49)
+			runScript(myScript(),1750);
+			else if(wis>=50)
+			runScript(myScript(),1400);
+		}
+	}
+	if(globalInt(runpsn)<=0)
+	{
+		freeGlobal(psn);
+		freeGlobal(runpsn);
+	}
+}

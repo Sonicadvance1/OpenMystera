@@ -1,0 +1,7 @@
+//CC sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^CPRICE TO BE DETERMINED.",id);
+}

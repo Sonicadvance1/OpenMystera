@@ -1,0 +1,62 @@
+// D.Knight Member Transmutate
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x=getX(id);
+	int y=getY(id);
+	int effect=13;
+	int sprite=24;
+	int target=getMTarget(id);
+	string morph="^YWith a sudden jolt, you feel a great energy surge through your body. Pain grips your every fibre as your skin and bones twist and bend, reshaping themselves into your new image.";
+	if (getPlayerType(target)==0)
+	{
+		if (target!=id)
+		{
+			if (target==-1)
+			{
+				makeEffect(map, x, y, effect);
+				if (getImg(id)==0)
+				{
+					setImg(id,sprite);
+				}
+				else
+				{
+					setImg(id,0);
+				}
+				sendChat(morph,id);
+			}
+			else if (target!=id)
+			{
+				makeEffect(getMap(target), getX(target), getY(target), effect);
+				if (getImg(target)==0)
+				{
+					setImg(target,sprite);
+				}
+				else
+				{
+					setImg(target,0);
+				}
+				sendChat(morph,target);
+			}
+		}
+		else if (target==id)
+		{
+			makeEffect(map, x, y, effect);
+			if (getImg(id)==0)
+			{
+				setImg(id,sprite);
+			}
+			else
+			{
+				setImg(id,0);
+			}
+			sendChat(morph,id);
+		}
+	}
+	else if (getPlayerType(target)==1)
+	{
+		sendChat("^RYou may only target other players with this.",id);
+	}
+}

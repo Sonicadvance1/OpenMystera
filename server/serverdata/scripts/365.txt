@@ -1,0 +1,13 @@
+// full heal mushroom
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x=getX(id);
+	int y=getY(id);
+	makeEffect(map,x,y,17);
+	sendChat("^GYou eat the mushroom... and you feel GREAT!",id);
+	setHP(id,getMaxHP(id));
+	setMP(id,getMaxMP(id));
+}

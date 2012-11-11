@@ -1,0 +1,8 @@
+// Mana Crystal
+
+void main()
+{
+	int id=getPlayer();
+	setMP(id,getMP(id)+100);
+	sendChat("^gThe warm touch of the mana crystal recovers some of your magical power.",id);
+}

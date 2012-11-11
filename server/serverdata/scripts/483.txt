@@ -1,0 +1,24 @@
+//Blue Potion Mixing
+
+void main()
+{
+	int id=getPlayer();
+	int meat=itemSlot(id,577);
+	if(potion>-1)
+	{
+		int qty=qtyAt(id,potion);
+		if(qty>=1)
+		{
+			setQty(id,potion,qty-1);
+			giveItem(id,381,1);
+		}
+		else
+		{
+			sendChat("^RNo potions to mix!",id);
+		}
+	}
+	else
+	{
+		sendChat("^RNo potions to mix!",id);
+	}
+}

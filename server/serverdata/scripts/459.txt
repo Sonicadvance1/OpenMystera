@@ -1,0 +1,45 @@
+// Elementalist Soak
+
+void main()
+{
+	int id=getPlayer();
+	int map=getMap(id);
+	int x  =getX(id);
+	int y  =getY(id);
+	if(getMP(id)<20)
+	{
+		sendChat("^RNot enough mana.",id);
+	}
+	else
+	{
+		setMP(id,getMP(id)-20);
+		int victim;
+		switch(getDir(id))
+		{
+			case 0:
+				victim=getID(map,x,y+1);
+				makeEffect(map,x,y+1,12);
+				if(victim>-1)
+				setHP(victim,getHP(victim)-getRand(13)-7);
+				break;
+			case 1:
+				victim=getID(map,x,y-1);
+				makeEffect(map,x,y-1,12);
+				if(victim>-1)
+				setHP(victim,getHP(victim)-getRand(13)-7);
+				break;
+			case 2:
+				victim=getID(map,x-1,y);
+				makeEffect(map,x-1,y,12);
+				if(victim>-1)
+				setHP(victim,getHP(victim)-getRand(13)-7);
+				break;
+			case 3:
+				victim=getID(map,x+1,y);
+				makeEffect(map,x+1,y,12);
+				if(victim>-1)
+				setHP(victim,getHP(victim)-getRand(13)-7);
+				break;
+		}
+	}
+}

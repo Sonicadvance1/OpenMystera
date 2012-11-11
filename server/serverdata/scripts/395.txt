@@ -1,0 +1,22 @@
+// Water Well
+
+void main()
+{
+	int id=getPlayer();
+	int slot=itemSlot(id,443);
+	if(slot>-1)
+	{
+		int qty=qtyAt(id,slot);
+		if(qty>=1)
+		{
+			setQty(id,slot,qty-1);
+			int map=getMap(id);
+			sendMapChatf(map,"%s:^G*pulls up some water*",getName(id));
+			giveItem(id,436,1);
+		}
+	}
+	else
+	{
+		sendChat("^RYou need something to put the water in!",id);
+	}
+}

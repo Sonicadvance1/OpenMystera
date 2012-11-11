@@ -1,0 +1,58 @@
+/*
+	Client resycnronize
+	Written by Steve Northamer
+	February 23, 2004
+	SteveNorthamer@yahoo.com
+*/
+
+void main()
+{
+	int PlayerID;
+	cPlayer* pPlayer;
+	int MapID;
+	int x;
+	int y;
+
+	PlayerID = getPlayer();
+	pPlayer = playerStruct(PlayerID);
+	MapID = pPlayer->map;
+	x = pPlayer->x;
+	y = pPlayer->y;
+
+	sendChat("^YResyncronizing client...", PlayerID);
+
+	sendPlayerUpdate(PlayerID);
+	sendMapUpdate(pPlayer->map);
+	sendAttribute(PlayerID);
+	sendLevel(PlayerID);
+	sendPosition(PlayerID);
+	sendAccess(PlayerID);
+	sendMap(PlayerID, pPlayer->map);
+	sendEquip(PlayerID);
+
+	int SlotID;
+	int InvLen;
+	int ItemID;
+	cItem* pItem;
+	InvLen = inventoryLen();
+	for (SlotID = 0; SlotID < InvLen; SlotID++)
+		{
+		ItemID = pPlayer->inventory[SlotID];
+		if (ItemID == -1)
+			{
+			sendInventoryAdd(PlayerID, 0, "", SlotID, 0);
+			sendInventoryQty(PlayerID, SlotID, 0);
+			continue;
+			}
+		pItem = itemStruct(ItemID);
+		sendInventoryAdd(PlayerID, pItem->graphic, pItem->name, SlotID, pItem->qty);
+		sendInventoryQty(PlayerID, SlotID, pItem->qty);
+		}
+
+	pPlayer->map = MapID;
+	pPlayer->x = x;
+	pPlayer->y = y;
+	sendPosition(PlayerID);
+
+	sendChat("^YResyncronization complete...", PlayerID);
+}

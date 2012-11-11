@@ -1,0 +1,8 @@
+// Hair Removal
+
+void main()
+{
+	int id=getPlayer();
+	setHair(id,0);
+	sendChat("^CYour hair magically vanishes!",id);
+}

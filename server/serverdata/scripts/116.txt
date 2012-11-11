@@ -1,0 +1,24 @@
+//jail & strip search script
+void main()
+{
+	int id=getPlayer();
+	int vc=getMTarget(id);
+	if(vc>-1)
+	{
+		setPos(vc,446,9,7);
+		setPos(id,453,16,10);
+		int i;
+		int qty;
+		int item;
+		for(i=0;i<inventoryLen();i++)
+		{
+			qty=qtyAt(vc,i);	
+			item=itemAt(vc,i);
+			if(qty!=0)
+			{
+				setQty(vc,i,0);
+				makeItem(item,qty,453,4+(i%7),8+(i/7));
+			}
+		}	
+	}
+}

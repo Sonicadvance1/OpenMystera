@@ -1,0 +1,15 @@
+//volcano maze reset script
+
+#include "maze.h"
+
+void main()
+{
+
+	setPos(getPlayer(),1193,10,13);
+
+	make_maze(1188,10,13,16,0,1188,10,13,10);
+	make_maze(1189,16,14,0,10,1188,10,13,10);
+	make_maze(1190,19,10,3,0,1188,10,13,10);
+	make_maze(1191,3,14,11,8,1188,10,13,10);
+
+}

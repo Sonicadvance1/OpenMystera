@@ -1,0 +1,20 @@
+//Item Deleter
+void main()
+{
+	int id=getPlayer();
+	cPlayer *player=playerStruct(id);
+	int slot=-1;
+	int i;
+	for(i=0;i<itemLen();i++)
+	{
+		cItem *item=itemStruct(i);
+		if(item->map==player->map && item->stack>0 && item->owner==-1)
+		{
+			sendRemoveMapItem(item->map, item->x, item->y);
+			strcpy(item->name, "_EMPTY_");
+			item->life = 0;
+			item->qty = 0;
+			itemSave(i);
+		}
+	}
+}

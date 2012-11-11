@@ -1,0 +1,7 @@
+//Lothal's House Sign
+void main()
+{
+	int id=getPlayer();
+	if(getPlayerType(id)==0)
+		sendChat("^yTranor and Taylor's House",id);
+}

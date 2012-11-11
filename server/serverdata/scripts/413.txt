@@ -1,0 +1,27 @@
+// THUNDER CATS
+
+void main()
+{
+ if (getAccess(getPlayer()) == 1)
+     {
+     string Msg;
+     Msg = getName(getPlayer());
+     Msg += " ^RIS TRYING TO USE THE MIGHTY POWER OF THE THUNDER CATS";
+     sendChat(Msg, -1);
+     return;
+}
+	int id  =getPlayer();
+	int map =getMap(id);
+	int x   =getX(id);
+	int y   =getY(id);
+	makeEffect(map,x,y,31);
+	makeEffect(map,x+1,y,2);
+	makeEffect(map,x-1,y,2);
+	makeEffect(map,x,y+1,2);
+	makeEffect(map,x,y-1,2);
+	makeEffect(map,x+1,y+1,9);
+	makeEffect(map,x+1,y-1,9);
+	makeEffect(map,x-1,y+1,9);
+	makeEffect(map,x-1,y-1,9);
+	sendMapChatf(map, "%s:^YThunder Cats HOOOOOOOOOO!!", getName(id));
+}

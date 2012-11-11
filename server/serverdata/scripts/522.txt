@@ -1,0 +1,7 @@
+// How to Use Signs
+
+void main()
+{
+	int id=getPlayer();
+	sendChat("^YYou see a small tunnel up ahead...",id);
+}

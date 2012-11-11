@@ -1,0 +1,32 @@
+
+/*
+	Paralyze Release Script
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	November 23, 2003
+*/
+
+int SPELL_EFFECT = 3;
+
+void main()
+{
+	int PlayerID;
+	int TargetID;
+	string GlobalVarName;
+
+	PlayerID = getPlayer();
+
+	GlobalVarName = "Paralyze";
+	GlobalVarName += itos(PlayerID);
+
+	if (!isGlobal(GlobalVarName))
+		return;
+
+	TargetID = globalInt(GlobalVarName);
+
+	makeEffect(getMap(TargetID), getX(TargetID), getY(TargetID), SPELL_EFFECT);
+
+	setMoveScript(TargetID, -1);
+
+	freeGlobal(strCat("Paralyze", itos(PlayerID)));
+}

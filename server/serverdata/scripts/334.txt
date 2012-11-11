@@ -1,0 +1,9 @@
+// newbie well
+
+void main()
+{
+	int id=getPlayer();
+	sendChat("^GThe cool water from the well rejuvenates you.",id);
+	setHP(id,getMaxHP(id));
+	setMP(id,getMaxMP(id));
+}

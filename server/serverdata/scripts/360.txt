@@ -1,0 +1,6 @@
+// crash everyone in the party room
+
+void main()
+{
+	makeEffect(834,8,10,32);
+}

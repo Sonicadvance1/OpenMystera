@@ -1,0 +1,20 @@
+// vamp Transmutate
+
+void main()
+{
+if (getAccess(getPlayer()) == 1)
+     {
+     string Msg;
+     Msg = getName(getPlayer());
+     Msg += " ^RIS CHEATING BY USING AN ADMIN SUNNMANN'S PENDANT ITEM.";
+     sendChat(Msg, -1);
+     return;
+     }
+
+	int id=getPlayer();
+	makeEffect(getMap(id), getX(id), getY(id), 29);
+	if 
+	   (getImg(id)==0) setImg(id,9);
+	else 
+	   setImg(id,0);
+}

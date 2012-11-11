@@ -1,0 +1,128 @@
+//Farming Script
+
+checkmap(int map)
+{
+	int x,y;
+	cMap *tile = mapStruct(map);
+	for(x=0;x<20;x++)
+	for(y=0;y<15;y++)
+	if(tile->map[y][x].tile[0]==22)
+	{
+			
+			if(tile->map[y][x].tile[1]==291)
+			{
+				tile->map[y][x].warp.map++;
+				if(tile->map[y][x].warp.map>=50)
+				{
+					tile->map[y][x].tile[1]=444;
+					tile->map[y][x].warp.map=0;
+					mapSave(map);
+					sendMapUpdate(map);
+				}
+			}
+			else if(tile->map[y][x].tile[1]==444)
+			{
+				tile->map[y][x].warp.map++;
+				if(tile->map[y][x].warp.map>=50)
+				{
+					tile->map[y][x].tile[1]=353;
+					tile->map[y][x].warp.map=0;
+					mapSave(map);
+					sendMapUpdate(map);
+				}
+			}
+			else if(tile->map[y][x].tile[1]==353)
+			{
+				tile->map[y][x].warp.map++;
+				if(tile->map[y][x].warp.map>=50)
+				{
+					tile->map[y][x].tile[1]=0;
+					tile->map[y][x].warp.map=0;
+					mapSave(map);
+					sendMapUpdate(map);
+					if(rand()%4==0)
+						makeItem(556,rand()%3+1,map,x,y);
+					makeItem(558,1,map,x,y);
+				}
+			}
+			/*else
+			{
+				tile->map[y][x].tile[1]=0;
+				tile->map[y][x].warp.map=0;
+				mapSave(map);
+				sendMapUpdate(map);
+			}*/
+	}
+}
+
+void main()
+{
+	checkmap(1246);
+	checkmap(928);
+	checkmap(1291);
+	checkmap(1342);
+	checkmap(1343);
+	checkmap(1355);
+	runScript(470,600);
+}
+
+/*
+#include <time.h>
+void main()
+{
+	int i,runflag=0;
+	char name[16];
+	char value[128];
+	int timemade,map,x,y;
+	cMap *tile;
+	for(i=0;i<80;i++)
+	{
+		sprintf(name,"fm%d",i);
+	if(isGlobal(name))
+	{
+		strcpy(value,globalStr(name));
+		sscanf(value,"%d %d %d %d",&timemade,&map,&x,&y);
+		if(time(0)-timemade>=30)
+		{
+			tile = mapStruct(map);
+			if(tile->map[y][x].tile[1]==291)
+			{
+				tile->map[y][x].tile[1]=444;
+				mapSave(map);
+				sendMapUpdate(map);
+				sprintf(value,"%d %d %d %d",time(0),map,x,y);
+				setGlobalStr(name,value);
+				runflag=1;
+			}
+			else if(tile->map[y][x].tile[1]==444)
+			{
+				tile->map[y][x].tile[1]=353;
+				mapSave(map);
+				sendMapUpdate(map);
+				sprintf(value,"%d %d %d %d",time(0),map,x,y);
+				setGlobalStr(name,value);
+				runflag=1;
+			}
+			else if(tile->map[y][x].tile[1]==353)
+			{
+				tile->map[y][x].tile[1]=0;
+				mapSave(map);
+				sendMapUpdate(map);
+				makeItem(558,1,map,x,y);
+				freeGlobal(name);
+			}
+			else
+			{
+				tile->map[y][x].tile[1]=0;
+				mapSave(map);
+				sendMapUpdate(map);
+				freeGlobal(name);
+			}
+		}
+		else
+			runflag=1;
+	}
+	}
+	if(runflag)
+		runScript(470,1000);
+}*/

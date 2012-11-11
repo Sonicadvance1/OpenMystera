@@ -1,0 +1,8 @@
+//Under CC Signs - Don't put into full 156.
+void main()
+{
+	int id = getPlayer();
+	sendChat("^GPublic Notice: ^YAfter reports of strange noises coming from behind the far back wall, a decision has been made to close off this section of the basement.",id);
+	sendChat("^YIn addition to that, the far back wall has been reinforced with steel bars and warded with powerful magic’s to keep whatever is behind it at bay.",id);
+	sendChat("^GGalebrook Council appreciates your cooperation in this matter and apologizes if this causes any inconveniences to the homeless people who lived next to the warmth of that wall.",id);
+}

@@ -1,0 +1,307 @@
+/*
+	A* Pathfinding Test
+	Written by Steve Northamer
+	SteveNorthamer@yahoo.com
+	November 30, 2003
+*/
+
+#include <math.h>
+
+
+struct POINT
+{
+	int x;
+	int y;
+};
+
+struct SEARCH_NODE
+{
+	SEARCH_NODE* pNext;
+	SEARCH_NODE* pParent;
+	POINT Position;
+	float CostFromStart;
+	float TotalCost;
+};
+
+struct DIRECTION_NODE
+{
+	DIRECTION_NODE* pNext;
+	int Dir;
+};
+
+float PathCostEstimate(POINT xStartPos, POINT xGoalPos)
+{
+	return (float)(abs(xStartPos.x - xGoalPos.x) + abs(xStartPos.y - xGoalPos.y));
+}
+
+float TraverseCost(int xMapID, int xPosX, int xPosY)
+{
+	return 1.0;
+}
+
+void main()
+{
+	// Disabled for now...
+	return;
+
+	// Find start and goal positions
+	POINT StartPos;
+	POINT GoalPos;
+
+	int MonsterID = getPlayer();
+	int MapID = getMap(MonsterID);
+	int PlayerID = mapList(MapID, 0);
+	if (PlayerID == MonsterID)
+		PlayerID = mapList(MapID, 1);
+
+	StartPos.x = getX(MonsterID);
+	StartPos.y = getY(MonsterID);
+
+	GoalPos.x = getX(PlayerID);
+	GoalPos.y = getY(PlayerID);
+
+
+	// Perform pathfinding
+	SEARCH_NODE* pOpen = NULL;
+	SEARCH_NODE* pClosed = NULL;
+	SEARCH_NODE* pCurrNode = NULL;
+	SEARCH_NODE* pBestNode = NULL;
+	SEARCH_NODE* pAdjNode = NULL;
+	SEARCH_NODE* pPrevNode = NULL;
+	int i;
+	char MapCell;
+	int PosX, PosY;
+	float AdjNodeCost;
+	bool NodeInOpenList;
+	bool NodeInClosedList;
+	DIRECTION_NODE* pDirList = NULL;
+	DIRECTION_NODE* pCurrDir = NULL;
+
+	// Initialize open list with start node
+	pOpen = new SEARCH_NODE;
+	pOpen->pNext = NULL;
+	pOpen->pParent = NULL;
+	pOpen->Position = StartPos;
+	pOpen->CostFromStart = 0;
+	pOpen->TotalCost = PathCostEstimate(StartPos, GoalPos);
+
+	while (pOpen)
+		{
+		// Pop Node with lowest estimate from open list
+		pBestNode = pOpen;
+		pOpen = pOpen->pNext;
+
+		// If this node represents the goal, the path has been found
+		if (pBestNode->Position.x == GoalPos.x && pBestNode->Position.y == GoalPos.y)
+			{
+			// Construct path backwards from goal node to start node
+			pPrevNode = NULL;
+			pCurrNode = pBestNode;
+			pCurrDir = pDirList;
+			while (pCurrNode)
+				{
+				if (pPrevNode)
+					{
+					pCurrDir = new DIRECTION_NODE;
+
+					if (pPrevNode->Position.x > pCurrNode->Position.x)
+						pCurrDir->Dir = DIR_RIGHT;
+					if (pPrevNode->Position.x < pCurrNode->Position.x)
+						pCurrDir->Dir = DIR_LEFT;
+					if (pPrevNode->Position.y < pCurrNode->Position.y)
+						pCurrDir->Dir = DIR_UP;
+					if (pPrevNode->Position.y > pCurrNode->Position.y)
+						pCurrDir->Dir = DIR_DOWN;
+
+					pCurrDir->pNext = pDirList;
+					pDirList = pCurrDir;
+					}
+				pPrevNode = pCurrNode;
+				pCurrNode = pCurrNode->pParent;
+				}
+
+			delete pBestNode;
+
+			break;
+			}
+
+		// Loop through adjacent cells
+		for (i = 0; i < 4; i++)
+			{
+			switch (i)
+				{
+				case 0:
+					PosX = pBestNode->Position.x;
+					PosY = pBestNode->Position.y - 1;
+					break;
+				case 1:
+					PosX = pBestNode->Position.x + 1;
+					PosY = pBestNode->Position.y;
+					break;
+				case 2:
+					PosX = pBestNode->Position.x;
+					PosY = pBestNode->Position.y + 1;
+					break;
+				case 3:
+					PosX = pBestNode->Position.x - 1;
+					PosY = pBestNode->Position.y;
+					break;
+				}
+
+			// Make sure our coordinates are within map boundaries
+			if (PosX < 0 || PosX >= MAP_WIDTH || PosY < 0 || PosY >= MAP_HEIGHT)
+				continue;
+
+			// Check to make sure this cell isn't a wall
+			if (getTileType(MapID, PosX, PosY) == 2)
+				continue;
+
+			AdjNodeCost = pBestNode->CostFromStart + TraverseCost(MapID, PosX, PosY);
+
+			// Search open and closed lists to see if adjacent node already exists
+			NodeInOpenList = false;
+			NodeInClosedList = false;
+
+			pPrevNode = NULL;
+			pAdjNode = pOpen;
+			while (pAdjNode)
+				{
+				if (pAdjNode->Position.x == PosX && pAdjNode->Position.y == PosY)
+					{
+					NodeInOpenList = true;
+					break;
+					}
+				pPrevNode = pAdjNode;
+				pAdjNode = pAdjNode->pNext;
+				}
+			if (!NodeInOpenList)
+				{
+				pPrevNode = NULL;
+				pAdjNode = pClosed;
+				while (pAdjNode)
+					{
+					if (pAdjNode->Position.x == PosX && pAdjNode->Position.y == PosY)
+						{
+						NodeInClosedList = true;
+						break;
+						}
+					pPrevNode = pAdjNode;
+					pAdjNode = pAdjNode->pNext;
+					}
+				}
+
+			// If adjacent node already exists in one of the lists, only keep going if we have a better cost
+			if (NodeInOpenList || NodeInClosedList)
+				{
+				if (pAdjNode->CostFromStart <= AdjNodeCost)
+					continue;
+				}
+			else
+				{
+				pAdjNode = new SEARCH_NODE;
+				pAdjNode->Position.x = PosX;
+				pAdjNode->Position.y = PosY;
+				}
+
+			pAdjNode->pParent = pBestNode;
+			pAdjNode->CostFromStart = AdjNodeCost;
+			pAdjNode->TotalCost = AdjNodeCost + PathCostEstimate(pAdjNode->Position, GoalPos);
+
+			if (NodeInClosedList)
+				{
+				// Remove from closed list
+				if (pPrevNode)
+					pPrevNode->pNext = pAdjNode->pNext;
+				else
+					pClosed = pAdjNode->pNext;
+				}
+
+			if (NodeInOpenList)
+				{
+				// Remove from open list
+				if (pPrevNode)
+					pPrevNode->pNext = pAdjNode->pNext;
+				else
+					pOpen = pAdjNode->pNext;
+				}
+
+			// Place new node in open list in sorted order
+			pPrevNode = NULL;
+			pCurrNode = pOpen;
+			while (pCurrNode)
+				{
+				if (pAdjNode->TotalCost < pCurrNode->TotalCost)
+					break;
+				pPrevNode = pCurrNode;
+				pCurrNode = pCurrNode->pNext;
+				}
+
+			if (pPrevNode)
+				pPrevNode->pNext = pAdjNode;
+			else
+				pOpen = pAdjNode;
+			pAdjNode->pNext = pCurrNode;
+			}
+
+		// Push tested node onto closed list
+		pBestNode->pNext = pClosed;
+		pClosed = pBestNode;
+		}
+
+	bool PathFound = (pOpen != NULL);
+
+	// Deallocate node lists
+	while (pOpen)
+		{
+		pCurrNode = pOpen->pNext;
+		delete pOpen;
+		pOpen = pCurrNode;
+		}
+	while (pClosed)
+		{
+		pCurrNode = pClosed->pNext;
+		delete pClosed;
+		pClosed = pCurrNode;
+		}
+
+	// If path wasn't found display message
+	if (!PathFound)
+		{
+		//puts("Path cannot be found");
+		return;
+		}
+
+	// Make first movement in path
+	npcMove(MonsterID, pDirList->Dir);
+
+	string Dirs;
+	pCurrDir = pDirList;
+	while (pCurrDir)
+		{
+		switch (pCurrDir->Dir)
+			{
+			case DIR_UP:
+				Dirs += "U";
+				break;
+			case DIR_RIGHT:
+				Dirs += "R";
+				break;
+			case DIR_DOWN:
+				Dirs += "D";
+				break;
+			case DIR_LEFT:
+				Dirs += "L";
+				break;
+			}
+		pCurrDir = pCurrDir->pNext;
+		}
+
+	//sendChat(Dirs, PlayerID);
+
+	while (pDirList)
+		{
+		pCurrDir = pDirList->pNext;
+		delete pDirList;
+		pDirList = pCurrDir;
+		}
+}

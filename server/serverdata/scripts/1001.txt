@@ -1,0 +1,121 @@
+//game script
+
+void doBountyDecrease(int id)
+{
+	int bty=getBounty(id);
+	if(getPlayerType(id)==0 && bty>0)
+	{
+		bty-=1;
+		setBounty(id,bty);
+	}
+}
+
+void doRegen(int id)
+{
+	cPlayer *player = playerStruct(id);
+	int hp=player->hp;
+	if(hp<1)
+		return;
+    if(player->map == 69)
+	{
+		setHP(id, player->mhp);
+	}
+	else if(hp<player->mhp)
+	{
+		int r=player->wis/5;
+		if(r<1)
+			r=1;
+		hp+=r;
+		setHP(id,hp);
+	}
+	int mp=getMP(id);
+	if(mp<player->mmp)
+	{
+		int r=player->wis/5;
+		if(r<1)
+			r=1;
+		mp+=r;
+		setMP(id,mp);
+	}
+}
+
+// Stationary code added by Steve
+const int STATIONARY_TIME = 4 * 60 * 10;	// 10 minutes
+const int STATIONARY_MAP = 829;
+const int STATIONARY_X = 10;
+const int STATIONARY_Y = 12;
+
+void CheckStationary()
+{
+	int PlayerID;
+	cPlayer* pPlayer;
+	cMap* pMap;
+
+	PlayerID = getPlayer();
+	pPlayer = playerStruct(PlayerID);
+
+	if (pPlayer->type == PLAYER_TYPE_NPC)	// Is this a player?
+		return;
+
+	/*if (strncmp(pPlayer->accid, "5034515", 7) != 0)	// Is this Steve's acct?
+		return;*/
+
+	if (isAdmin(PlayerID))	// Don't warp AFK Admins
+		return;
+
+	if (pPlayer->stationary < STATIONARY_TIME)	// Has player been stationary for a long time?
+		return;
+
+	if (pPlayer->map == STATIONARY_MAP && pPlayer->x == STATIONARY_X && pPlayer->y == STATIONARY_Y)	// Already in place, don't update
+		return;
+
+	// Store player's previous position
+	char pGlobalName[128];
+	char pGlobalValue[128];
+	sprintf(pGlobalName, "Stationary%d", pPlayer->id);
+	sprintf(pGlobalValue, "%d, %d, %d", pPlayer->map, pPlayer->x, pPlayer->y);
+	setGlobalStr(pGlobalName, pGlobalValue);
+
+	// Clear tile's player id
+	pMap = mapStruct(pPlayer->map);
+	pMap->map[pPlayer->y][pPlayer->x].space = -1;
+
+	// Warp player to AFK map
+	pPlayer->map = STATIONARY_MAP;
+	pPlayer->x = STATIONARY_X;
+	pPlayer->y = STATIONARY_Y;
+
+	// Set new tile's player id
+	pMap = mapStruct(STATIONARY_MAP);
+	pMap->map[STATIONARY_Y][STATIONARY_X].space = PlayerID;
+
+	// Send client notification
+	sendPosition(PlayerID);
+}
+
+void main()
+{
+	int id=getPlayer();
+
+	if (0 && getAccess(id)>=6)
+	{
+		if (getHP(id)<getMaxHP(id))
+		{
+			setHP(id,getMaxHP(id));
+		}
+		if (getMP(id)<getMaxMP(id))
+		{
+			setMP(id,getMaxMP(id));
+		}
+	}
+	else
+	{
+		doRegen(id);
+	}
+	doBountyDecrease(id);
+
+	CheckStationary();
+
+	// Check secure areas
+	//runScript(456, 1);
+}

@@ -1,0 +1,11 @@
+//game script
+void main()
+{
+	char* pNull;
+	pNull = NULL;
+	*pNull = 7;
+
+	/*strcpy(playerStruct(1155)->name, "Gerbster");
+	playerSave(1155);
+	sendPlayerUpdate(1155);*/
+}
