@@ -1189,7 +1189,6 @@ void initializeSystem()
 	#ifdef WIN32
 		ShowCursor(0);
 	#endif
-	pngSetStencil(255,0,255);
 	srand(time(NULL));
 }
 
