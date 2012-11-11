@@ -732,7 +732,7 @@ struct cGlobalHandler
 				return g[i].str;
 			i++;
 		}
-		return "";
+		return (char* )"";
 	}
 	int isGlobal(char *name)
 	{

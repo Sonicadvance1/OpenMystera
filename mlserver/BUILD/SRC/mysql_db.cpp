@@ -8,7 +8,7 @@ mysqlDB::mysqlDB()
 	db = 0;
 }
 
-void mysqlDB::runScript(char *filename)
+void mysqlDB::runScript(const char *filename)
 {
 /*	char query[10000];
 	FILE *f=fopen(filename,"r");

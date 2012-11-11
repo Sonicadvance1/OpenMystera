@@ -112,7 +112,7 @@ static int transact(TCPsocket *sock,char *message,char *expect)
 */
 
 //file commands
-static int copyFile(char *name,char *newname)
+static int copyFile(const char *name,const char *newname)
 {
 	FILE *f;
 	FILE *f2;

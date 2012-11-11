@@ -513,7 +513,7 @@ void cGameServer::onMessage(unsigned char *data,unsigned long dataSize,PlayerID 
 	else if(type==DROP_MSG)
 	{
 		CAST_MSG(drop_msg,msg);
-		sprintf(last_command, "drop %d %d", msg->index, ml_items.item[player[index].inventory[msg->index]].qty);
+		sprintf(last_command, "drop %d %d", msg->index, (int) ml_items.item[player[index].inventory[msg->index]].qty);
 		mlscript.run(1008,index);
 		doDrop(index,msg->index);
 	}

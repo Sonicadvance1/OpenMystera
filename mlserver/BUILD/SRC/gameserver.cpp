@@ -255,7 +255,7 @@ void cGameServer::loadNPCfile()
 				mnl[npc].hair=temp;
 			}
 			else if(strcon(line,"type="))
-				sscanf(line,"type=%d",&mnl[npc].state);
+				sscanf(line,"type=%d",(int*) &mnl[npc].state);
 			else if(strcon(line,"atk="))
 			{
 				sscanf(line,"atk=%d",&temp);//because they are shorts and funny
@@ -282,7 +282,7 @@ void cGameServer::loadNPCfile()
 				mnl[npc].move_script = temp;
 			}
 			else if(strcon(line,"rng="))
-				sscanf(line,"rng=%d",&mnl[npc].range);
+				sscanf(line,"rng=%d",(int*) &mnl[npc].range);
 			else if(strcon(line,"exp="))
 			{
 				sscanf(line,"exp=%d",&temp);

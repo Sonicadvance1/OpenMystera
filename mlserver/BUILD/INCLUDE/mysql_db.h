@@ -15,7 +15,7 @@ struct mysqlDB
 
 	mysqlDB();
 	char mystring[256];
-	void runScript(char *filename);
+	void runScript(const char *filename);
 	int connect();
 	void disconnect();
 	int accountExists(char *id);
