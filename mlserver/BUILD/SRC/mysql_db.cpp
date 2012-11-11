@@ -10,7 +10,7 @@ mysqlDB::mysqlDB()
 
 void mysqlDB::runScript(char *filename)
 {
-	char query[10000];
+/*	char query[10000];
 	FILE *f=fopen(filename,"r");
 	if(f==NULL)
 		return;
@@ -28,7 +28,7 @@ void mysqlDB::runScript(char *filename)
 		{
 			mysql_real_query(pConnection,&query[mark],i-mark);
 			mark=i+2;
-		}
+		}*/
 }
 
 int mysqlDB::connect()
@@ -43,7 +43,7 @@ int mysqlDB::connect()
 
 void mysqlDB::disconnect()
 {
-	sqlite_close(db);
+	sqlite3_close(db);
 	db = 0;
 }
 
@@ -77,6 +77,7 @@ int mysqlDB::accountExists(char *id)
 
 int mysqlDB::createPlayer(char *name,int body,int clothes,int hair,int access,int map,int x,int y,int *player_id)
 {
+	int numRows;
 	char *zSQL = sqlite3_mprintf("INSERT INTO players (name,body,clothes,hair,sprite,access,create_date,origin_map,origin_x,origin_y) VALUES ('%s',%d,%d,%d,%d,%d,NOW(),%d,%d,%d)",
 		name,
 		body,
@@ -96,29 +97,30 @@ int mysqlDB::createPlayer(char *name,int body,int clothes,int hair,int access,in
 
 void mysqlDB::deletePlayer(int id)//STRUCTUREFLAG
 {
+	int numRows;
 	char *zSQL;
 
-	sqlite3_mprintf("DELETE FROM players WHERE id='%d'",id);
+	zSQL =sqlite3_mprintf("DELETE FROM players WHERE id='%d'",id);
 	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
 	sqlite3_free(zSQL);
 
-	sqlite3_mprintf("DELETE FROM items WHERE owner='%d'",id);
+	zSQL = sqlite3_mprintf("DELETE FROM items WHERE owner='%d'",id);
 	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
 	sqlite3_free(zSQL);
 
-	sqlite3_mprintf("UPDATE accounts SET char1=-1 WHERE char1=%d",id);
+	zSQL = sqlite3_mprintf("UPDATE accounts SET char1=-1 WHERE char1=%d",id);
 	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
 	sqlite3_free(zSQL);
 
-	sqlite3_mprintf("UPDATE accounts SET char2=-1 WHERE char2=%d",id);
+	zSQL = sqlite3_mprintf("UPDATE accounts SET char2=-1 WHERE char2=%d",id);
 	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
 	sqlite3_free(zSQL);
 
-	sqlite3_mprintf("UPDATE accounts SET char3=-1 WHERE char3=%d",id);
+	zSQL = sqlite3_mprintf("UPDATE accounts SET char3=-1 WHERE char3=%d",id);
 	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
 	sqlite3_free(zSQL);
 
-	sqlite3_mprintf("UPDATE accounts SET char4=-1 WHERE char4=%d",id);
+	zSQL = sqlite3_mprintf("UPDATE accounts SET char4=-1 WHERE char4=%d",id);
 	sqlite3_get_table(db, zSQL, NULL, &numRows, NULL, NULL);
 	sqlite3_free(zSQL);
 
@@ -126,7 +128,8 @@ void mysqlDB::deletePlayer(int id)//STRUCTUREFLAG
 
 void mysqlDB::updatePlayer(const cPlayer *player)
 {
-	sqlite3_mprintf("UPDATE players SET x=%d,y=%d,map=%d,direction=%d,type=%d,state=%d,range=%d,str=%d,dex=%d,con=%d,itl=%d,wis=%d,access=%d,eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d,level=%d,template=%d,sprite=%d,body=%d,hair=%d,clothes=%d,worth=%d,atk=%d,def=%d,train=%d,hp=%d,mhp=%d,mp=%d,mmp=%d,target=%d,target_at=%d,chat_script=%d,move_script=%d,exp=%d,flags=%d,origin_x=%d,origin_y=%d,origin_map=%d,name='%s',title='%s',boot_time=%d,serenity=%d,unknown=%d,logout_date=NOW() WHERE id=%d",
+	int numRows;
+	char *zSQL = sqlite3_mprintf("UPDATE players SET x=%d,y=%d,map=%d,direction=%d,type=%d,state=%d,range=%d,str=%d,dex=%d,con=%d,itl=%d,wis=%d,access=%d,eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d,level=%d,template=%d,sprite=%d,body=%d,hair=%d,clothes=%d,worth=%d,atk=%d,def=%d,train=%d,hp=%d,mhp=%d,mp=%d,mmp=%d,target=%d,target_at=%d,chat_script=%d,move_script=%d,exp=%d,flags=%d,origin_x=%d,origin_y=%d,origin_map=%d,name='%s',title='%s',boot_time=%d,serenity=%d,unknown=%d,logout_date=NOW() WHERE id=%d",
 		player->x,
 		player->y,
 		player->map,
@@ -181,8 +184,8 @@ void mysqlDB::updatePlayer(const cPlayer *player)
 
 void mysqlDB::updateCorePlayer(const cPlayer *player)
 {
-	char query[5000];//STRUCTUREFLAG
-	sqlite3_mprintf("UPDATE players SET x=%d,y=%d,map=%d,direction=%d,hp=%d,mp=%d,exp=%d,logout_date=NOW(),total_time=(total_time+10) WHERE id=%d",
+	int numRows;
+	char *zSQL = sqlite3_mprintf("UPDATE players SET x=%d,y=%d,map=%d,direction=%d,hp=%d,mp=%d,exp=%d,logout_date=NOW(),total_time=(total_time+10) WHERE id=%d",
 		player->x,
 		player->y,
 		player->map,
@@ -198,7 +201,8 @@ void mysqlDB::updateCorePlayer(const cPlayer *player)
 
 void mysqlDB::updateEquipPlayer(const cPlayer *player)
 {
-	sqlite3_mprintf("UPDATE players SET eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d WHERE id=%d",
+	int numRows;
+	char *zSQL = sqlite3_mprintf("UPDATE players SET eLeft=%d,eRight=%d,eHead=%d,eBody=%d,eSpecial=%d WHERE id=%d",
 		player->eLeft,
 		player->eRight,
 		player->eHead,
@@ -237,6 +241,7 @@ int mysqlDB::numAccounts()
 
 void mysqlDB::updateItem(cItem *item)
 {
+	int numRows;
 	if(item->qty==0)
 	{
 		removeItem(item->id);
@@ -286,14 +291,15 @@ void mysqlDB::removeItem(int permid)
 
 void mysqlDB::insertItem(cItem *item,int perm_owner)
 {
+	int numRows;
 	int old = item->owner;
 	item->owner=perm_owner;
 
 	if(item->qty==0)
 		return;
-	char *zSQL = sqlite3_mprintf("INSERT INTO items(life, quantity, graphics, name, map, x, y, owner, slot, type, stack, flags, uses, use_script,
-	equip_script, unequip_script, pickup_script, drop_script, lose_script, atk, def, template, bonus, bonus2, userdata, userdata2, total_cooldown,
-	weight) VALUES(%d,%d,%d,'%s',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f)",
+	char *zSQL = sqlite3_mprintf("INSERT INTO items(life, quantity, graphics, name, map, x, y, owner, slot, type, stack, flags, uses, use_script,"
+	"equip_script, unequip_script, pickup_script, drop_script, lose_script, atk, def, template, bonus, bonus2, userdata, userdata2, total_cooldown,"
+	"weight) VALUES(%d,%d,%d,'%s',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f)",
 	 	item->life,
 		item->qty,
 		item->graphic,
@@ -595,7 +601,7 @@ int mysqlDB::loadPlayer(cPlayer *player,int slot)
 
 void mysqlDB::setAccountSlot(char *id,int slot,int index)
 {
-	char *zSQL = sqlite3_mprintf("DELETE FROM globals WHERE name='%s'",name);
+	char *zSQL = sqlite3_mprintf("UPDATE accounts SET char%d=%d WHERE accid='%s'",slot+1,index,id);
 	sqlite3_exec(db, zSQL, 0, 0, 0);
 	sqlite3_free(zSQL);
 }
@@ -720,7 +726,7 @@ int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slo
 
 int mysqlDB::sendQuery(char *query)
 {
-	return mysql_query(pConnection,query);
+	//return mysql_query(pConnection,query);
 }
 
 #endif
