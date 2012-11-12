@@ -1,5 +1,0 @@
-void main()
-{
-	for(long i = 19; i < 25; i++)
-		makeEffect(1629,2,2,i);
-}

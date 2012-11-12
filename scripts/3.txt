@@ -1,7 +1,0 @@
-//meat heal
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getHP(id)+20);
-}

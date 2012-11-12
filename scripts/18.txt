@@ -1,7 +1,0 @@
-//recovery ring heal
-
-void main()
-{
-	int id=getPlayer();
-	setHP(id,getHP(id)-10000);
-}
