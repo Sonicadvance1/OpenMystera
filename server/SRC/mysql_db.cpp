@@ -29,7 +29,6 @@ void mysqlDB::runScript(const char *filename)
 	{
 		int ret = sqlite3_exec(db, quer, 0, 0, 0);
 	}
-	disconnect();
 	free(query);
 }
 
@@ -356,86 +355,91 @@ void mysqlDB::deleteGlobal(char *name)
 
 char *mysqlDB::selectGlobal(char *name)
 {
-/*	char query[1024];
-	strcpy(mystring,"");
-	sprintf(query, "SELECT value FROM globals WHERE name='%s'",name);
-	if(mysql_query(pConnection, query) != 0)
-		return mystring;
-	res = mysql_store_result(pConnection);
-	if(!(int)mysql_num_rows(res))
-		return mystring;
-	row=mysql_fetch_row(res);
-	strcpy(mystring,row[0]);
-	mysql_free_result(res);
-	return mystring;*/ 
+	char *zSQL = sqlite3_mprintf("SELECT value FROM globals WHERE name='%s'",name);
+
+	int numRows;
+	int numCol;
+	char *err;
+	char **table;
+
+	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
+	if (!numRows)
+		strcpy(mystring, "");
+	else
+		strcpy(mystring, table[numCol + 0]);
+
+	sqlite3_free_table(table);
+	sqlite3_free(zSQL);
+
+	return mystring;
 }
 
 bool mysqlDB::isGlobal(char *name)
 {
-	/*char query[1024];
-	sprintf(query, "SELECT id FROM globals WHERE name='%s'",name);
+	int numRows;
+	char *zSQL = sqlite3_mprintf("SELECT id FROM globals WHERE name='%s'", name);
+	numRows = GetRowCount(zSQL);
+	sqlite3_free(zSQL);
 
-	if(mysql_query(pConnection, query) != 0)
-		return 0;
-	
-	res = mysql_store_result(pConnection);
-
-	int num= (int)mysql_num_rows(res);
-
-	mysql_free_result(res);
-	if(num>0)
+	if (numRows > 0)
 		return 1;
-	return 0;*/
+	else
+		return 0;
 }
 
 void mysqlDB::loadMapItems(cItemList *itemlist)
 {
-/*	char query[1024];
-	sprintf(query, "SELECT * FROM items WHERE map != -1");
+	char *zSQL = sqlite3_mprintf("SELECT id, life, quantity, graphic, name, map, x, y, owner, slot, \
+		type, stack, flags, uses, use_script, equip_script, unequip_script, pickup_script, drop_script, \
+		lose_script, atk, def, template, bonus, bonus2, userdata, userdata2, total_cooldown, weight \
+		FROM items WHERE map != -1");
 
-	if(mysql_query(pConnection, query) != 0)
-		return;
+	int numRows;
+	int numCol;
+	char *err;
+	char **table;
 
-	res = mysql_store_result(pConnection);
+	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 
 	cItem item;
-	while(row=mysql_fetch_row(res))//STRUCTUREFLAG
+	for (int r = 0; r < numRows; ++r)
 	{
 		int i=0;
-		item.id=atoi(row[i++]);
-		item.life=atoi(row[i++]);
-		item.qty=atoi(row[i++]);
-		item.graphic=atoi(row[i++]);
-		strcpy(item.name,row[i++]);
-		item.map=atoi(row[i++]);
-		item.x=atoi(row[i++]);
-		item.y=atoi(row[i++]);
-		item.owner=atoi(row[i++]);
-		item.slot=atoi(row[i++]);
-		item.type=atoi(row[i++]);
-		item.stack=atoi(row[i++]);
-		item.flags=atoi(row[i++]);
-		item.uses=atoi(row[i++]);
-		item.use_script=atoi(row[i++]);
-		item.equip_script=atoi(row[i++]);
-		item.unequip_script=atoi(row[i++]);
-		item.pickup_script=atoi(row[i++]);
-		item.drop_script=atoi(row[i++]);
-		item.lose_script=atoi(row[i++]);
-		item.atk=atoi(row[i++]);
-		item.def=atoi(row[i++]);
-		item.item_template=atoi(row[i++]);
-		item.bonus=atoi(row[i++]);
-		item.bonus2=atoi(row[i++]);
-		item.userdata=atoi(row[i++]);
-		item.userdata2=atoi(row[i++]);
-		item.total_cooldown=atoi(row[i++]);
-		item.weight = atof(row[i++]);
-		//item.pDataSize=atoi(row[i++]);
-		//memcpy(item.pData,row[i++],item.pDataSize);
+		item.id=atoi(table[r*numCol+i++]);
+		item.life=atoi(table[r*numCol+i++]);
+		item.qty=atoi(table[r*numCol+i++]);
+		item.graphic=atoi(table[r*numCol+i++]);
+		strcpy(item.name,table[r*numCol+i++]);
+		item.map=atoi(table[r*numCol+i++]);
+		item.x=atoi(table[r*numCol+i++]);
+		item.y=atoi(table[r*numCol+i++]);
+		item.owner=atoi(table[r*numCol+i++]);
+		item.slot=atoi(table[r*numCol+i++]);
+		item.type=atoi(table[r*numCol+i++]);
+		item.stack=atoi(table[r*numCol+i++]);
+		item.flags=atoi(table[r*numCol+i++]);
+		item.uses=atoi(table[r*numCol+i++]);
+		item.use_script=atoi(table[r*numCol+i++]);
+		item.equip_script=atoi(table[r*numCol+i++]);
+		item.unequip_script=atoi(table[r*numCol+i++]);
+		item.pickup_script=atoi(table[r*numCol+i++]);
+		item.drop_script=atoi(table[r*numCol+i++]);
+		item.lose_script=atoi(table[r*numCol+i++]);
+		item.atk=atoi(table[r*numCol+i++]);
+		item.def=atoi(table[r*numCol+i++]);
+		item.item_template=atoi(table[r*numCol+i++]);
+		item.bonus=atoi(table[r*numCol+i++]);
+		item.bonus2=atoi(table[r*numCol+i++]);
+		item.userdata=atoi(table[r*numCol+i++]);
+		item.userdata2=atoi(table[r*numCol+i++]);
+		item.total_cooldown=atoi(table[r*numCol+i++]);
+		item.weight = atof(table[r*numCol+i++]);
+		//item.pDataSize=atoi(table[r*numCol+i++]);
+		//memcpy(item.pData,table[r*numCol+i++],item.pDataSize);
 		itemlist->addItem(item);
 	}
-	mysql_free_result(res);*/
+	sqlite3_free_table(table);
+	sqlite3_free(zSQL);
 }
 
 void mysqlDB::loadPlayerItems(int id,int tempid,cItemList *itemlist)

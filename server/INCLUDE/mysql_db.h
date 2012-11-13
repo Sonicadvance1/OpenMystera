@@ -15,6 +15,9 @@ class mysqlDB
 	int GetRowCount(const char *sql);
 public:
 	mysqlDB();
+	// Using this mystring is a HUUUUUGE hack.
+	// Due to how this is set up, it is currently the only way
+	// Later we need to change this and the scripting system to not use this stupid thing.
 	char mystring[256];
 	void runScript(const char *filename);
 	int connect();
