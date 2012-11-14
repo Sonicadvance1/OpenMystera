@@ -455,7 +455,6 @@ void mysqlDB::loadPlayerItems(int id,int tempid,cItemList *itemlist)
 	char *err;
 	char **table;
 
-
 	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 
 	cItem item;
@@ -493,6 +492,9 @@ void mysqlDB::loadPlayerItems(int id,int tempid,cItemList *itemlist)
 		item.weight = atof(table[r*numCol+i++]);
 		//item.pDataSize=atoi(table[r*numCol+i++]);
 		//memcpy(item.pData,table[r*numCol+i++],item.pDataSize);
+		// tempid is the location of the player within the array of players on the server
+		// This was kept this way since Jame's logic probably relies on it elsewhere.
+		item.owner = tempid;
 		itemlist->addItem(item);
 	}
 	sqlite3_free_table(table);
@@ -509,27 +511,21 @@ int mysqlDB::loadPlayer(cPlayer *player,int slot)
 	char *zSQL;
 	int player_id;
 
-	zSQL = sqlite3_mprintf("SELECT * FROM accounts WHERE accid='%s'", player->accid);
+	zSQL = sqlite3_mprintf("SELECT char1, char2, char3, char4 FROM accounts WHERE accid='%s'", player->accid);
 	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
-
-	numRows = GetRowCount(zSQL);
 
 	if(numRows!=1)
 		return 0;
 
-		player_id = atoi(table[numCol+6]);	
-		sqlite3_free_table(table);
-		sqlite3_free(zSQL);
+	player_id = atoi(table[numCol+slot - 1]);	
+	sqlite3_free_table(table);
+	sqlite3_free(zSQL);
 
 //load player
 	zSQL = sqlite3_mprintf("SELECT id, x, y, map, dir, type, state, range, str, dex, con, itl, wis, access, eLeft, eRight, eHead, eBody, eSpecial, \
  					lvl, player_temp, sprite, body, hair, clothes, worth, atk, def, train, hp, mp, mmp, target, target_at, chat_script, \
 					move_script, exp, flags, origin_x, origin_y, origin_map, total_time, boot_time, serenity, unknown FROM players WHERE id=%d",player_id);
 	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
-
-	numRows = GetRowCount(zSQL);
-	if(numRows!=1)
-		return 0;
 
 	for (int r = 1; r <= numRows; ++r)
 	{
@@ -590,9 +586,8 @@ int mysqlDB::loadPlayer(cPlayer *player,int slot)
 	sqlite3_free_table(table);
 	sqlite3_free(zSQL);
 
-
 	//update login_time
-	zSQL = sqlite3_mprintf("UPDATE players SET login_date=time() WHERE id=%d",player->id);
+	zSQL = sqlite3_mprintf("UPDATE players SET login_date=datetime('now') WHERE id=%d",player->id);
 	sqlite3_exec(db, zSQL, 0, 0, 0);
 	sqlite3_free(zSQL);
 
@@ -601,7 +596,7 @@ int mysqlDB::loadPlayer(cPlayer *player,int slot)
 
 void mysqlDB::setAccountSlot(char *id,int slot,int index)
 {
-	char *zSQL = sqlite3_mprintf("UPDATE accounts SET char%d=%d WHERE accid='%s'",slot+1,index,id);
+	char *zSQL = sqlite3_mprintf("UPDATE accounts SET char%d=%d WHERE accid='%s'",slot,index,id);
 	sqlite3_exec(db, zSQL, 0, 0, 0);
 	sqlite3_free(zSQL);
 }
@@ -637,27 +632,23 @@ int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slo
 
 	zSQL = sqlite3_mprintf("SELECT char1, char2, char3, char4 FROM accounts WHERE accid='%s'",id);
 	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
-
-	numRows = GetRowCount(zSQL);
 	sqlite3_free(zSQL);
 
 	if (numRows < 1)
 		return 0; //man not found dog
 
-
 	int slot[4];
 	//fetch character slot representations
 
-
-		slot[0]=atoi(table[numCol+0]);
-		slot[1]=atoi(table[numCol+1]);
-		slot[2]=atoi(table[numCol+2]);
-		slot[3]=atoi(table[numCol+3]);
+	slot[0]=atoi(table[numCol+0]);
+	slot[1]=atoi(table[numCol+1]);
+	slot[2]=atoi(table[numCol+2]);
+	slot[3]=atoi(table[numCol+3]);
 
 	sqlite3_free_table(table);
 	sqlite3_free(zSQL);
 
-//load slot 1
+	//load slot 1
 	if(slot[0]==-1)
 		slot1->lvl=0;
 	else
@@ -679,7 +670,7 @@ int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slo
 		slot2->lvl=0;
 	else
 	{
-		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[0]);
+		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[1]);
 		sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 		strcpy(slot1->name,table[numCol+0]);
 		slot2->lvl=atoi(table[numCol+1]);
@@ -696,7 +687,7 @@ int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slo
 		slot3->lvl=0;
 	else
 	{
-		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[0]);
+		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[2]);
 		sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 		strcpy(slot1->name,table[numCol+0]);
 		slot3->lvl=atoi(table[numCol+1]);
@@ -713,7 +704,7 @@ int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slo
 		slot4->lvl=0;
 	else
 	{
-		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[0]);
+		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[3]);
 		sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 		strcpy(slot1->name,table[numCol+0]);
 		slot4->lvl=atoi(table[numCol+1]);
