@@ -18,7 +18,7 @@ void mysqlDB::runScript(const char *filename)
 	int size = ftell(f);
 	query = (char*)malloc(size);
 	rewind(f);
-	fread(query,size,1,f);
+	if(size != fread(query, size, 1, f)) then return;
 	fclose(f);
 	for(int i=0;i<size;i++)
 		if(query[i]=='\n')
@@ -402,7 +402,7 @@ void mysqlDB::loadMapItems(cItemList *itemlist)
 	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 
 	cItem item;
-	for (int r = 0; r < numRows; ++r)
+	for (int r = 1; r < numRows; ++r)
 	{
 		int i=0;
 		item.id=atoi(table[r*numCol+i++]);
@@ -444,161 +444,159 @@ void mysqlDB::loadMapItems(cItemList *itemlist)
 
 void mysqlDB::loadPlayerItems(int id,int tempid,cItemList *itemlist)
 {
-	/*char query[1024];
-	sprintf(query, "SELECT * FROM items WHERE owner = %d",id);
 
-	if(mysql_query(pConnection, query) != 0)
-		return;
+	char *zSQL = sqlite3_mprintf("SELECT id, life, quantity, graphic, name, map, x, y, owner, slot, \
+		type, stack, flags, uses, use_script, equip_script, unequip_script, pickup_script, drop_script, \
+		lose_script, atk, def, template, bonus, bonus2, userdata, userdata2, total_cooldown, weight \
+		FROM items WHERE owner = %d", id);
 
-	res = mysql_store_result(pConnection);
+	int numRows;
+	int numCol;
+	char *err;
+	char **table;
+
+
+	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 
 	cItem item;
-	int i;
-	while(row=mysql_fetch_row(res))//STRUCTUREFLAG
+	for (int r = 1; r < numRows; ++r)
 	{
-		i=0;
-		item.id=atoi(row[i++]);
-		item.life=atoi(row[i++]);
-		item.qty=atoi(row[i++]);
-		item.graphic=atoi(row[i++]);
-		strcpy(item.name,row[i++]);
-		item.map=atoi(row[i++]);
-		item.x=atoi(row[i++]);
-		item.y=atoi(row[i++]);
-		item.owner=atoi(row[i++]); 
-		item.slot=atoi(row[i++]);
-		item.type=atoi(row[i++]);
-		item.stack=atoi(row[i++]);
-		item.flags=atoi(row[i++]);
-		item.uses=atoi(row[i++]);
-		item.use_script=atoi(row[i++]);
-		item.equip_script=atoi(row[i++]);
-		item.unequip_script=atoi(row[i++]);
-		item.pickup_script=atoi(row[i++]);
-		item.drop_script=atoi(row[i++]);
-		item.lose_script=atoi(row[i++]);
-		item.atk=atoi(row[i++]);
-		item.def=atoi(row[i++]);
-		item.item_template=atoi(row[i++]);
-		item.bonus=atoi(row[i++]);
-		item.bonus2=atoi(row[i++]);
-		item.userdata=atoi(row[i++]);
-		item.userdata2=atoi(row[i++]);
-		item.total_cooldown=atoi(row[i++]);
-		item.weight =atof(row[i++]);
-		//item.pDataSize=atoi(row[i++]);
-		//memcpy(item.pData,row[i++],item.pDataSize);
-		if(item.owner!=id)
-			printf("***ITEM MISMATCH: mysql id %d received item from id %d\n",id,item.owner);
-		else
-		{
-			item.owner = tempid;
-			itemlist->addItem(item);
-		}
+		int i=0;
+		item.id=atoi(table[r*numCol+i++]);
+		item.life=atoi(table[r*numCol+i++]);
+		item.qty=atoi(table[r*numCol+i++]);
+		item.graphic=atoi(table[r*numCol+i++]);
+		strcpy(item.name,table[r*numCol+i++]);
+		item.map=atoi(table[r*numCol+i++]);
+		item.x=atoi(table[r*numCol+i++]);
+		item.y=atoi(table[r*numCol+i++]);
+		item.owner=atoi(table[r*numCol+i++]);
+		item.slot=atoi(table[r*numCol+i++]);
+		item.type=atoi(table[r*numCol+i++]);
+		item.stack=atoi(table[r*numCol+i++]);
+		item.flags=atoi(table[r*numCol+i++]);
+		item.uses=atoi(table[r*numCol+i++]);
+		item.use_script=atoi(table[r*numCol+i++]);
+		item.equip_script=atoi(table[r*numCol+i++]);
+		item.unequip_script=atoi(table[r*numCol+i++]);
+		item.pickup_script=atoi(table[r*numCol+i++]);
+		item.drop_script=atoi(table[r*numCol+i++]);
+		item.lose_script=atoi(table[r*numCol+i++]);
+		item.atk=atoi(table[r*numCol+i++]);
+		item.def=atoi(table[r*numCol+i++]);
+		item.item_template=atoi(table[r*numCol+i++]);
+		item.bonus=atoi(table[r*numCol+i++]);
+		item.bonus2=atoi(table[r*numCol+i++]);
+		item.userdata=atoi(table[r*numCol+i++]);
+		item.userdata2=atoi(table[r*numCol+i++]);
+		item.total_cooldown=atoi(table[r*numCol+i++]);
+		item.weight = atof(table[r*numCol+i++]);
+		//item.pDataSize=atoi(table[r*numCol+i++]);
+		//memcpy(item.pData,table[r*numCol+i++],item.pDataSize);
+		itemlist->addItem(item);
 	}
-	mysql_free_result(res); */
+	sqlite3_free_table(table);
+	sqlite3_free(zSQL);
 }
 
 int mysqlDB::loadPlayer(cPlayer *player,int slot)
 {
 	//obtain player id from account's slot
-	/*char query[1024];
-	sprintf(query, "SELECT * FROM accounts WHERE accid='%s'",player->accid);
-
-	if(mysql_query(pConnection, query) != 0)
-		return 0;
-
-	res = mysql_store_result(pConnection);
-
-	int num = (int)mysql_num_rows(res);
-	if(num!=1)
-		return 0;
-
+	int numRows;
+	int numCol;
+	char *err;
+	char **table;
+	char *zSQL;
 	int player_id;
-	if(row=mysql_fetch_row(res))//STRUCTUREFLAG
-		player_id = atoi(row[slot+6]);	
-	else
-	{
-		mysql_free_result(res);
-		return 0;
-	}
-	mysql_free_result(res);
 
-	sprintf(query, "SELECT * FROM players WHERE id=%d",player_id);
+	zSQL = sqlite3_mprintf("SELECT * FROM accounts WHERE accid='%s'", player->accid);
+	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 
-	if(mysql_query(pConnection, query) != 0)
+	numRows = GetRowCount(zSQL);
+
+	if(numRows!=1)
 		return 0;
 
-	res = mysql_store_result(pConnection);
+		player_id = atoi(table[numCol+6]);	
+		sqlite3_free_table(table);
+		sqlite3_free(zSQL);
 
-	num= (int)mysql_num_rows(res);
-	if(num!=1)
+//load player
+	zSQL = sqlite3_mprintf("SELECT id, x, y, map, dir, type, state, range, str, dex, con, itl, wis, access, eLeft, eRight, eHead, eBody, eSpecial, \
+ 					lvl, player_temp, sprite, body, hair, clothes, worth, atk, def, train, hp, mp, mmp, target, target_at, chat_script, \
+					move_script, exp, flags, origin_x, origin_y, origin_map, total_time, boot_time, serenity, unknown FROM players WHERE id=%d",player_id);
+	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
+
+	numRows = GetRowCount(zSQL);
+	if(numRows!=1)
 		return 0;
 
-	if(row=mysql_fetch_row(res))//STRUCTUREFLAG
-	{
+		for (int r = 1; r <=numRows; ++r)
+		{
 		int i=0;
-		player->id=atoi(row[i++]);
-		player->x=atoi(row[i++]);
-		player->y=atoi(row[i++]);
-		player->map=atoi(row[i++]);
-		player->dir=atoi(row[i++]);
-		player->type=atoi(row[i++]);
-		player->state=atoi(row[i++]);
-		player->range=atoi(row[i++]);
-		player->str=atoi(row[i++]);
-		player->dex=atoi(row[i++]);
-		player->con=atoi(row[i++]);
-		player->itl=atoi(row[i++]);
-		player->wis=atoi(row[i++]);
-		player->access=atoi(row[i++]);
-		player->eLeft=atoi(row[i++]);
-		player->eRight=atoi(row[i++]);
-		player->eHead=atoi(row[i++]);
-		player->eBody=atoi(row[i++]);
-		player->eSpecial=atoi(row[i++]);
-		player->lvl=atoi(row[i++]);
-		player->player_template=atoi(row[i++]);
-		player->sprite=atoi(row[i++]);
-		player->body=atoi(row[i++]);
-		player->hair=atoi(row[i++]);
-		player->clothes=atoi(row[i++]);
-		player->worth=atoi(row[i++]);
-		player->atk=atoi(row[i++]);
-		player->def=atoi(row[i++]);
-		player->train=atoi(row[i++]);
-		player->hp=atoi(row[i++]);
-		player->mhp=atoi(row[i++]);
-		player->mp=atoi(row[i++]);
-		player->mmp=atoi(row[i++]);
-		player->target=atoi(row[i++]);
-		player->target_at=atoi(row[i++]);
-		player->chat_script=atoi(row[i++]);
-		player->move_script=atoi(row[i++]);
-		player->exp=atoi(row[i++]);
-		player->flags=atoi(row[i++]);
-		player->origin_x=atoi(row[i++]);
-		player->origin_y=atoi(row[i++]);
-		player->origin_map=atoi(row[i++]);
-		strcpy(player->name,row[i++]);
-		strcpy(player->title,row[i++]);
-		strcpy(player->create_date,row[i++]);
-		strcpy(player->login_date,row[i++]);
-		strcpy(player->logout_date,row[i++]);
-		player->total_time=atoi(row[i++]);
-		player->boot_time=atoi(row[i++]);
-		player->serenity=atoi(row[i++]);
-		player->unknown=atoi(row[i++]);
+		player->id=atoi(table[r*numCol+i++]);
+		player->x=atoi(table[r*numCol+i++]);
+		player->y=atoi(table[r*numCol+i++]);
+		player->map=atoi(table[r*numCol+i++]);
+		player->dir=atoi(table[r*numCol+i++]);
+		player->type=atoi(table[r*numCol+i++]);
+		player->state=atoi(table[r*numCol+i++]);
+		player->range=atoi(table[r*numCol+i++]);
+		player->str=atoi(table[r*numCol+i++]);
+		player->dex=atoi(table[r*numCol+i++]);
+		player->con=atoi(table[r*numCol+i++]);
+		player->itl=atoi(table[r*numCol+i++]);
+		player->wis=atoi(table[r*numCol+i++]);
+		player->access=atoi(table[r*numCol+i++]);
+		player->eLeft=atoi(table[r*numCol+i++]);
+		player->eRight=atoi(table[r*numCol+i++]);
+		player->eHead=atoi(table[r*numCol+i++]);
+		player->eBody=atoi(table[r*numCol+i++]);
+		player->eSpecial=atoi(table[r*numCol+i++]);
+		player->lvl=atoi(table[r*numCol+i++]);
+		player->player_template=atoi(table[r*numCol+i++]);
+		player->sprite=atoi(table[r*numCol+i++]);
+		player->body=atoi(table[r*numCol+i++]);
+		player->hair=atoi(table[r*numCol+i++]);
+		player->clothes=atoi(table[r*numCol+i++]);
+		player->worth=atoi(table[r*numCol+i++]);
+		player->atk=atoi(table[r*numCol+i++]);
+		player->def=atoi(table[r*numCol+i++]);
+		player->train=atoi(table[r*numCol+i++]);
+		player->hp=atoi(table[r*numCol+i++]);
+		player->mhp=atoi(table[r*numCol+i++]);
+		player->mp=atoi(table[r*numCol+i++]);
+		player->mmp=atoi(table[r*numCol+i++]);
+		player->target=atoi(table[r*numCol+i++]);
+		player->target_at=atoi(table[r*numCol+i++]);
+		player->chat_script=atoi(table[r*numCol+i++]);
+		player->move_script=atoi(table[r*numCol+i++]);
+		player->exp=atoi(table[r*numCol+i++]);
+		player->flags=atoi(table[r*numCol+i++]);
+		player->origin_x=atoi(table[r*numCol+i++]);
+		player->origin_y=atoi(table[r*numCol+i++]);
+		player->origin_map=atoi(table[r*numCol+i++]);
+		strcpy(player->name,table[r*numCol+i++]);
+		strcpy(player->title,table[r*numCol+i++]);
+		strcpy(player->create_date,table[r*numCol+i++]);
+		strcpy(player->login_date,table[r*numCol+i++]);
+		strcpy(player->logout_date,table[r*numCol+i++]);
+		player->total_time=atoi(table[r*numCol+i++]);
+		player->boot_time=atoi(table[r*numCol+i++]);
+		player->serenity=atoi(table[r*numCol+i++]);
+		player->unknown=atoi(table[r*numCol+i++]);
 	}
-	else
-		return 0;
 
-	mysql_free_result(res);
+	sqlite3_free_table(table);
+	sqlite3_free(zSQL);
+
 
 	//update login_time
-	sprintf(query,"UPDATE players SET login_date=NOW() WHERE id=%d",player->id);
-	mysql_query(pConnection,query);
-	return 1;*/
+	zSQL = sqlite3_mprintf("UPDATE players SET login_date=time() WHERE id=%d",player->id);
+	sqlite3_exec(db, zSQL, 0, 0, 0);
+	sqlite3_free(zSQL);
+
+	return 1;
 }
 
 void mysqlDB::setAccountSlot(char *id,int slot,int index)
@@ -610,125 +608,131 @@ void mysqlDB::setAccountSlot(char *id,int slot,int index)
 
 int mysqlDB::loginAccount(char *id,char *pass,char *ip)
 {
-/*	char query[1024];
-	sprintf(query, "SELECT * FROM accounts WHERE accid='%s' AND pass='%s'",id,pass);
 
-	if(mysql_query(pConnection, query) != 0)
-		return 0;
+	int numRows;
+	char *zSQL;
+	zSQL = sqlite3_mprintf("SELECT * FROM accounts WHERE accid='%s' AND pass='%s'",id,pass);
 
-	res = mysql_store_result(pConnection);
-	
-	int num= (int)mysql_num_rows(res);
-	mysql_free_result(res);
-	
-	if(num<1)
-		return 0;
+	numRows = GetRowCount(zSQL);
+	sqlite3_free(zSQL);
 
-	sprintf(query,"UPDATE accounts SET ip='%s' WHERE accid='%s'",ip,id);
-	mysql_query(pConnection,query);
+	if (numRows < 1)
+		return 0; //Incorrect login
 
-	return 1;*/
+	zSQL = sqlite3_mprintf("UPDATE accounts SET ip='%s' WHERE accid='%s'",ip,id);
+	sqlite3_exec(db, zSQL, 0, 0, 0);
+	sqlite3_free(zSQL);
+
+	return 1; //Login OK
 }
 
 int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slot3,cPlayer *slot4)
 {
-	/*char query[1024];
-	sprintf(query, "SELECT * FROM accounts WHERE accid='%s'",id);
 
-	if(mysql_query(pConnection, query) != 0)
-		return 0;
+	int numRows;
+	int numCol;
+	char *err;
+	char **table;
+	char *zSQL;
 
-	res = mysql_store_result(pConnection);
-	
-	int num= (int)mysql_num_rows(res);
-	
-	if(num<1)
-		return 0;
+	zSQL = sqlite3_mprintf("SELECT char1, char2, char3, char4 FROM accounts WHERE accid='%s'",id);
+	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
+
+	numRows = GetRowCount(zSQL);
+	sqlite3_free(zSQL);
+
+	if (numRows < 1)
+		return 0; //man not found dog
+
 
 	int slot[4];
 	//fetch character slot representations
-	if(row=mysql_fetch_row(res))
-	{
-		slot[0]=atoi(row[6]);
-		slot[1]=atoi(row[7]);
-		slot[2]=atoi(row[8]);
-		slot[3]=atoi(row[9]);
-	}
-	else
-		return 0;
 
-	mysql_free_result(res);
 
+		slot[0]=atoi(table[numCol+0]);
+		slot[1]=atoi(table[numCol+1]);
+		slot[2]=atoi(table[numCol+2]);
+		slot[3]=atoi(table[numCol+3]);
+
+	sqlite3_free_table(table);
+	sqlite3_free(zSQL);
+
+//load slot 1
 	if(slot[0]==-1)
 		slot1->lvl=0;
 	else
 	{
-		sprintf(query, "SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[0]);
-		mysql_query(pConnection,query);
-		res = mysql_store_result(pConnection);
-		row=mysql_fetch_row(res);
-		strcpy(slot1->name,row[0]);
-		slot1->lvl=atoi(row[1]);
-		slot1->sprite=atoi(row[2]);
-		slot1->body=atoi(row[3]);
-		slot1->hair=atoi(row[4]);
-		slot1->clothes=atoi(row[5]);
-		mysql_free_result(res);
+		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[0]);
+		sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
+		strcpy(slot1->name,table[numCol+0]);
+		slot1->lvl=atoi(table[numCol+1]);
+		slot1->sprite=atoi(table[numCol+2]);
+		slot1->body=atoi(table[numCol+3]);
+		slot1->hair=atoi(table[numCol+4]);
+		slot1->clothes=atoi(table[numCol+5]);
+		sqlite3_free_table(table);
+		sqlite3_free(zSQL);
 	}
+
+//load slot 2
 	if(slot[1]==-1)
+
 		slot2->lvl=0;
 	else
 	{
-		sprintf(query, "SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[1]);
-		mysql_query(pConnection,query);
-		res = mysql_store_result(pConnection);
-		row=mysql_fetch_row(res);
-		strcpy(slot2->name,row[0]);
-		slot2->lvl=atoi(row[1]);
-		slot2->sprite=atoi(row[2]);
-		slot2->body=atoi(row[3]);
-		slot2->hair=atoi(row[4]);
-		slot2->clothes=atoi(row[5]);
-		mysql_free_result(res);
+		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[0]);
+		sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
+		strcpy(slot1->name,table[numCol+0]);
+		slot2->lvl=atoi(table[numCol+1]);
+		slot2->sprite=atoi(table[numCol+2]);
+		slot2->body=atoi(table[numCol+3]);
+		slot2->hair=atoi(table[numCol+4]);
+		slot2->clothes=atoi(table[numCol+5]);
+		sqlite3_free_table(table);
+		sqlite3_free(zSQL);
 	}
+
+//load slot 3
 	if(slot[2]==-1)
+
 		slot3->lvl=0;
 	else
 	{
-		sprintf(query, "SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[2]);
-		mysql_query(pConnection,query);
-		res = mysql_store_result(pConnection);
-		row=mysql_fetch_row(res);
-		strcpy(slot3->name,row[0]);
-		slot3->lvl=atoi(row[1]);
-		slot3->sprite=atoi(row[2]);
-		slot3->body=atoi(row[3]);
-		slot3->hair=atoi(row[4]);
-		slot3->clothes=atoi(row[5]);
-		mysql_free_result(res);
+		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[0]);
+		sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
+		strcpy(slot1->name,table[numCol+0]);
+		slot3->lvl=atoi(table[numCol+1]);
+		slot3->sprite=atoi(table[numCol+2]);
+		slot3->body=atoi(table[numCol+3]);
+		slot3->hair=atoi(table[numCol+4]);
+		slot3->clothes=atoi(table[numCol+5]);
+		sqlite3_free_table(table);
+		sqlite3_free(zSQL);
 	}
+
+//load slot 4
 	if(slot[3]==-1)
+
 		slot4->lvl=0;
 	else
 	{
-		sprintf(query, "SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[3]);
-		mysql_query(pConnection,query);
-		res = mysql_store_result(pConnection);
-		row=mysql_fetch_row(res);
-		strcpy(slot4->name,row[0]);
-		slot4->lvl=atoi(row[1]);
-		slot4->sprite=atoi(row[2]);
-		slot4->body=atoi(row[3]);
-		slot4->hair=atoi(row[4]);
-		slot4->clothes=atoi(row[5]);
-		mysql_free_result(res);
+		zSQL = sqlite3_mprintf("SELECT name,level,sprite,body,hair,clothes FROM players WHERE id=%d",slot[0]);
+		sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
+		strcpy(slot1->name,table[numCol+0]);
+		slot4->lvl=atoi(table[numCol+1]);
+		slot4->sprite=atoi(table[numCol+2]);
+		slot4->body=atoi(table[numCol+3]);
+		slot4->hair=atoi(table[numCol+4]);
+		slot4->clothes=atoi(table[numCol+5]);
+		sqlite3_free_table(table);
+		sqlite3_free(zSQL);
 	}
-	return 1;*/
+	return 1;
 }
 
 int mysqlDB::sendQuery(char *query)
 {
-	//return mysql_query(pConnection,query);
+	return sqlite3_exec(db, query, 0, 0, 0);
 }
 
 #endif
