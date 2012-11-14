@@ -18,7 +18,7 @@ void mysqlDB::runScript(const char *filename)
 	int size = ftell(f);
 	query = (char*)malloc(size);
 	rewind(f);
-	if(size != fread(query, size, 1, f)) then return;
+	if(size != fread(query, size, 1, f)) return;
 	fclose(f);
 	for(int i=0;i<size;i++)
 		if(query[i]=='\n')
@@ -402,7 +402,7 @@ void mysqlDB::loadMapItems(cItemList *itemlist)
 	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 
 	cItem item;
-	for (int r = 1; r < numRows; ++r)
+	for (int r = 1; r <= numRows; ++r)
 	{
 		int i=0;
 		item.id=atoi(table[r*numCol+i++]);
@@ -459,7 +459,7 @@ void mysqlDB::loadPlayerItems(int id,int tempid,cItemList *itemlist)
 	sqlite3_get_table(db, zSQL, &table, &numRows, &numCol, &err);
 
 	cItem item;
-	for (int r = 1; r < numRows; ++r)
+	for (int r = 1; r <= numRows; ++r)
 	{
 		int i=0;
 		item.id=atoi(table[r*numCol+i++]);
@@ -531,8 +531,8 @@ int mysqlDB::loadPlayer(cPlayer *player,int slot)
 	if(numRows!=1)
 		return 0;
 
-		for (int r = 1; r <=numRows; ++r)
-		{
+	for (int r = 1; r <= numRows; ++r)
+	{
 		int i=0;
 		player->id=atoi(table[r*numCol+i++]);
 		player->x=atoi(table[r*numCol+i++]);
@@ -676,7 +676,6 @@ int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slo
 
 //load slot 2
 	if(slot[1]==-1)
-
 		slot2->lvl=0;
 	else
 	{
@@ -694,7 +693,6 @@ int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slo
 
 //load slot 3
 	if(slot[2]==-1)
-
 		slot3->lvl=0;
 	else
 	{
@@ -712,7 +710,6 @@ int mysqlDB::getAccountSlots(char *id,cPlayer *slot1,cPlayer *slot2,cPlayer *slo
 
 //load slot 4
 	if(slot[3]==-1)
-
 		slot4->lvl=0;
 	else
 	{
