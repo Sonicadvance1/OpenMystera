@@ -10,6 +10,7 @@ set(SRCS	SRC/mlserver.cpp
 		SRC/net.cpp 
 		SRC/md5.cpp 
 		SRC/consoleport.cpp
+		SRC/sqlite3.c
 )
 #Don't have any of these yet
 
@@ -23,7 +24,6 @@ set(LIBS
 	SDL_mixer
 	SDL_net	
 	png
-	sqlite3
 	)
 
 set(SERVER Server)

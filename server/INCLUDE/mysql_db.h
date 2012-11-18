@@ -4,7 +4,7 @@
 #define _MYSQLDB_
 
 #include <stdio.h>
-#include <sqlite3.h>
+#include "sqlite3.h"
 
 #include "gamedefs.h"
 #include "list.h"
