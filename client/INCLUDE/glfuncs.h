@@ -34,8 +34,8 @@ struct glSurface
 			int           bit_depth;
 			int           color_type;
 		   
-			unsigned long width;            /* PNG image width in pixels */
-			unsigned long height;           /* PNG image height in pixels */
+			unsigned int width;            /* PNG image width in pixels */
+			unsigned int height;           /* PNG image height in pixels */
 			unsigned int rowbytes;         /* raw bytes at row n in image */
 		   
 			image_data = NULL;
