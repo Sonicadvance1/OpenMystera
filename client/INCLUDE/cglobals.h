@@ -1,3 +1,8 @@
+#ifndef _CGLOBALS_H_
+#define _CGLOBALS_H_
+
+#include "glfuncs.h"
+
 //DEFINES
 #define MYGUY player[me]
 #define STDH 35
@@ -762,7 +767,7 @@ void uxWidget::draw(int px,int py)
 				TEXTDRAWER.PrintText(cntr(px+x,width-16,label), py+y, label);//label
 			}
 		}
-		else colorFill(px+x,py+y,width,height,0,0,0.05f,1);
+		else Renderer::ColorFill(px+x,py+y,width,height,0,0,0.05f,1);
 	}
 	if(type==UX_TYPE_LABEL)
 	{
@@ -796,7 +801,7 @@ void uxWidget::draw(int px,int py)
 		skin.blit(px+x+width,py+y+16,0,32,16,16,-1,(height/16)-2);//east
 		skin.blit(px+x+width,py+y+height,0,16,16,16,-1,-1);//se corner
 		skin.blit(px+x+width,py+y,0,16,16,16,-1,1);//ne corner
-	//	colorFill(px+x+2,py+y+2,width-4,height-4,0,0,0,1);
+	//	Renderer::ColorFill(px+x+2,py+y+2,width-4,height-4,0,0,0,1);
 	}
 	if(type==UX_TYPE_PLYR)
 	{
@@ -819,13 +824,13 @@ void uxWidget::draw(int px,int py)
 			//for(r=0;r<width;r+=16)
 			//	for(c=0;c<height;c+=16)
 			//		skin.blit(px+x+r,py+y+c,32,16,16,16,1,1);//background
-			colorFill(px+x,py+y,width,height,0,0,0,1);
+			Renderer::ColorFill(px+x,py+y,width,height,0,0,0,1);
 			c=-scroll;
 			int i=0;
 			while(i<list.size() && c<height/16)
 			{
 				if(c+scroll==selected&&c>=0)
-					colorFill(px+x,py+y+c*16,width-15,15,1,1,1,0.20f);
+					Renderer::ColorFill(px+x,py+y+c*16,width-15,15,1,1,1,0.20f);
 				if(c>=0)
 					TEXTDRAWER.PrintText(px+x+1, py+y+1+c*16,list[i].str);
 				c++;
@@ -849,7 +854,7 @@ void uxWidget::draw(int px,int py)
 				int ch = list.size()-height/16-1;
 				if(ch==0)
 					ch=1;
-				//colorFill(px+x+width-11,py+y+18+(scroll*(height-45)/(list.size()-height/12)),8,8,0,0,1,1);
+				//Renderer::ColorFill(px+x+width-11,py+y+18+(scroll*(height-45)/(list.size()-height/12)),8,8,0,0,1,1);
 				skin.blit(px+x+width-16,py+y+16+(scroll*(height-48)/ch),48,32,16,16,1,1);//scroll up
 				//if(scroll!=0)
 				//if(scroll!=list.size()-height/12)
@@ -874,7 +879,7 @@ void uxWidget::draw(int px,int py)
 			skin.blit(px+x+width,py+y,0,16,16,16,-1,1);//ne corner
 		}
 		//else 
-		//	colorFill(px+x,py+y,width,height,0,0,0.05f,1);
+		//	Renderer::ColorFill(px+x,py+y,width,height,0,0,0.05f,1);
 		if(type==UX_TYPE_PASS)
 		{
 			char temp[128];
@@ -1184,7 +1189,7 @@ void initializeSystem()
 		screen = SDL_SetVideoMode(gamewidth,gameheight,gamebpp,SDL_SWSURFACE| SDL_OPENGL |SDL_FULLSCREEN);
 	}
 	//misc setup
-	setup_opengl( gamewidth, gameheight );
+	Renderer::Init( gamewidth, gameheight );
 	SDL_WM_SetCaption("Mystera Legends", 0);
 	#ifdef WIN32
 		ShowCursor(0);
@@ -1411,3 +1416,4 @@ void initTestingMode()
 	strcpy(player[0].item[0].name,"Gold");
 }
 
+#endif

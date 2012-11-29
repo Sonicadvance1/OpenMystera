@@ -1,3 +1,7 @@
+#ifndef _DRAW_H_
+#define _DRAW_H
+#include "glfuncs.h"
+
 //Draw a frame
 
 void buildMapLayers()
@@ -69,7 +73,7 @@ void doGameGraphics()
 				return;
 			}
 
-			colorFill(0,0,640,480,1,0,1,1);
+			Renderer::ColorFill(0,0,640,480,1,0,1,1);
 		}
 		for(r=0;r<MAP_ROWS;r++)
 		{
@@ -240,8 +244,8 @@ void doGameGraphics()
 			{
 				//if(bar[k].hp < 0)
 				//	bar[k].hp = 0;
-				colorFill(player[bar[k].index].p.x*32,player[bar[k].index].p.y*32-10,32,2,0.78f,0,0,1);
-				colorFill(player[bar[k].index].p.x*32,player[bar[k].index].p.y*32-10,((bar[k].hp*32)/255),2,0,0.78f,0,1);
+				Renderer::ColorFill(player[bar[k].index].p.x*32,player[bar[k].index].p.y*32-10,32,2,0.78f,0,0,1);
+				Renderer::ColorFill(player[bar[k].index].p.x*32,player[bar[k].index].p.y*32-10,((bar[k].hp*32)/255),2,0,0.78f,0,1);
 				if(bar[k].advance(1000))
 					bar.remove(k);				
 			}
@@ -250,7 +254,7 @@ void doGameGraphics()
 		}
 		//targets
 		if(target>-1)
-			drawTarget(mX-16,mY-16,target);
+			Renderer::DrawTarget(mX-16,mY-16,target);
 		if(ptarget_id>-1)
 		{
 			int the_x=player[ptarget_id].p.x*32;
@@ -270,7 +274,7 @@ void doGameGraphics()
 				else if(player[ptarget_id].dir==2)the_x+=path;
 				else if(player[ptarget_id].dir==3)the_x-=path;
 			}
-			drawTarget(the_x,the_y-8,0);
+			Renderer::DrawTarget(the_x,the_y-8,0);
 			if(player[ptarget_id].p.map!=MYGUY.p.map || player[ptarget_id].access==-1)
 				ptarget_id=-1;
 		}
@@ -293,7 +297,7 @@ void doGameGraphics()
 				else if(player[mtarget_id].dir==2)the_x+=path;
 				else if(player[mtarget_id].dir==3)the_x-=path;
 			}
-			drawTarget(the_x,the_y-8,1);
+			Renderer::DrawTarget(the_x,the_y-8,1);
 			if(player[mtarget_id].p.map!=MYGUY.p.map || player[mtarget_id].access==-1)
 			{
 				mtarget_id=-1;
@@ -306,9 +310,9 @@ void doGameGraphics()
 		if(mode!=1)
 		{
 			if(world[MYGUY.p.map].npc[4].qty==1)
-				colorFill(0,0,640,480,0,0,0,1.00f - (map_shade/100.0f));
+				Renderer::ColorFill(0,0,640,480,0,0,0,1.00f - (map_shade/100.0f));
 			else
-				colorFill(0,0,640,480,0,0,0,1.00f - ((world[MYGUY.p.map].npc[4].qty+100)/100.0f));
+				Renderer::ColorFill(0,0,640,480,0,0,0,1.00f - ((world[MYGUY.p.map].npc[4].qty+100)/100.0f));
 		}
 		//draw chat balloons
 		balloon.draw();
@@ -340,24 +344,24 @@ void doGameGraphics()
 		
 		char temp[64];
 		
-		colorFill(647,520,130,14,0.20f,0,0.20f,1);
+		Renderer::ColorFill(647,520,130,14,0.20f,0,0.20f,1);
 		int barSize = ((MYGUY.exp*130)/mexp);
 		if(barSize > 130)
 			barSize = 130;
-		colorFill(647,520,barSize,14,0.58f,0,0.58f,1);
+		Renderer::ColorFill(647,520,barSize,14,0.58f,0,0.58f,1);
 		float perc = percExp(MYGUY.exp,MYGUY.lvl);
 		if(perc > 100)
 			perc = 100;
 		sprintf(temp,"^WLVL %d [%2.2f%%]",MYGUY.lvl,perc);
 		TEXTDRAWER.PrintText(647,520,temp);//lvl
 		
-		colorFill(647,535,130,14,0.5f,0,0,1);
-		colorFill(647,535,((MYGUY.hp*130)/MYGUY.mhp),14,0,0.5f,0,1);
+		Renderer::ColorFill(647,535,130,14,0.5f,0,0,1);
+		Renderer::ColorFill(647,535,((MYGUY.hp*130)/MYGUY.mhp),14,0,0.5f,0,1);
 		sprintf(temp,"^WHP %d/%d",MYGUY.hp,MYGUY.mhp);
 		TEXTDRAWER.PrintText(647,535,temp);//hp
 
-		colorFill(647,550,130,14,0,0,0.3f,1);
-		colorFill(647,550,((MYGUY.mp*130)/MYGUY.mmp),14,0,0,0.65f,1);
+		Renderer::ColorFill(647,550,130,14,0,0,0.3f,1);
+		Renderer::ColorFill(647,550,((MYGUY.mp*130)/MYGUY.mmp),14,0,0,0.65f,1);
 		sprintf(temp,"^WMP %d/%d",MYGUY.mp,MYGUY.mmp);
 		TEXTDRAWER.PrintText(647,550,temp);//mp
 		TEXTDRAWER.setFont(0);
@@ -365,7 +369,7 @@ void doGameGraphics()
 		//TEXTDRAWER.PrintText(300-3*(strlen(world[MYGUY.p.map].name)-4),10,world[MYGUY.p.map].name);
 		if(mode==0)
 		{
-			//colorFill(650,32,32,448,0,0,0.20f,1);
+			//Renderer::ColorFill(650,32,32,448,0,0,0.20f,1);
 			//inventory
 			TEXTDRAWER.setFont(1);
 			if(!inv_slot)
@@ -512,13 +516,13 @@ void doMapDialog()
 	mapDialog.x=640;
 	mapDialog.y=0;
 	mapDialog.draw();
-	colorFill(660,20,128,256,0,0,0,0.2f);
+	Renderer::ColorFill(660,20,128,256,0,0,0,0.2f);
 	tiledata.blit(660,20,mscrx,mscry,128,256,1,1);
 	if(curTile>=0)
 	{
 		xoff=curTile*32;
 		yoff=xoff/512;
-		colorFill(757,279,32,32,0,0,0,0.2f);
+		Renderer::ColorFill(757,279,32,32,0,0,0,0.2f);
 		tiledata.blit(757,279,(xoff)%512,yoff*32,32,32,1,1);
 	}
 	else if(curTile==-100)
@@ -551,3 +555,4 @@ void doMapDialog()
 	}
 }
 
+#endif
