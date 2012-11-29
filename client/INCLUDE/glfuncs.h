@@ -1,7 +1,12 @@
 #ifndef _RENDER_H_
 #define _RENDER_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <png.h>
+#include <GL/gl.h>
+
 
 struct glSurface
 {
@@ -26,7 +31,7 @@ struct glSurface
 	{
 		cr=1;cg=1;cb=1;ca=1;
 	}
-	int LoadPNG(const char *filename, int minfilter, int magfilter)
+	int LoadPNG(const char *filename)
 	{
 			FILE         *infile;         /* PNG file pointer */
 			png_structp   png_ptr;        /* internally used by libpng */
@@ -190,22 +195,22 @@ struct glSurface
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magfilter);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
 									 GL_RGB, GL_UNSIGNED_BYTE, image_data);            
 		return img;
 	}
 
-	int load(char *filename, int minfilter, int magfilter)
+	int Load(char *filename)
 	{
 		if(img!=0)
 		{
 			glDeleteTextures (1,&img);
 			img=0;
 		}
-		LoadPNG(filename, minfilter, magfilter);
+		LoadPNG(filename);
 		//img = pngBind(filename, PNG_NOMIPMAP, PNG_STENCIL,&info, GL_REPEAT, minfilter,magfilter);
 		if(img!=0)
 			return 1;
@@ -289,5 +294,14 @@ namespace Renderer
 	void DrawCursor(int _x,int _y);
 	// Draws a coloured quad
 	void ColorFill(int x,int y,int w, int h,float r=1.0f,float g=1.0f,float b=1.0f,float a=1.0f);
+	// Clear the screen
+	void Clear();
+	// Change game to fullscreen or back
+	void SetFullscreen(bool fs);
+
+
+	// Deprecated backend functions here
+	// These need to be removed very soon
+	void LoadIdentity();
 }
 #endif

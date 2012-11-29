@@ -1,9 +1,14 @@
+#include "glfuncs.h"
+
 #include <GL/gl.h>
 #include <SDL/SDL.h>
 
 namespace Renderer
 {
-	void Init( int width, int height )
+	unsigned int width, height;
+	SDL_Surface *screen=0;
+
+	void Init( int _width, int _height )
 	{
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);// Enable Alpha Blending (disable alpha testing)
 		glEnable(GL_BLEND);
@@ -19,6 +24,8 @@ namespace Renderer
 		glOrtho(0.0f,width,height,0.0f,-1.0f,1.0f);
 		glMatrixMode(GL_MODELVIEW);// Select The Modelview Matrix
 		glLoadIdentity();// Reset The Modelview Matrix
+		width = _width;
+		height = _height;
 	}
 
 	void DrawTarget(int _x,int _y,int ttype)
@@ -64,7 +71,7 @@ namespace Renderer
 		glEnd();
 	}
 
-	void ColorFill(int x,int y,int w, int h,float r=1.0f,float g=1.0f,float b=1.0f,float a=1.0f)
+	void ColorFill(int x,int y,int w, int h,float r,float g,float b,float a)
 	{
 		glLoadIdentity();
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -75,6 +82,18 @@ namespace Renderer
 			glVertex2d( x+w, y+h );
 			glVertex2d( x, y+h );
 		glEnd();
+	}
+	void Clear()
+	{
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 
+	}
+	void SetFullscreen(bool fs)
+	{
+		screen = SDL_SetVideoMode(width, height, 32, SDL_SWSURFACE | SDL_OPENGL | (fs ? SDL_FULLSCREEN : 0));
+	}
+	void LoadIdentity()
+	{
+		glLoadIdentity();	 
 	}
 }
 

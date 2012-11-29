@@ -28,10 +28,12 @@ void doFrame()
 	if ((keyDown[SDLK_LALT] || keyDown[SDLK_RALT]) && keyPress[SDLK_RETURN])
 	{
 		fullscreen = !fullscreen;
-		screen = SDL_SetVideoMode(gamewidth,gameheight,gamebpp, SDL_SWSURFACE | SDL_OPENGL | (fullscreen ? SDL_FULLSCREEN : 0));
-		initializeSystem();
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-		glLoadIdentity();
+		Renderer::SetFullscreen(fullscreen);
+		// The next block of code is stupid nonsense crap because it is already setup.
+		// There is no reason to reload EVERYTHING just because we are going to fullscreen.
+		/*initializeSystem();
+		Renderer::Clear();
+		Renderer::LoadIdentity();
 		//load images and sounds
 		char pnum[32];
 		int i;
@@ -45,42 +47,42 @@ void doFrame()
 			if(soundMax==-1)
 			{
 				sprintf(pnum,"data/sounds/%d.wav",i);
-				if(!sounds.load(i,pnum))
+				if(!sounds.Load(i,pnum))
 					soundMax=i;
 			}
 			if(bodyMax==-1)
 			{
 				sprintf(pnum,"data/body/%d.png",i);
-				if(!pBody[i].load(pnum,GL_NEAREST,GL_NEAREST))
+				if(!pBody[i].Load(pnum))
 					bodyMax=i;
 			}
 			if(hairMax==-1)
 			{
 				sprintf(pnum,"data/hair/%d.png",i);
-				if(!pHair[i].load(pnum,GL_NEAREST,GL_NEAREST))
+				if(!pHair[i].Load(pnum))
 					hairMax=i;
 			}
 			if(clothesMax==-1)
 			{
 				sprintf(pnum,"data/clothes/%d.png",i);
-				if(!pClothes[i].load(pnum,GL_NEAREST,GL_NEAREST))
+				if(!pClothes[i].Load(pnum))
 					clothesMax=i;
 			}
 			if(monsterMax==-1 && i>0)
 			{
 				sprintf(pnum,"data/monsters/%d.png",i);
-				if(!pMonster[i].load(pnum,GL_NEAREST,GL_NEAREST))
+				if(!pMonster[i].Load(pnum))
 					monsterMax=i;
 			}
 		}
-		tiledata.load("data/misc/tiledata.png",GL_NEAREST,GL_NEAREST);
-		effdata.load("data/misc/effects.png",GL_NEAREST,GL_NEAREST);
-		itemdata.load("data/misc/items.png",GL_NEAREST,GL_NEAREST);
-		loading.load("data/misc/loading.png",GL_NEAREST,GL_NEAREST);
-		skin.load("data/misc/skin0.png",GL_NEAREST,GL_NEAREST);
+		tiledata.Load("data/misc/tiledata.png");
+		effdata.Load("data/misc/effects.png");
+		itemdata.Load("data/misc/items.png");
+		loading.Load("data/misc/loading.png");
+		skin.Load("data/misc/skin0.png");
 	
 		//load fonts
-		font.load("data/misc/font.png",GL_NEAREST,GL_NEAREST);
+		font.Load("data/misc/font.png");
 		TEXTDRAWER.Initialize(font.img);
 		TEXTDRAWER.setColor(0,0,0,1);
 		//create effects,terminal,dialog boxes
@@ -90,8 +92,8 @@ void doFrame()
 	
 	//	setupDialogs();
 		loadEffectsMap();
-		buildGuiSkin();
-		updateFPS();
+		updateFPS();*/
+		
 		//render images	 
 		doGameGraphics();
 	}
@@ -105,15 +107,14 @@ void doFrame()
 		{
 			guiskin=0;
 			sprintf(name,"data/misc/skin%d.png",guiskin);
-			skin.load(name,GL_NEAREST,GL_NEAREST);
+			skin.Load(name);
 		}
 		else
 		{
 			fclose(f);
 			f=0;
-			skin.load(name,GL_NEAREST,GL_NEAREST);
+			skin.Load(name);
 		}
-		buildGuiSkin();
 	}
 	if(keyPress[SDLK_ESCAPE])
 	{
@@ -183,8 +184,8 @@ void doFrame()
 	}
 	updateFPS();
 	//render images
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	glLoadIdentity();	 
+	Renderer::Clear();
+	Renderer::LoadIdentity();
 	doGameGraphics();
 
 	/*TEXTDRAWER.setColor(1,1,1,1);//draw bottleneck stats
@@ -295,7 +296,6 @@ int main(int argc, char **argv)
 	term.newLine("^cMystera Legends Beta %.3f ^b- ^OZircon Release",client_version);
 	//only for testing
 	//initTestingMode();
-	buildGuiSkin();
 
 	//checking for newer version or showing servers
 	//if(!checkVer())showServers();
@@ -389,8 +389,6 @@ int main(int argc, char **argv)
 	
 	nc.shutdown();
 	Mix_CloseAudio();
-
-	glDeleteLists(baseList,1);
 
 	SDL_Quit();
 	

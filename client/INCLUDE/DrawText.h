@@ -1,13 +1,7 @@
 #ifndef _DRAWTEXT_H
 #define _DRAWTEXT_H
 
-#ifdef WIN32
-	#include <windows.h>
-	#include <gl/gl.h>
-#endif
-
-
-
+#include <GL/gl.h>
 
 // The number of chars in our font texture.
 // We are assuming two sets of 128 chars (e.g. as created by Bitmap Font Creator).

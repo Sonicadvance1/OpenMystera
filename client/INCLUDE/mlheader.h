@@ -19,9 +19,6 @@ void strlwr(char *t)
 
 //#include "mleaks.h"
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
-
 #include <math.h>
 #include <time.h>
 
@@ -32,11 +29,7 @@ void strlwr(char *t)
 #include <unistd.h>
 #endif
 
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <zlib.h>
-
-#include "png.h"
 
 #include "list.h"
 #include "signal.h"
@@ -56,19 +49,4 @@ void strlwr(char *t)
 #include "console.h"
 #include "input.h"
 #include "draw.h"
-
-//LIBRARIES
-#if defined(_MSC_VER)
-#   pragma comment(lib,"sdl.lib")
-#   pragma comment(lib,"sdlmain.lib")
-#   pragma comment(lib, "opengl32.lib")
-#   pragma comment(lib, "glu32.lib")
-#   pragma comment(lib, "glaux.lib")
-#   pragma comment(lib, "glpng.lib")
-#   pragma comment(lib,"SDL_mixer.lib")
-#   pragma comment(lib,"wsock32.lib")
-#   pragma comment(lib, "winmm.lib")
-#   pragma comment(lib,"zlib.lib")
-#endif
-
 

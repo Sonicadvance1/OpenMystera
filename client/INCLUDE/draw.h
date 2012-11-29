@@ -47,7 +47,51 @@ void buildMapLayers()
 	}
 	maplayer3.loadFromScreen(1024,1024);*/
 }
-
+void DrawGUI()
+{
+	//window frame
+	skin.blit(0,0,0,16,16,16,1,1);//nw corner
+	skin.blit(0,0+16,0,32,16,16,1,(480/16)-2);//west
+	skin.blit(0,480,0,16,16,16,1,-1);//sw corner
+	skin.blit(0,0,16,16,16,16,(640/16)-1,1);//north
+	skin.blit(0,480,16,16,16,16,(640/16)-1,-1);//south
+	skin.blit(640,0+16,0,32,16,16,-1,(480/16)-2);//east
+	skin.blit(640,480,0,16,16,16,-1,-1);//se corner
+	skin.blit(640,0,0,16,16,16,-1,1);//ne corner
+	//chat box line
+	skin.blit(0,582,16,16,16,16,(640/16),1);//north
+	//chat frame
+	skin.blit(0,480,0,16,16,16,1,1);//nw corner
+	skin.blit(0,480+16,0,32,16,16,1,(480/16)-2);//west
+	skin.blit(0,600,0,16,16,16,1,-1);//sw corner
+	skin.blit(0,480,16,16,16,16,(640/16)-1,1);//north
+	skin.blit(0,600,16,16,16,16,(640/16)-1,-1);//south
+	skin.blit(640,480+16,0,32,16,16,-1,(480/16)-2);//east
+	skin.blit(640,600,0,16,16,16,-1,-1);//se corner
+	skin.blit(640,480,0,16,16,16,-1,1);//ne corner
+	//scroll bar
+	skin.blit(624,480,0,32,16,16,1,6.4);//line
+	skin.blit(624,481,48,48,16,16,1,1);//scroll up
+	skin.blit(624,582,48,48,16,16,1,-1);//scroll down
+	//stats frame
+	skin.blit(640,480,0,16,16,16,1,1);//nw corner
+	skin.blit(640,480+16,0,32,16,16,1,(480/16)-2);//west
+	skin.blit(640,600,0,16,16,16,1,-1);//sw corner
+	skin.blit(640,480,16,16,16,16,(640/16)-1,1);//north
+	skin.blit(640,600,16,16,16,16,(640/16)-1,-1);//south
+	skin.blit(800,480+16,0,32,16,16,-1,(480/16)-2);//east
+	skin.blit(800,600,0,16,16,16,-1,-1);//se corner
+	skin.blit(800,480,0,16,16,16,-1,1);//ne corner
+	//inv frame
+	skin.blit(640,0,0,16,16,16,1,1);//nw corner
+	skin.blit(640,0+16,0,32,16,16,1,(480/16)-2);//west
+	skin.blit(640,480,0,16,16,16,1,-1);//sw corner
+	skin.blit(640,0,16,16,16,16,(640/16)-1,1);//north
+	skin.blit(640,480,16,16,16,16,(640/16)-1,-1);//south
+	skin.blit(800,0+16,0,32,16,16,-1,(480/16)-2);//east
+	skin.blit(800,480,0,16,16,16,-1,-1);//se corner
+	skin.blit(800,0,0,16,16,16,-1,1);//ne corner
+}
 void doGameGraphics()
 {
 	//security check
@@ -447,69 +491,12 @@ void doGameGraphics()
 	}
 	
 	//blit gui
-	glCallList(baseList);
+	DrawGUI();
 	if(term.size>9)
 		skin.blit(624,552-((chat_scroll*(55))/(term.size-9)),48,32,16,16,1,1);//scroll button
 	//bottle.set(4);
 }
 
-void buildGuiSkin()
-{
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 
-	int r,c;
-	for( r=0;r<512;r+=16)
-		for( c=0;c<512;c+=16)
-			skin.blit(r,c+88,32,16,16,16,1,1);//background
-	guiback.loadFromScreen(512,512);
-
-	if(baseList!=0)
-		glDeleteLists(baseList,1);
-	baseList = glGenLists(1);
-	glNewList(baseList,GL_COMPILE);	// Start Building A List
-		//window frame
-		skin.blit(0,0,0,16,16,16,1,1);//nw corner
-		skin.blit(0,0+16,0,32,16,16,1,(480/16)-2);//west
-		skin.blit(0,480,0,16,16,16,1,-1);//sw corner
-		skin.blit(0,0,16,16,16,16,(640/16)-1,1);//north
-		skin.blit(0,480,16,16,16,16,(640/16)-1,-1);//south
-		skin.blit(640,0+16,0,32,16,16,-1,(480/16)-2);//east
-		skin.blit(640,480,0,16,16,16,-1,-1);//se corner
-		skin.blit(640,0,0,16,16,16,-1,1);//ne corner
-		//chat box line
-		skin.blit(0,582,16,16,16,16,(640/16),1);//north
-		//chat frame
-		skin.blit(0,480,0,16,16,16,1,1);//nw corner
-		skin.blit(0,480+16,0,32,16,16,1,(480/16)-2);//west
-		skin.blit(0,600,0,16,16,16,1,-1);//sw corner
-		skin.blit(0,480,16,16,16,16,(640/16)-1,1);//north
-		skin.blit(0,600,16,16,16,16,(640/16)-1,-1);//south
-		skin.blit(640,480+16,0,32,16,16,-1,(480/16)-2);//east
-		skin.blit(640,600,0,16,16,16,-1,-1);//se corner
-		skin.blit(640,480,0,16,16,16,-1,1);//ne corner
-		//scroll bar
-		skin.blit(624,480,0,32,16,16,1,6.4);//line
-		skin.blit(624,481,48,48,16,16,1,1);//scroll up
-		skin.blit(624,582,48,48,16,16,1,-1);//scroll down
-		//stats frame
-		skin.blit(640,480,0,16,16,16,1,1);//nw corner
-		skin.blit(640,480+16,0,32,16,16,1,(480/16)-2);//west
-		skin.blit(640,600,0,16,16,16,1,-1);//sw corner
-		skin.blit(640,480,16,16,16,16,(640/16)-1,1);//north
-		skin.blit(640,600,16,16,16,16,(640/16)-1,-1);//south
-		skin.blit(800,480+16,0,32,16,16,-1,(480/16)-2);//east
-		skin.blit(800,600,0,16,16,16,-1,-1);//se corner
-		skin.blit(800,480,0,16,16,16,-1,1);//ne corner
-		//inv frame
-		skin.blit(640,0,0,16,16,16,1,1);//nw corner
-		skin.blit(640,0+16,0,32,16,16,1,(480/16)-2);//west
-		skin.blit(640,480,0,16,16,16,1,-1);//sw corner
-		skin.blit(640,0,16,16,16,16,(640/16)-1,1);//north
-		skin.blit(640,480,16,16,16,16,(640/16)-1,-1);//south
-		skin.blit(800,0+16,0,32,16,16,-1,(480/16)-2);//east
-		skin.blit(800,480,0,16,16,16,-1,-1);//se corner
-		skin.blit(800,0,0,16,16,16,-1,1);//ne corner
-	glEndList();
-}
 void doMapDialog()
 {
 	int xoff,yoff;

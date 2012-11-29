@@ -355,7 +355,6 @@ char myIp[32],
      login_name[32],
 	 last_tell[256];
 
-SDL_Surface *screen=0;
 
 console term;
 
@@ -380,8 +379,6 @@ glSurface pBody[256],
 		  pHair[256],
 		  pMonster[256],
 		  pItem[768];
-
-GLuint baseList=0;
 
 timer animTimer,
 	  anyTimer,
@@ -1180,13 +1177,13 @@ void initializeSystem()
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 	
 	if(!fullscreen)
-		screen = SDL_SetVideoMode(gamewidth,gameheight,gamebpp,SDL_SWSURFACE | SDL_OPENGL);
+		Renderer::SetFullscreen(fullscreen);
 	else
 	{
 		#ifdef WIN32
 			ShowCursor(0);
 		#endif
-		screen = SDL_SetVideoMode(gamewidth,gameheight,gamebpp,SDL_SWSURFACE| SDL_OPENGL |SDL_FULLSCREEN);
+		Renderer::SetFullscreen(fullscreen);
 	}
 	//misc setup
 	Renderer::Init( gamewidth, gameheight );
@@ -1241,36 +1238,36 @@ void setupClient()
 		if(bodyMax==-1)
 		{
 			sprintf(pnum,"data/body/%d.png",i);
-			if(!pBody[i].load(pnum,GL_NEAREST,GL_NEAREST))
+			if(!pBody[i].Load(pnum))
 				bodyMax=i;
 		}
 		if(hairMax==-1)
 		{
 			sprintf(pnum,"data/hair/%d.png",i);
-			if(!pHair[i].load(pnum,GL_NEAREST,GL_NEAREST))
+			if(!pHair[i].Load(pnum))
 				hairMax=i;
 		}
 		if(clothesMax==-1)
 		{
 			sprintf(pnum,"data/clothes/%d.png",i);
-			if(!pClothes[i].load(pnum,GL_NEAREST,GL_NEAREST))
+			if(!pClothes[i].Load(pnum))
 				clothesMax=i;
 		}
 		if(monsterMax==-1 && i>0)
 		{
 			sprintf(pnum,"data/monsters/%d.png",i);
-			if(!pMonster[i].load(pnum,GL_NEAREST,GL_NEAREST))
+			if(!pMonster[i].Load(pnum))
 				monsterMax=i;
 		}
 	}
-	tiledata.load("data/misc/tiledata.png",GL_NEAREST,GL_NEAREST);
-	effdata.load("data/misc/effects.png",GL_NEAREST,GL_NEAREST);
-	itemdata.load("data/misc/items.png",GL_NEAREST,GL_NEAREST);
-	loading.load("data/misc/loading.png",GL_NEAREST,GL_NEAREST);
-	skin.load("data/misc/skin0.png",GL_NEAREST,GL_NEAREST);
+	tiledata.Load("data/misc/tiledata.png");
+	effdata.Load("data/misc/effects.png");
+	itemdata.Load("data/misc/items.png");
+	loading.Load("data/misc/loading.png");
+	skin.Load("data/misc/skin0.png");
 	
 	//load fonts
-	font.load("data/misc/font.png",GL_NEAREST,GL_NEAREST);
+	font.Load("data/misc/font.png");
 	TEXTDRAWER.Initialize(font.img);
 	TEXTDRAWER.setColor(0,0,0,1);
 	//create effects,terminal,dialog boxes
