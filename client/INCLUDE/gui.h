@@ -224,7 +224,7 @@ struct uxDialog
 					w[i].selected++;
 				if(Input::IsPressed(SDLK_UP) && w[i].type==UX_TYPE_LISTBOX && w[i].selected >0)
 					w[i].selected--;
-				if(Input::IsPressed(SDLK_RETURN) && w[i].type==UX_TYPE_BUTTON && !Input::IsPressed(SDLK_LALT) && !Input::IsKeyDown(SDLK_RALT))
+				if(Input::IsPressed(SDLK_RETURN) && w[i].type==UX_TYPE_BUTTON && !Input::IsKeyDown(SDLK_LALT) && !Input::IsKeyDown(SDLK_RALT))
 					return i;
 				if(Input::IsPressed(SDLK_TAB) && w[i].state==UX_ACTIVE && (w[i].type==UX_TYPE_FIELD || w[i].type==UX_TYPE_PASS))//tab selection
 				{
@@ -253,7 +253,7 @@ struct uxDialog
 				return i;
 
 		}
-		if(hx==-1 && Input::IsPressed(SDLK_MLEFT) && Input::MouseX()>x && Input::MouseX()<x+width && Input::MouseY()>y && Input::MouseY()<y+15) //Dialog Drag Stuff - 15 @ y is titlebar offset
+		if(hx==-1 && Input::IsKeyDown(SDLK_MLEFT) && Input::MouseX()>x && Input::MouseX()<x+width && Input::MouseY()>y && Input::MouseY()<y+15) //Dialog Drag Stuff - 15 @ y is titlebar offset
 		{
 			hx=Input::MouseX()-x;
 			hy=Input::MouseY()-y;

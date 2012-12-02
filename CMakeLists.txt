@@ -20,6 +20,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
 add_definitions(-ggdb)
+add_definitions(-D_DEBUG_)
 endif(CMAKE_BUILD_TYPE STREQUAL Debug)
 
 if(CMAKE_BUILD_TYPE STREQUAL Release)
@@ -27,7 +28,7 @@ add_definitions(-fomit-frame-pointer -O2)
 endif(CMAKE_BUILD_TYPE STREQUAL Release)
 
 add_definitions(-Wno-unused-result)
-#add_definitions(-Wall -Werror)
+add_definitions(-Wall -Wextra -Werror)
 # Add our common directory for Common includes
 include_directories(Common/Src)
 
@@ -36,7 +37,7 @@ include_directories(Common/Src)
 # Start compiling our code
 #
 
-#add_subdirectory(Common)
+add_subdirectory(common)
 add_subdirectory(client)
 add_subdirectory(server)
 

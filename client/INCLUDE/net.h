@@ -61,14 +61,14 @@ public:
 	int host(int thePort);
 	void shutdown();
 	int update();
-	void disconnect(unsigned long cid);
-	int send(unsigned char *data,int size,int guaranteed,unsigned long cid);
+	void disconnect(signed long cid);
+	int send(unsigned char *data,int size,int guaranteed, signed long cid);
 	char *getip();
-	char *getip(unsigned long cid);
+	char *getip(signed long cid);
 
-	virtual void onConnect(unsigned long cid,char *ip_address);
-	virtual void onDisconnect(unsigned long cid);
-	virtual void onReceive(unsigned char *data,int size,unsigned long cid);
+	virtual void onConnect(signed long cid,char *ip_address);
+	virtual void onDisconnect(signed long cid);
+	virtual void onReceive(unsigned char *data,int size, signed long cid);
 };
 
 class netClient

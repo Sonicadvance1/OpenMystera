@@ -26,14 +26,14 @@ server.host(12000) //udp now claiming 12001
 
 #define ALL_CLIENTS -1 
 
-#define PlayerID unsigned long
+#define PlayerID signed long
 #include <SDL/SDL_net.h>
 /* Dont forget to implement these functions:
 
 //for server
-void netServer::onConnect(unsigned long cid,char *ip_address){}
-void netServer::onDisconnect(unsigned long cid){}
-void netServer::onReceive(unsigned char *data,int size,unsigned long cid){}
+void netServer::onConnect(signed long cid,char *ip_address){}
+void netServer::onDisconnect(signed long cid){}
+void netServer::onReceive(unsigned char *data,int size,signed long cid){}
 
 //for client
 void netClient::onReceive(unsigned char *data,int size){}
@@ -131,14 +131,14 @@ public:
 	int host(int thePort);
 	void shutdown();
 	int update();
-	void disconnect(unsigned long cid);
-	int send(unsigned char *data,int size,int guaranteed,unsigned long cid);
+	void disconnect(signed long cid);
+	int send(unsigned char *data,int size,int guaranteed,signed long cid);
 	char *getip();
-	char *getip(unsigned long cid);
+	char *getip(signed long cid);
 
-	virtual void onConnect(unsigned long cid,char *ip_address);
-	virtual void onDisconnect(unsigned long cid);
-	virtual void onReceive(unsigned char *data,int size,unsigned long cid);
+	virtual void onConnect(signed long cid,char *ip_address);
+	virtual void onDisconnect(signed long cid);
+	virtual void onReceive(unsigned char *data,int size,signed long cid);
 };
 
 class netClient

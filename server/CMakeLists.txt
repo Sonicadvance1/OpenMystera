@@ -9,6 +9,7 @@ set(SRCS	SRC/mlserver.cpp
 		SRC/mysql_db.cpp 
 		SRC/net.cpp 
 		SRC/md5.cpp 
+		SRC/utils.cpp
 		SRC/consoleport.cpp
 		SRC/sqlite3.c
 )

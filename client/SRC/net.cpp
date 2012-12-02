@@ -105,7 +105,7 @@ int netServer::update()
 	int msg_size;
 	if(numready>0)
 	{
-		unsigned long cid=0;
+		signed long cid=0;
 		//check for udp packets
 		if(SDLNet_SocketReady(udpsock))
 		{
@@ -249,14 +249,14 @@ int netServer::update()
 	}
 	return 0;
 }
-void netServer::disconnect(unsigned long cid)
+void netServer::disconnect(signed long cid)
 {
 	numClients=SDLNet_TCP_DelSocket(set,client[cid])-2;
 	SDLNet_TCP_Close(client[cid]);
 	client[cid]=0;
 	memset(&clientip[cid],0,sizeof(IPaddress));
 }
-int netServer::send(unsigned char *data,int size,int guaranteed,unsigned long cid)
+int netServer::send(unsigned char *data,int size,int guaranteed, signed long cid)
 {
 	if(!guaranteed)
 	{
@@ -359,7 +359,7 @@ char *netServer::getip()
 	return myip;
 }
 
-char *netServer::getip(unsigned long cid)
+char *netServer::getip(signed long cid)
 {
 	sprintf(clip,"%d.%d.%d.%d",
 		((unsigned char *)&clientip[cid].host)[0],

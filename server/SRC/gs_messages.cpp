@@ -385,6 +385,8 @@ void cGameServer::sendInventory(PlayerID pid,unsigned short index)
 
 void cGameServer::sendParmMsg(PlayerID pid,unsigned char parm,unsigned char flag)
 {
+	UNUSED(parm);
+	UNUSED(flag);
 	MAKE_MSG(parm_msg,hello,PARM_MSG);
 	hello.parm=0;
 	hello.flag=50;

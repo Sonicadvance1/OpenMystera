@@ -7,6 +7,7 @@
 //DEFINES
 #define MYGUY player[me]
 #define STDH 35
+#define UNUSED(x) (void)(x)
 //PROTOTYPES
 void doFrame();
 void setupDialogs();
@@ -426,7 +427,8 @@ void buildMapLayers();
 //FUNCTIONS
 // We need to break these off in to a "Common" library later
 void debugMsg(const char *fmt,...)
-{/*
+{
+#ifdef _DEBUG_
 	char		text[256];							// Holds Our String
 	va_list		ap;									// Pointer To List Of Arguments
 	if (fmt == NULL)
@@ -435,9 +437,16 @@ void debugMsg(const char *fmt,...)
 	va_start(ap, fmt);							
 	vsprintf(text, fmt, ap);
 	va_end(ap);
+	
 	FILE *f = fopen("debug.txt","a");
+	if (!f)
+	{
+		printf("Couldn't open Debug log\n");
+		return;
+	}
 	fprintf(f,"%s\n",text);
-	fclose(f);*/
+	fclose(f);
+#endif
 }
 
 int getPath(int id)
@@ -1073,9 +1082,9 @@ void showServers()
 	{
 		stuff[s]=servs[p];
 		p++;s++;
-		if(servs[p]<0)
-			serv_done=1;
-		else if(servs[p]==',')
+		if(servs[p] == 0)
+			serv_done = 1;
+		else if(servs[p] == ',')
 		{
 			stuff[s]='\0';
 			if(i>=sips.size())

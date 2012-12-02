@@ -911,6 +911,7 @@ int cGameServer::manaBonus(int num)
 int cGameServer::expBonus(int num, int lvl)
 {
 	//return num * (lvl/4);
+	UNUSED(lvl);
 	return int(float(num) * 1.5f);
 }
 

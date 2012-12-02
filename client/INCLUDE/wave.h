@@ -5,7 +5,7 @@ int music=1,sound=1;
 struct WaveFile
 {
 	Mix_Chunk *pSound;
-	int Play(bool loop);
+	int Play();
 	void Stop();
 	WaveFile(){pSound=0;}
 	int Load(char *szFileName);
@@ -32,7 +32,7 @@ WaveFile::~WaveFile()
 	pSound=0;
 }
 
-int WaveFile::Play(bool loop=false)
+int WaveFile::Play()
 {
 	if(sound)
 		Mix_PlayChannel(-1, pSound, 0);	

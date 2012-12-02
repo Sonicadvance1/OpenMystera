@@ -1048,7 +1048,7 @@ _MLF void setTarget(int p0,int p1)
 _MLF char *stringLower(char * p0)
 {
 	char* p = p0;
-	while (*p = tolower( *p )) p++;
+	while ( (*p = tolower( *p )) ) p++;
 	return p0;
 }
 
@@ -1209,6 +1209,7 @@ _MLF int getMapLink(int p0,int p1)
 }
 _MLF int updateMap(int p0)
 {
+	UNUSED(p0);
 	return 0;
 }
 #endif

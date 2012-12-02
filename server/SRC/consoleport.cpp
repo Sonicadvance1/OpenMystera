@@ -35,6 +35,8 @@ void clrscr()
 
 void gotoxy(int x, int y)
 {
+	UNUSED(x);
+	UNUSED(y);
 	/*COORD point;
 	if((x < 0 || x > screensize.x) || (y < 0 || y > screensize.y))
 		return;
@@ -49,6 +51,7 @@ void gotoxy(int x, int y)
 
 void setrgb(int color)
 {
+	UNUSED(color);
 /*
 	switch (color)
 	{

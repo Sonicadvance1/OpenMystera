@@ -33,7 +33,11 @@ void netServer::onReceive(unsigned char *data,int size,PlayerID cid)
 {
 	mlserver.onMessage(data,size,cid,data[0]);
 }
-void netClient::onReceive(unsigned char *data,int size){}
+void netClient::onReceive(unsigned char *data,int size)
+{
+	UNUSED(data);
+	UNUSED(size);
+}
 
 int checkAlive(void *unused)//rough way to see if the server has stalled (blocking send)
 {
@@ -175,6 +179,8 @@ void ScriptSignalHandler(int Signal)
 int main(int argc,char *argv[])
 {
 
+	UNUSED(argc);
+	UNUSED(argv);
 	srand(time(0));
 
 	//Create key command thread

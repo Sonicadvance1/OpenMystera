@@ -25,7 +25,7 @@ public: //INTERFACE
 				str[i]=32;
 			while(starOut(temp,badWords[i])!=-1);
 		}
-		for(int i=0;i<strlen(str);i++)
+		for(unsigned int i=0;i<strlen(str);i++)
 			if(temp[i]=='*')
 				str[i]='*';
 	}

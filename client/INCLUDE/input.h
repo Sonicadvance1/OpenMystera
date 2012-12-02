@@ -5,7 +5,7 @@ void doGameInput()
 	//admin options
 	if(MYGUY.access>5)
 	{
-		if(Input::IsPressed(SDLK_MLEFT))
+		if(Input::IsKeyDown(SDLK_MLEFT))
 		{
 			if(mode==1)//map buttons
 			{
@@ -17,7 +17,7 @@ void doGameInput()
 			{
 			}
 		}
-		if(Input::IsPressed(SDLK_MRIGHT))
+		if(Input::IsKeyDown(SDLK_MRIGHT))
 		{
 			if(mode==1)
 			{
@@ -42,7 +42,7 @@ void doGameInput()
 				}
 			}
 		}
-		if(Input::IsPressed(SDLK_MLEFT))
+		if(Input::IsKeyDown(SDLK_MLEFT))
 		{
 			if(mode==1)
 			{
@@ -192,7 +192,7 @@ void doGameInput()
 			if(chat_scroll<0)
 				chat_scroll=0;
 		}
-		else if(Input::IsPressed(SDLK_MLEFT) && Input::MouseX()>624 && Input::MouseX()<640 && Input::MouseY()>496 && Input::MouseY()<566)
+		else if(Input::IsKeyDown(SDLK_MLEFT) && Input::MouseX()>624 && Input::MouseX()<640 && Input::MouseY()>496 && Input::MouseY()<566)
 		{
 			chat_scroll=term.size-9-((Input::MouseY()-8-496)*(term.size-9))/(55);
 			if(chat_scroll<0)chat_scroll=0;
@@ -209,7 +209,7 @@ void doGameInput()
 			nc.send((unsigned char *)&hello,sizeof(parm_msg),SEND_GUARANTEED);
 		}
 	}
-	if((Input::IsPressed(SDLK_SPACE) || (ptarget_id!=-1&&MYGUY.front()==player[ptarget_id].p))&& attackTimer.tick(550))
+	if((Input::IsKeyDown(SDLK_SPACE) || (ptarget_id!=-1&&MYGUY.front()==player[ptarget_id].p))&& attackTimer.tick(550))
 		attack();
 	if(Input::IsPressed('/'))
 	{
@@ -362,7 +362,7 @@ void doGameInput()
 			}
 		}
 	}
-	if(Input::IsPressed(SDLK_RCTRL) || Input::IsPressed(SDLK_LCTRL))//move in place
+	if(Input::IsKeyDown(SDLK_RCTRL) || Input::IsKeyDown(SDLK_LCTRL))//move in place
 	{
 		turning=1;
 		smove=0;
@@ -399,7 +399,7 @@ void doGameInput()
 		
 		if(walkTime.tick(walk_delay))
 			holdMove=1;
-		if(holdMove && Input::IsPressed(SDLK_RIGHT))
+		if(holdMove && Input::IsKeyDown(SDLK_RIGHT))
 		{
 			
 			MYGUY.dir=3;
@@ -420,7 +420,7 @@ void doGameInput()
 			holdMove=0;
 			walkTime.reset();
 		}
-		if(holdMove && Input::IsPressed(SDLK_LEFT))
+		if(holdMove && Input::IsKeyDown(SDLK_LEFT))
 		{
 			MYGUY.dir=2;
 			if(world[MYGUY.p.map].canMove(player[me].left()))
@@ -439,7 +439,7 @@ void doGameInput()
 			holdMove=0;
 			walkTime.reset();
 		}
-		if(holdMove && Input::IsPressed(SDLK_UP))
+		if(holdMove && Input::IsKeyDown(SDLK_UP))
 		{
 			MYGUY.dir=1;
 			if(world[MYGUY.p.map].canMove(player[me].up()))
@@ -459,7 +459,7 @@ void doGameInput()
 			holdMove=0;
 			walkTime.reset();
 		}
-		if(holdMove && Input::IsPressed(SDLK_DOWN))
+		if(holdMove && Input::IsKeyDown(SDLK_DOWN))
 		{
 			MYGUY.dir=0;
 			if(world[MYGUY.p.map].canMove(player[me].down()))

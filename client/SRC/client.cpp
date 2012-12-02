@@ -3,9 +3,22 @@
 #include "mlheader.h"
 
 //for server
-void netServer::onConnect(unsigned long cid,char *ip_address){}
-void netServer::onDisconnect(unsigned long cid){}
-void netServer::onReceive(unsigned char *data,int size,unsigned long cid){}
+void netServer::onConnect(signed long cid,char *ip_address)
+{
+	UNUSED(cid);
+	UNUSED(ip_address);
+}
+void netServer::onDisconnect(signed long cid)
+{
+	UNUSED(cid);
+}
+void netServer::onReceive(unsigned char *data,int size,signed long cid)
+{
+	UNUSED(data);
+	UNUSED(size);
+	UNUSED(cid);
+}
+
 
 //for client
 void netClient::onReceive(unsigned char *data,int size)
@@ -15,7 +28,7 @@ void netClient::onReceive(unsigned char *data,int size)
 
 void doFrame()
 {
-	if(Input::IsPressed(SDLK_LCTRL) && Input::IsPressed(SDLK_q))
+	if(Input::IsKeyDown(SDLK_LCTRL) && Input::IsPressed(SDLK_q))
 	{
 			if(connected)
 			{
@@ -25,7 +38,7 @@ void doFrame()
 			else
 				done=1;
 	}
-	if ((Input::IsPressed(SDLK_LALT) || Input::IsPressed(SDLK_RALT)) && Input::IsPressed(SDLK_RETURN))
+	if ((Input::IsKeyDown(SDLK_LALT) || Input::IsKeyDown(SDLK_RALT)) && Input::IsPressed(SDLK_RETURN))
 	{
 		fullscreen = !fullscreen;
 		Renderer::SetFullscreen(fullscreen);
@@ -127,7 +140,7 @@ void doFrame()
 		chatting=0;
 		Input::ResetString();
 	}
-	if(connected && dialog==-1 && Input::IsPressed(SDLK_RETURN) && !Input::IsPressed(SDLK_LALT) && !Input::IsPressed(SDLK_RALT))
+	if(connected && dialog==-1 && Input::IsPressed(SDLK_RETURN) && !Input::IsKeyDown(SDLK_LALT) && !Input::IsKeyDown(SDLK_RALT))
 	{
 		if(chatting)
 		{
@@ -333,7 +346,7 @@ int main(int argc, char **argv)
 	unsigned long loopnum   = 0;
 	unsigned long lastsec   = 0;
 	unsigned long loopdif   = 0;
-	unsigned long second    = time(0);
+	long second    = time(0);
 	unsigned long sleeptime = 0;
 	const long FPS = 50;
 

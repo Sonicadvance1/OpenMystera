@@ -11,6 +11,7 @@
 
 void cGameServer::onConnect(PlayerID pid,char *ip)
 {
+	UNUSED(ip);
 	int i=0;
 	if(i==player.size())
 		player.size(i+100);
@@ -99,6 +100,8 @@ void cGameServer::onDisconnect(PlayerID pid)
 
 void cGameServer::onMessage(unsigned char *data,unsigned long dataSize,PlayerID pid,unsigned char type)
 {
+	UNUSED(dataSize);
+
 	if(type==NULL_MSG)
 		return;
 
@@ -210,10 +213,6 @@ void cGameServer::onMessage(unsigned char *data,unsigned long dataSize,PlayerID 
 			player[index].map=0;
 		if(player[index].map>world.size())
 			player[index].map=0;
-		if(player[index].x<0)
-			player[index].x=0;
-		if(player[index].y<0)
-			player[index].y=0;
 		if(player[index].x>=MAP_COLS)
 			player[index].x=MAP_COLS-1;
 		if(player[index].y>=MAP_ROWS)
@@ -373,8 +372,8 @@ void cGameServer::onMessage(unsigned char *data,unsigned long dataSize,PlayerID 
 		CAST_MSG(mycr_msg,msg);
 
 		//make sure params are normal value
-		if(msg->p.map<0 || msg->p.map>=world.size() || msg->dir < 0 || msg->dir > 3 || 
-			msg->p.x<0 || msg->p.x>19 || msg->p.y<0 || msg->p.y>14)
+		if(msg->p.map<0 || msg->p.map>=world.size() || msg->dir > 3 || 
+			msg->p.x>19 || msg->p.y>14)
 		{
 			sendMycrMsg(player[index].pid,index);
 			return;

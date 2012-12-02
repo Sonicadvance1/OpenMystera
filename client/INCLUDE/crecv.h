@@ -2,6 +2,7 @@
 char message[256];
 void onReceive(unsigned char *data,unsigned long dataSize,unsigned char type)
 {
+	UNUSED(dataSize);
 	//char temp[64];
 	//totaldata+=dataSize;
 	//sprintf(temp,"type:%d size:%d totalsize:%d",type,dataSize,totaldata);
@@ -471,8 +472,13 @@ void onReceive(unsigned char *data,unsigned long dataSize,unsigned char type)
 		memcpy((unsigned char *)&msg,data,sizeof(itmv_msg));
 		memcpy(&tempbuf,data+sizeof(itmv_msg),msg.size);
 		unsigned long newlen = 50000;
-		int res=uncompress((unsigned char *)&buf, &newlen, (unsigned char *)&tempbuf, (unsigned long)msg.size);
-		int qty=newlen/sizeof(ivms_msg);
+		int res = uncompress((unsigned char *)&buf, &newlen, (unsigned char *)&tempbuf, (unsigned long)msg.size);
+		if (!res)
+		{
+			debugMsg("Couldn't decompress ITMV_MSG\n");
+			return;
+		}
+		int qty = newlen/sizeof(ivms_msg);
 		cItemRef theItem;
 		theItem.qty=1;
 		theItem.p.map=MYGUY.p.map;

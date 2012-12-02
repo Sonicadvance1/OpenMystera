@@ -2,16 +2,16 @@ set(SRCS	SRC/client.cpp
 		SRC/net.cpp
 		SRC/Graphics/SDL_OGL.cpp
 		SRC/Input/SDL.cpp
-		SRC/Timing.cpp
 )
 #Don't have any of these yet
 
 
 include(FindOpenGL)
 include(FindPNG)
-include_directories(${OPENGL_INCLUDE_DIR}, ${PNG_INCLUDE_DIR}, "INCLUDE")
+include_directories(${OPENGL_INCLUDE_DIR}, ${PNG_INCLUDE_DIR}, "INCLUDE", "../common/Include")
 
 set(LIBS
+	common
 	SDL 
 	SDL_mixer
 	SDL_net	

@@ -15,19 +15,18 @@ void mysqlDB::runScript(const char *filename)
 	if(f==NULL)
 		return;
 	fseek(f,0,SEEK_END);
-	int size = ftell(f);
+	unsigned int size = ftell(f);
 	query = (char*)malloc(size);
 	rewind(f);
 	if(size != fread(query, size, 1, f)) return;
 	fclose(f);
-	for(int i=0;i<size;i++)
+	for(unsigned int i = 0;i < size; ++i)
 		if(query[i]=='\n')
 			query[i]=' ';
-	int mark=0;
 	char *quer;
 	while ((quer = strsep(&query, ";")) != NULL)
 	{
-		int ret = sqlite3_exec(db, quer, 0, 0, 0);
+		sqlite3_exec(db, quer, 0, 0, 0);
 	}
 	free(query);
 }

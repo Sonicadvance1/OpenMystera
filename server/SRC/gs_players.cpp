@@ -302,22 +302,27 @@ void cGameServer::doPickup(int id)
 
 void cGameServer::doAction(int id)
 {
-
+	UNUSED(id);
 }
 
 void cGameServer::doEquip(int id,int slot)
 {
-
+	UNUSED(id);
+	UNUSED(slot);
 }
 
 void cGameServer::doUnequip(int id,int slot)
 {
-
+	UNUSED(id);
+	UNUSED(slot);
 }
 
 void cGameServer::doMove(int id,int map,int x,int y)
 {
-
+	UNUSED(id);
+	UNUSED(map);
+	UNUSED(x);
+	UNUSED(y);
 }
 
 void cGameServer::doLogout(int id)
@@ -427,6 +432,7 @@ void cGameServer::doCreateAccount(int index,char *pass,char *conf,char *email)
 
 void cGameServer::doCreate(int id,char *name,int body,int clothes,int hair,int *player_id)
 {
+	UNUSED(id);
 	int ac=1;
 	
 	if(strcmp(admin_name,name)==0)
@@ -438,7 +444,7 @@ void cGameServer::doCreate(int id,char *name,int body,int clothes,int hair,int *
 int cGameServer::doDelete(char *name)
 {
 	int pid;
-	if(pid=mydb.nameExists(name))
+	if((pid = mydb.nameExists(name)))
 	{
 		int id=ntoi(name);
 		if(id>-1)//player is online

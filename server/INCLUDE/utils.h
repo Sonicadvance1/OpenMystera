@@ -7,6 +7,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_net.h>
 #include <SDL/SDL_thread.h>
+#define UNUSED(x) (void)(x)
 //sdl timer
 struct timer
 {
@@ -45,20 +46,7 @@ struct timer
 	}
 };
 
-static int transact(TCPsocket *sock,char *message,char *expect)
-{
-	int res;
-	//printf(message);
-	SDLNet_TCP_Send(*sock,message,strlen(message));
-	res=SDLNet_TCP_Recv(*sock,message,256);
-	if(res<=0)
-		return 0;
-	message[res]='\0';
-	//printf(message);
-	if(strstr(message,expect)!=0)
-		return 1;
-	return 0;
-}
+int transact(TCPsocket *sock,char *message,char *expect);
 
 /*static void sendEmail(char *host,char *login,char *pass,char *from,char *to,char *subject,char *body)
 {
@@ -112,66 +100,11 @@ static int transact(TCPsocket *sock,char *message,char *expect)
 */
 
 //file commands
-static int copyFile(const char *name,const char *newname)
-{
-	FILE *f;
-	FILE *f2;
-	f=fopen(name,"rb");
-	if(f==NULL)
-	{
-		return 0;
-	}
-	f2=fopen(newname,"wb");
-	if(f2==NULL)
-	{
-		return 0;
-	}
-	fseek(f,0,SEEK_END);
-	int len = ftell(f);
-	rewind(f);
-	unsigned char *buffer = new unsigned char[len];
-	fread(buffer,len,1,f);
-	fwrite(buffer,len,1,f2);
-	delete [] buffer;
-	fclose(f);
-	fclose(f2);
-	return 1;
-}
-
-static void backupFile(char *filePath,char *backupPath)
-{
-	char temp[64];
-	sprintf(temp,"%s.%ld",backupPath,time(NULL));
-	copyFile(filePath,temp);
-}
-
-static bool saveData(void *data,int size,char *filename,bool append=false)
-{
-	FILE *f;
-	if(!append||(f=fopen(filename,"ab"))==NULL)
-		if((f=fopen(filename,"wb"))==NULL)
-			return false;
-	fwrite (data,size,1,f);
-	fclose(f);
-	return true;
-}
-static bool loadData(void *data,int size,char *filename)
-{
-	FILE *f;
-	if((f=fopen(filename,"rb"))==NULL)
-		return false;
-	fread (data,size,1,f);
-	fclose(f);
-	return true;
-}
-static bool fileExists(const char *filename)
-{
-	FILE *f;
-	if((f=fopen(filename,"rb"))==NULL)
-		return false;
-	fclose(f);
-	return true;
-}
+int copyFile(const char *name,const char *newname);
+void backupFile(char *filePath,char *backupPath);
+bool saveData(void *data,int size,char *filename,bool append=false);
+bool loadData(void *data,int size,char *filename);
+bool fileExists(const char *filename);
 
 //flat file database
 struct gameDB

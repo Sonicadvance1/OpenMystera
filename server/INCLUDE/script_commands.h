@@ -5,7 +5,8 @@
 #include "gameserver.h"
 #include "console.h"
 
-static cGameServer *mygs;
+// (Sonic) Unused?
+//static cGameServer *mygs;
 
 void setScriptCommandGameServer(cGameServer *gs);
 //newer script access commands

@@ -15,6 +15,8 @@ void cScriptSystem::runDll(int id)
 //		if(pFunc != NULL)	
 //			pFunc();
 //	}
+	// Not yet implemented
+	UNUSED(id);
 }
 
 int cScriptSystem::load(int id)
@@ -23,6 +25,10 @@ int cScriptSystem::load(int id)
 //	sprintf(temp,"%d.dll",id);
 //	hDLL.at(id) = LoadLibrary(temp);
 //	return int(hDLL[id] != NULL);
+	
+	// Not yet implemented
+	UNUSED(id);
+	return false;
 }
 
 cScriptSystem::cScriptSystem()
@@ -46,6 +52,8 @@ void cScriptSystem::run(int id,int index)
 
 void cScriptSystem::free(int id)
 {
+	// Not yet implemented
+	UNUSED(id);
 //	FreeLibrary(hDLL[id]);
 }
 

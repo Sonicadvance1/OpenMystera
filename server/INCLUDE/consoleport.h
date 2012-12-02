@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
+#include "utils.h"
 
 void clrscr();
 void gotoxy(int, int);

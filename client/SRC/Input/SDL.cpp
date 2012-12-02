@@ -101,6 +101,7 @@ namespace Input
 			keyFlag[i]=0;
 			keyUp[i]=0;
 		}
+		return true;
 	}
 	void Shutdown()
 	{
