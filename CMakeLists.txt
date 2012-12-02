@@ -27,7 +27,7 @@ add_definitions(-fomit-frame-pointer -O2)
 endif(CMAKE_BUILD_TYPE STREQUAL Release)
 
 add_definitions(-Wno-unused-result)
-#add_definitions(-std=c++0x -Wall -Werror)
+#add_definitions(-Wall -Werror)
 # Add our common directory for Common includes
 include_directories(Common/Src)
 

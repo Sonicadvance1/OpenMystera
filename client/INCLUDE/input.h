@@ -1,35 +1,36 @@
+#include "Input.h"
 //get input
 void doGameInput()
 {
 	//admin options
 	if(MYGUY.access>5)
 	{
-		if(keyDown[SDLK_MLEFT])
+		if(Input::IsPressed(SDLK_MLEFT))
 		{
 			if(mode==1)//map buttons
 			{
 			}
 		}
-		if(keyPress[SDLK_MLEFT])//buttons
+		if(Input::IsPressed(SDLK_MLEFT))//buttons
 		{
 			if(mode==1)//map buttons
 			{
 			}
 		}
-		if(keyDown[SDLK_MRIGHT])
+		if(Input::IsPressed(SDLK_MRIGHT))
 		{
 			if(mode==1)
 			{
-				if(mX < 640 && mY < 480)//tile grabber
+				if(Input::MouseX() < 640 && Input::MouseY() < 480)//tile grabber
 				{
 					
-					curTile=world[MYGUY.p.map].map[mY/32][mX/32].tile[layer];
+					curTile=world[MYGUY.p.map].map[Input::MouseY()/32][Input::MouseX()/32].tile[layer];
 					
 				}
-				if(mX >= 660 && mY >= 20 && mX <= 788 && mY <= 276 && anyTimer.tick(100))//tile scroller
+				if(Input::MouseX() >= 660 && Input::MouseY() >= 20 && Input::MouseX() <= 788 && Input::MouseY() <= 276 && anyTimer.tick(100))//tile scroller
 				{
-					mscrx+=(mX-(660+64))/2;
-					mscry+=(mY-(20+128))/2;
+					mscrx+=(Input::MouseX()-(660+64))/2;
+					mscry+=(Input::MouseY()-(20+128))/2;
 					if(mscrx<0)
 						mscrx=0;
 					if(mscry<0)
@@ -41,44 +42,44 @@ void doGameInput()
 				}
 			}
 		}
-		if(keyDown[SDLK_MLEFT])
+		if(Input::IsPressed(SDLK_MLEFT))
 		{
 			if(mode==1)
 			{
-				if(mX >= 660 && mY >= 20 && mX <= 788 && mY <= 276)//tile select
+				if(Input::MouseX() >= 660 && Input::MouseY() >= 20 && Input::MouseX() <= 788 && Input::MouseY() <= 276)//tile select
 				{
 					
-					curTile=((mX-660+mscrx)/32) + (((mY-20+mscry)/32)*(tiledata.w/32));
+					curTile=((Input::MouseX()-660+mscrx)/32) + (((Input::MouseY()-20+mscry)/32)*(tiledata.w/32));
 					
 				}
-				else if(mX < 640 && mY < 480)//tile draw
+				else if(Input::MouseX() < 640 && Input::MouseY() < 480)//tile draw
 				{
 					
 					if(curTile >= 0)
 					{
-						world[MYGUY.p.map].map[mY/32][mX/32].tile[layer]=curTile;
+						world[MYGUY.p.map].map[Input::MouseY()/32][Input::MouseX()/32].tile[layer]=curTile;
 					}
 					else
 					{
-						world[MYGUY.p.map].map[mY/32][mX/32].type = curTile+101;
+						world[MYGUY.p.map].map[Input::MouseY()/32][Input::MouseX()/32].type = curTile+101;
 						if(curTile==-98)
-							world[MYGUY.p.map].map[mY/32][mX/32].warp=warp;
+							world[MYGUY.p.map].map[Input::MouseY()/32][Input::MouseX()/32].warp=warp;
 						else if(curTile==-96 || curTile==-95)
-							world[MYGUY.p.map].map[mY/32][mX/32].warp.map=map_script;
+							world[MYGUY.p.map].map[Input::MouseY()/32][Input::MouseX()/32].warp.map=map_script;
 					}
 					
 				}
 			}
 		}
-		if(keyPress['f'])
+		if(Input::IsPressed('f'))
 		{
 			if(mode==1)
 			{
 				
 				if(curTile >= 0)
-					fillwith(mY/32,mX/32,world[MYGUY.p.map].map[mY/32][mX/32].tile[layer]);
+					fillwith(Input::MouseY()/32,Input::MouseX()/32,world[MYGUY.p.map].map[Input::MouseY()/32][Input::MouseX()/32].tile[layer]);
 				else
-					fillwith(mY/32,mX/32,world[MYGUY.p.map].map[mY/32][mX/32].type);
+					fillwith(Input::MouseY()/32,Input::MouseX()/32,world[MYGUY.p.map].map[Input::MouseY()/32][Input::MouseX()/32].type);
 				
 			}
 		}
@@ -104,28 +105,27 @@ void doGameInput()
 		eff.place(temp);
 		
 	}*/
-	if(keyPress[SDLK_MRIGHT])
+	if(Input::IsPressed(SDLK_MRIGHT))
 	{
 		if(mode==0)
 		{
-			if(mX<640&&mY<480)
+			if(Input::MouseX()<640&&Input::MouseY()<480)
 			{
 				target++;
 				if(target>1)
 					target=-1;
 			}
-			if(mX > 645 && mX < 677 && mY > 20 && mY < 468 && MYGUY.item[((mY-20)/32)+inv_slot*14].qty!=0)//item drop
+			if(Input::MouseX() > 645 && Input::MouseX() < 677 && Input::MouseY() > 20 && Input::MouseY() < 468 && MYGUY.item[((Input::MouseY()-20)/32)+inv_slot*14].qty!=0)//item drop
 			{
 				chatting=0;
 				MAKE_MSG(drop_msg,msg,DROP_MSG);
-				msg.index=((mY-20)/32)+(inv_slot*14);
+				msg.index=((Input::MouseY()-20)/32)+(inv_slot*14);
 				if(MYGUY.item[msg.index].qty>1)
 				{
 					//init drop dialog on stackable items
 					dropSlot=msg.index;
-					sprintf(vDialog[5].w[2].label,"%d",MYGUY.item[dropSlot].qty);
-					sprintf(inputStr,"%d",MYGUY.item[dropSlot].qty);
-					curPos=strlen(inputStr);
+					sprintf(vDialog[5].w[2].label,"%ld",MYGUY.item[dropSlot].qty);
+					Input::SetString(vDialog[5].w[2].label);
 					vDialog[5].w[2].state=UX_ACTIVE;
 					dialog=5;
 				}
@@ -134,22 +134,22 @@ void doGameInput()
 			}
 		}
 	}
-	if(keyPress[SDLK_MLEFT])
+	if(Input::IsPressed(SDLK_MLEFT))
 	{
 		if(mode==0)
 		{
-			if(mX<640&&mY<480)
+			if(Input::MouseX()<640&&Input::MouseY()<480)
 			{
-				if(world[MYGUY.p.map].map[(mY+8)/32][mX/32].space!=VACANT)
+				if(world[MYGUY.p.map].map[(Input::MouseY()+8)/32][Input::MouseX()/32].space!=VACANT)
 				{
-					if(target==0 && world[MYGUY.p.map].map[(mY+8)/32][mX/32].space!=me)
+					if(target==0 && world[MYGUY.p.map].map[(Input::MouseY()+8)/32][Input::MouseX()/32].space!=me)
 					{
-						ptarget_id=world[MYGUY.p.map].map[(mY+8)/32][mX/32].space;
+						ptarget_id=world[MYGUY.p.map].map[(Input::MouseY()+8)/32][Input::MouseX()/32].space;
 						target=-1;
 					}
 					else if(target==1)
 					{
-						mtarget_id=world[MYGUY.p.map].map[(mY+8)/32][mX/32].space;
+						mtarget_id=world[MYGUY.p.map].map[(Input::MouseY()+8)/32][Input::MouseX()/32].space;
 						target=-1;
 						MAKE_MSG(trgt_msg,tr,TRGT_MSG);
 						tr.index=mtarget_id;
@@ -170,37 +170,37 @@ void doGameInput()
 					target=-1;
 				}
 			}
-			if(mX > 650 && mX < 682 && mY > 20 && mY < 468 && useTimer.tick(400) && MYGUY.item[((mY-20)/32)+inv_slot*14].qty!=0)//item equip
+			if(Input::MouseX() > 650 && Input::MouseX() < 682 && Input::MouseY() > 20 && Input::MouseY() < 468 && useTimer.tick(400) && MYGUY.item[((Input::MouseY()-20)/32)+inv_slot*14].qty!=0)//item equip
 			{
 				char temp[256];
-				sprintf(temp,"/use %d",((mY-20)/32)+inv_slot*14);
+				sprintf(temp,"/use %d",((Input::MouseY()-20)/32)+inv_slot*14);
 				sendCmndMsg(temp);
 			}
 		}
 	}
 	if(term.size>9) //scrolling
 	{
-		if(keyUp[SDLK_MLEFT] && mX>624 && mX<640 && mY>480 && mY<496)
+		if( Input::IsKeyUp(SDLK_MLEFT) && Input::MouseX()>624 && Input::MouseX()<640 && Input::MouseY()>480 && Input::MouseY()<496)
 		{
 			chat_scroll++;
 			if(chat_scroll>term.size-9)
 				chat_scroll=term.size-9;
 		}
-		else if(keyUp[SDLK_MLEFT] && mX>624 && mX<640 && mY>566 && mY<582)
+		else if(Input::IsKeyUp(SDLK_MLEFT) && Input::MouseX()>624 && Input::MouseX()<640 && Input::MouseY()>566 && Input::MouseY()<582)
 		{
 			chat_scroll--;
 			if(chat_scroll<0)
 				chat_scroll=0;
 		}
-		else if(keyDown[SDLK_MLEFT] && mX>624 && mX<640 && mY>496 && mY<566)
+		else if(Input::IsPressed(SDLK_MLEFT) && Input::MouseX()>624 && Input::MouseX()<640 && Input::MouseY()>496 && Input::MouseY()<566)
 		{
-			chat_scroll=term.size-9-((mY-8-496)*(term.size-9))/(55);
+			chat_scroll=term.size-9-((Input::MouseY()-8-496)*(term.size-9))/(55);
 			if(chat_scroll<0)chat_scroll=0;
 			if(chat_scroll>term.size-9)
 				chat_scroll=term.size-9;
 		}
 	}
-	if(keyPress[SDLK_SPACE])
+	if(Input::IsPressed(SDLK_SPACE))
 	{
 		if(MYGUY.front().inBounds() && world[MYGUY.p.map].map[MYGUY.front().y][MYGUY.front().x].type==SWCH)
 		{
@@ -209,143 +209,120 @@ void doGameInput()
 			nc.send((unsigned char *)&hello,sizeof(parm_msg),SEND_GUARANTEED);
 		}
 	}
-	if((keyDown[SDLK_SPACE] || (ptarget_id!=-1&&MYGUY.front()==player[ptarget_id].p))&& attackTimer.tick(550))
+	if((Input::IsPressed(SDLK_SPACE) || (ptarget_id!=-1&&MYGUY.front()==player[ptarget_id].p))&& attackTimer.tick(550))
 		attack();
-	if(keyPress['/'])
+	if(Input::IsPressed('/'))
 	{
 		if(chatting==0)
 		{
-			keyPress['/']=0;
-			keyDown['/']=0;
-			
 			chatting=1;
-			
-			strcpy(inputStr,"/");
-			curPos = strlen(inputStr);
+			Input::SetString("/");
 		}
-		else keyPress[SDLK_RETURN]=1;
 	}
-	if(keyPress['\\'])
+	if(Input::IsPressed('\\'))
 	{
 		if(chatting==0)
 		{
-			keyPress['\\']=0;
-			keyDown['\\']=0;
-			
 			chatting=1;
-			
-			strcpy(inputStr,"/b ");
-			curPos = strlen(inputStr);
+			Input::SetString("/b ");
 		}
-		else keyPress[SDLK_RETURN]=1;
 	}
-	if(keyPress[']'])
+	if(Input::IsPressed(']'))
 	{
 		if(chatting==0)
 		{
-			
 			chatting=1;
 			
-			keyPress[']']=0;
-			keyDown[']']=0;
+			char tmpStr[128];
+			
 			if(strlen(last_tell)>0)
-				sprintf(inputStr,"/t %s ",last_tell);
-			else strcpy(inputStr,"/t ");
-			curPos = strlen(inputStr);
+			{
+				sprintf(tmpStr,"/t %s ", last_tell);
+				Input::SetString(tmpStr);
+			}
+			else
+				Input::SetString("/t ");
 		}
-		else keyPress[SDLK_RETURN]=1;
 	}
-	if(keyPress['\''])
+	if(Input::IsPressed('\''))
 	{
 		if(chatting==0)
 		{
-
 			chatting=1;
-
-			keyPress['\'']=0;
-			keyDown['\'']=0;
-			strcpy(inputStr,"/g ");
-			curPos = strlen(inputStr);
+			Input::SetString("/g ");
 		}
-		else keyPress[SDLK_RETURN]=1;
 	}
-	if(keyPress['['] && MYGUY.access > 1)
+	if(Input::IsPressed('[') && MYGUY.access > 1)
 	{
 		if(chatting==0)
 		{
-
 			chatting=1;
-
-			keyPress['[']=0;
-			keyDown['[']=0;
-			strcpy(inputStr,"/admin ");
-			curPos = strlen(inputStr);
+			Input::SetString("/admin ");
 		}
-		else keyPress[SDLK_RETURN]=1;
 	}
-	if(keyPress['a'] && useTimer.tick(400) && MYGUY.item[0].qty!=0)
+	if(Input::IsPressed('a') && useTimer.tick(400) && MYGUY.item[0].qty!=0)
 	{
 		sendCmndMsg("/use 0");	
 	}
-	else if(keyPress['s'] && useTimer.tick(400) && MYGUY.item[1].qty!=0)
+	else if(Input::IsPressed('s') && useTimer.tick(400) && MYGUY.item[1].qty!=0)
 	{
 		sendCmndMsg("/use 1");
 	}
-	else if(keyPress['d'] && useTimer.tick(400) && MYGUY.item[2].qty!=0)
+	else if(Input::IsPressed('d') && useTimer.tick(400) && MYGUY.item[2].qty!=0)
 	{
 		sendCmndMsg("/use 2");
 	}
-	else if(keyPress['f'] && useTimer.tick(400) && MYGUY.item[3].qty!=0 && mode!=1)
+	else if(Input::IsPressed('f') && useTimer.tick(400) && MYGUY.item[3].qty!=0 && mode!=1)
 	{
 		sendCmndMsg("/use 3");
 	}
-	else if(keyPress['g'] && useTimer.tick(400) && MYGUY.item[4].qty!=0)
+	else if(Input::IsPressed('g') && useTimer.tick(400) && MYGUY.item[4].qty!=0)
 	{
 		sendCmndMsg("/use 4");
 	}
-	else if(keyPress['h'] && useTimer.tick(400) && MYGUY.item[5].qty!=0)
+	else if(Input::IsPressed('h') && useTimer.tick(400) && MYGUY.item[5].qty!=0)
 	{
 		sendCmndMsg("/use 5");
 	}
-	else if(keyPress['j'] && useTimer.tick(400) && MYGUY.item[6].qty!=0)
+	else if(Input::IsPressed('j') && useTimer.tick(400) && MYGUY.item[6].qty!=0)
 	{
 		sendCmndMsg("/use 6");
 	}
-	else if(keyPress['z'] && useTimer.tick(400) && MYGUY.item[7].qty!=0)
+	else if(Input::IsPressed('z') && useTimer.tick(400) && MYGUY.item[7].qty!=0)
 	{
 		sendCmndMsg("/use 7");
 	}
-	else if(keyPress['x'] && useTimer.tick(400) && MYGUY.item[8].qty!=0)
+	else if(Input::IsPressed('x') && useTimer.tick(400) && MYGUY.item[8].qty!=0)
 	{
 		sendCmndMsg("/use 8");
 	}
-	else if(keyPress['c'] && useTimer.tick(400) && MYGUY.item[9].qty!=0)
+	else if(Input::IsPressed('c') && useTimer.tick(400) && MYGUY.item[9].qty!=0)
 	{
 		sendCmndMsg("/use 9");
 	}
-	else if(keyPress['v'] && useTimer.tick(400) && MYGUY.item[10].qty!=0)
+	else if(Input::IsPressed('v') && useTimer.tick(400) && MYGUY.item[10].qty!=0)
 	{
 		sendCmndMsg("/use 10");
 	}
-	else if(keyPress['b'] && useTimer.tick(400) && MYGUY.item[11].qty!=0)
+	else if(Input::IsPressed('b') && useTimer.tick(400) && MYGUY.item[11].qty!=0)
 	{
 		sendCmndMsg("/use 11");
 	}
-	else if(keyPress['n'] && useTimer.tick(400) && MYGUY.item[12].qty!=0)
+	else if(Input::IsPressed('n') && useTimer.tick(400) && MYGUY.item[12].qty!=0)
 	{
 		sendCmndMsg("/use 12");
 	}
-	else if(keyPress['m'] && useTimer.tick(400) && MYGUY.item[13].qty!=0)
+	else if(Input::IsPressed('m') && useTimer.tick(400) && MYGUY.item[13].qty!=0)
 	{
 		sendCmndMsg("/use 13");
 	}
-	if(keyPress[SDLK_TAB])
+	if(Input::IsPressed(SDLK_TAB))
 	{
 		inv_slot++;
 		if(inv_slot>1)
 			inv_slot=0;
 	}
-	if(keyPress[SDLK_RSHIFT] || keyPress[SDLK_LSHIFT])
+	if(Input::IsPressed(SDLK_RSHIFT) || Input::IsPressed(SDLK_LSHIFT))
 	{
 		MAKE_MSG(pick_msg,p,PICK_MSG);
 		nc.send((unsigned char *)&p,sizeof(pick_msg),SEND_GUARANTEED);
@@ -385,31 +362,31 @@ void doGameInput()
 			}
 		}
 	}
-	if(keyDown[SDLK_RCTRL] || keyDown[SDLK_LCTRL])//move in place
+	if(Input::IsPressed(SDLK_RCTRL) || Input::IsPressed(SDLK_LCTRL))//move in place
 	{
 		turning=1;
 		smove=0;
 		if(holdMove)
 		{
-			if(keyPress[SDLK_RIGHT])
+			if(Input::IsPressed(SDLK_RIGHT))
 			{
 				MYGUY.dir=3;
 				moved=true;
 				smove=0;
 			}
-			if(keyPress[SDLK_LEFT])
+			if(Input::IsPressed(SDLK_LEFT))
 			{
 				MYGUY.dir=2;
 				moved=true;
 				smove=0;
 			}
-			if(keyPress[SDLK_UP])
+			if(Input::IsPressed(SDLK_UP))
 			{
 				MYGUY.dir=1;
 				moved=true;
 				smove=0;
 			}
-			if(keyPress[SDLK_DOWN])
+			if(Input::IsPressed(SDLK_DOWN))
 			{
 				MYGUY.dir=0;
 				moved=true;
@@ -422,7 +399,7 @@ void doGameInput()
 		
 		if(walkTime.tick(walk_delay))
 			holdMove=1;
-		if(holdMove&&keyDown[SDLK_RIGHT])
+		if(holdMove && Input::IsPressed(SDLK_RIGHT))
 		{
 			
 			MYGUY.dir=3;
@@ -443,7 +420,7 @@ void doGameInput()
 			holdMove=0;
 			walkTime.reset();
 		}
-		if(holdMove&&keyDown[SDLK_LEFT])
+		if(holdMove && Input::IsPressed(SDLK_LEFT))
 		{
 			MYGUY.dir=2;
 			if(world[MYGUY.p.map].canMove(player[me].left()))
@@ -462,7 +439,7 @@ void doGameInput()
 			holdMove=0;
 			walkTime.reset();
 		}
-		if(holdMove&&keyDown[SDLK_UP])
+		if(holdMove && Input::IsPressed(SDLK_UP))
 		{
 			MYGUY.dir=1;
 			if(world[MYGUY.p.map].canMove(player[me].up()))
@@ -482,7 +459,7 @@ void doGameInput()
 			holdMove=0;
 			walkTime.reset();
 		}
-		if(holdMove&&keyDown[SDLK_DOWN])
+		if(holdMove && Input::IsPressed(SDLK_DOWN))
 		{
 			MYGUY.dir=0;
 			if(world[MYGUY.p.map].canMove(player[me].down()))

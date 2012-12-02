@@ -2,6 +2,7 @@
 #define _CGLOBALS_H_
 
 #include "glfuncs.h"
+#include "Timing.h"
 
 //DEFINES
 #define MYGUY player[me]
@@ -13,6 +14,7 @@ void setupDialogs();
 
 
 //STRUCTS/CLASSES
+
 struct RPGserver
 {
 	char ip[32];
@@ -29,7 +31,7 @@ struct cBottleneck
 	long start;
 	long times[4];
 	int toggle;
-	timer check;
+	cTimer check;
 	cBottleneck()
 	{
 		toggle=0;
@@ -43,12 +45,12 @@ struct cBottleneck
 			if(num==0)
 			{
 				times[num]=0;
-				start=SDL_GetTicks();
+				start=GetTicks();
 			}
 			else
 			{
-				times[num]+=SDL_GetTicks()-start;
-				start=SDL_GetTicks();
+				times[num]+=GetTicks()-start;
+				start=GetTicks();
 			}
 		}
 		if(num==3)
@@ -242,7 +244,7 @@ public:
 		}
 		size=0;
 	}
-	void newLine(char *fmt,...)
+	void newLine(const char *fmt,...)
 	{
 		char		text[256];							// Holds Our String
 		va_list		ap;									// Pointer To List Of Arguments
@@ -380,7 +382,7 @@ glSurface pBody[256],
 		  pMonster[256],
 		  pItem[768];
 
-timer animTimer,
+cTimer animTimer,
 	  anyTimer,
 	  drawTimer,
 	  msgTimer,
@@ -422,7 +424,8 @@ char autoip[256];
 void buildMapLayers();
 
 //FUNCTIONS
-void debugMsg(char *fmt,...)
+// We need to break these off in to a "Common" library later
+void debugMsg(const char *fmt,...)
 {/*
 	char		text[256];							// Holds Our String
 	va_list		ap;									// Pointer To List Of Arguments
@@ -552,7 +555,7 @@ void updateFPS()
 	numFrames++;
 	if(numFrames==20)
 	{
-		float curTime=float(SDL_GetTicks());
+		float curTime=float(GetTicks());
 		FPS=20.0f/((curTime-startTime)/1000.0f);
 		startTime=curTime;
 		numFrames=0;
@@ -656,7 +659,7 @@ struct cChatBalloon
 		wid=pWidth(chat);
 		if(wid>500)wid=500;
 		lines=text.multiLine(chat,wid);
-		start=SDL_GetTicks();
+		start=GetTicks();
 		len=(75*strlen(chat))+1000;
 	}
 	void draw()
@@ -708,7 +711,7 @@ struct cChatBalloon
 			TEXTDRAWER.defaultColor();
 			i++;
 		}
-		if(SDL_GetTicks()-start>len || player[id].p.map!=MYGUY.p.map)
+		if(GetTicks()-start>len || player[id].p.map!=MYGUY.p.map)
 			id=-1;
 	}
 };
@@ -743,7 +746,8 @@ void uxWidget::draw(int px,int py)
 	{
 		if(state!=UX_LOCKED)
 		{
-			if(keyDown[SDLK_MLEFT] && mX>px+x && mX<px+x+width && mY>py+y-4 && mY<py+y+height)
+			if(Input::IsKeyDown(SDLK_MLEFT) && Input::MouseX() > px+x && Input::MouseX() < px+x+width \
+				&& Input::MouseY() > py+y-4 && Input::MouseY() < py+y+height)
 			{
 				skin.setColor(0.90f,0.90f,0.90f,1);
 				skin.blit(px+x,py+y,0,48,16,16,1,1);//left side
@@ -897,7 +901,7 @@ void uxWidget::draw(int px,int py)
 			if(state==UX_ACTIVE)
 			{
 				char temp[128];
-				sprintf(temp,"%s|",inputStr);
+				sprintf(temp,"%s|", Input::GetString());
 				TEXTDRAWER.PrintText(px+x+2,py+y+2,temp);
 			}
 			else
@@ -1019,7 +1023,7 @@ void loadEffectsMap()
 	fclose(f);
 }
 
-void sendCmndMsg(char *cmd)
+void sendCmndMsg(const char *cmd)
 {
 	char str[256];
 	strcpy(str,cmd);
@@ -1076,7 +1080,7 @@ void showServers()
 			stuff[s]='\0';
 			if(i>=sips.size())
 				sips.size(i+1);
-			sscanf(stuff,"%[^:]:%[^:]:%[^:]",&sips[i].ip,&sips[i].name,&sips[i].players);
+			sscanf(stuff,"%[^:]:%[^:]:%[^:]", sips[i].ip, sips[i].name, sips[i].players);
 			sprintf(tmp,"%s %s",sips[i].name,sips[i].players);
 			i++;
 			vDialog[0].w[2].addList(tmp);
@@ -1103,7 +1107,7 @@ void downloadUpdate()
 	//char header2[512];
 	//char servs[1024*512];
 	int len;
-	sscanf(PageBuffer,"%264[^*] %d",&header,&len);
+	sscanf(PageBuffer,"%264[^*] %d", header, &len);
 	sprintf(header,"%d",len);
 	term.newLine(header);
 	FILE *thezip = fopen("client.zip","wb");
@@ -1151,14 +1155,9 @@ void doRestart()
 
 void initializeSystem()
 {
-	//init sdl/opengl
-	const SDL_VideoInfo* info = NULL;
-
-	SDL_Init( 0 );
-	SDL_InitSubSystem( SDL_INIT_TIMER );
-	SDL_InitSubSystem( SDL_INIT_AUDIO );
-	SDL_InitSubSystem( SDL_INIT_VIDEO );
-
+	
+	// (Sonic) These signals being ignored is suck a ugly hack
+	// These REALLY need to be removed in the future.
 	signal(SIGINT, SIG_IGN);
 	signal(SIGILL, SIG_IGN);
 	signal(SIGFPE, SIG_IGN);
@@ -1166,16 +1165,10 @@ void initializeSystem()
 	signal(SIGTERM, SIG_IGN);
 	//signal(SIGBREAK, SIG_IGN);
 	signal(SIGABRT, SIG_IGN);
+		
+	Renderer::Init( gamewidth, gameheight );
+	Renderer::SetTitle("Mystera Legends");
 
-	//SDL_Init( SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO);
-	info = SDL_GetVideoInfo( );
-	gamebpp = info->vfmt->BitsPerPixel;
-	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-    SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
-    SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
-    SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, gamebpp );
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-	
 	if(!fullscreen)
 		Renderer::SetFullscreen(fullscreen);
 	else
@@ -1186,8 +1179,6 @@ void initializeSystem()
 		Renderer::SetFullscreen(fullscreen);
 	}
 	//misc setup
-	Renderer::Init( gamewidth, gameheight );
-	SDL_WM_SetCaption("Mystera Legends", 0);
 	#ifdef WIN32
 		ShowCursor(0);
 	#endif
@@ -1285,14 +1276,9 @@ void setupClient()
 	slot[1].lvl=0;
 	slot[2].lvl=0;
 	slot[3].lvl=0;
-	//reset all input keys
-	for(i=0;i<323;i++)
-	{
-		keyDown[i]=0;
-		keyPress[i]=0;
-		keyFlag[i]=0;
-		keyUp[i]=0;
-	}
+	
+	Input::Init();
+	
 	strcpy(last_tell,"");
 	strcpy(login_name,"");
 

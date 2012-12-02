@@ -1,3 +1,8 @@
+#ifndef _GAMEDEFS_H_
+#define _GAMEDEFS_H_
+
+#include "Timing.h"
+
 float client_version = 0.985f;
 /*TODO
 
@@ -225,7 +230,7 @@ struct cHPbar
 	int id;
 	unsigned char hp;
 	unsigned short map,index;
-	timer t;
+	cTimer t;
 	cHPbar()
 	{
 	}
@@ -331,7 +336,7 @@ struct cPlayer : public cBasePlayer
 	char guild[64];
 	char privProfile[4];
 	cItemRef item[84];
-	timer walk;
+	cTimer walk;
 	int delay,path;
 	cPlayer()
 	{
@@ -705,4 +710,4 @@ struct cTrade
 		isMerch = false;
 	}
 };
-
+#endif

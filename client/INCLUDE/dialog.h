@@ -1,3 +1,6 @@
+
+#include "Input.h"
+
 void setupDialogs()
 {
 	uxWidget wtemp;
@@ -500,32 +503,27 @@ void mapEvent(int item)
 	else if(item==3)
 	{
 		chatting=1;
-		strcpy(inputStr,"/map_title ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_title ");
 	}
 	else if(item==4)
 	{
 		chatting=1;
-		strcpy(inputStr,"/map_north ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_north ");
 	}
 	else if(item==5)
 	{
 		chatting=1;
-		strcpy(inputStr,"/map_south ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_south ");
 	}
 	else if(item==6)
 	{
 		chatting=1;
-		strcpy(inputStr,"/map_west ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_west ");
 	}
 	else if(item==7)
 	{
 		chatting=1;
-		strcpy(inputStr,"/map_east ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_east ");
 	}
 	else if(item==8)
 	{
@@ -553,22 +551,19 @@ void mapEvent(int item)
 	{
 		curTile = -95;//switch
 		chatting=1;
-		strcpy(inputStr,"/map_switch ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_switch ");
 	}
 	else if(item==14)
 	{
 		curTile = -98;//warp
 		chatting=1;
-		strcpy(inputStr,"/map_warp ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_warp ");
 	}
 	else if(item==15)
 	{
 		curTile = -96;//script
 		chatting=1;
-		strcpy(inputStr,"/map_script ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_script ");
 	}
 	else if(item==16)
 	{
@@ -577,78 +572,52 @@ void mapEvent(int item)
 	else if(item==17)
 	{
 		chatting=1;
-		strcpy(inputStr,"/map_npc1 ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_npc1 ");
 	}
 	else if(item==18)
 	{
 		chatting=1;
-		strcpy(inputStr,"/map_npc2 ");
-		curPos = strlen(inputStr);
+		Input::SetString("/map_npc2 ");
 	}
 	else if(item==19)
 	{
-		
 		chatting=1;
-		strcpy(inputStr,"/map_npc3 ");
-		curPos = strlen(inputStr);
-		
+		Input::SetString("/map_npc3 ");
 	}
 	else if(item==20)
 	{
-		
 		chatting=1;
-		strcpy(inputStr,"/map_npc4 ");
-		curPos = strlen(inputStr);
-		
+		Input::SetString("/map_npc4 ");
 	}
 	else if(item==21)
 	{
-		
 		chatting=1;
-		strcpy(inputStr,"/map_qty1 ");
-		curPos = strlen(inputStr);
-		
+		Input::SetString("/map_qty1 ");
 	}
 	else if(item==22)
 	{
-		
 		chatting=1;
-		strcpy(inputStr,"/map_qty2 ");
-		curPos = strlen(inputStr);
-		
+		Input::SetString("/map_qty2 ");
 	}
 	else if(item==23)
 	{
-		
 		chatting=1;
-		strcpy(inputStr,"/map_qty3 ");
-		curPos = strlen(inputStr);
-		
+		Input::SetString("/map_qty3 ");
 	}
 	else if(item==24)
 	{
-		
 		chatting=1;
-		strcpy(inputStr,"/map_qty4 ");
-		curPos = strlen(inputStr);
-		
+		Input::SetString("/map_qty4 ");
 	}
 	else if(item==25)
 	{
-		
 		chatting=1;
-		strcpy(inputStr,"/map_music ");
-		curPos = strlen(inputStr);
-		
+		Input::SetString("/map_music ");
 	}
 	else if(item==26)
 	{
-		
 		chatting=1;
-		strcpy(inputStr,"/map_light ");
-		curPos = strlen(inputStr);
-		
+		Input::SetString("/map_light ");
 	}
 }
 
@@ -662,7 +631,7 @@ void dialogEvent(int item)
 			//char show[128];
 			cstate=1;
 			char _ip[32];
-			sscanf(sips[vDialog[0].w[2].selected].ip,"%s",&_ip);
+			sscanf(sips[vDialog[0].w[2].selected].ip,"%s", _ip);
 			//strcpy(_ip,sips[vDialog[0].w[2].selected].ip);
 			//.term.newLine("connecting to %s %d",_ip,SERVER_PORT);
 			//sprintf(show,"--- Attempting to connect to %s...",_ip);
@@ -691,7 +660,7 @@ void dialogEvent(int item)
 			msg.id[7]='\0';
 			strcpy(msg.pass,vDialog[1].w[6].label);
 			nc.send((unsigned char *)&msg,sizeof(algn_msg),SEND_GUARANTEED);
-			resetStringInput();
+			Input::ResetString();
 		}
 		else if(item==1)
 		{
@@ -768,7 +737,7 @@ void dialogEvent(int item)
 		if(item==1)
 		{
 			dialog=1;
-			resetStringInput();
+			Input::ResetString();
 		}
 		else if(item==0)
 		{
@@ -778,7 +747,7 @@ void dialogEvent(int item)
 			strcpy(temp.pass,vDialog[3].w[6].label);
 			strcpy(temp.conf,vDialog[3].w[7].label);
 			nc.send((unsigned char *)&temp,sizeof(nwac_msg),SEND_GUARANTEED);
-			resetStringInput();
+			Input::ResetString();
 		}
 	}
 	else if(dialog==4)//new character
@@ -792,12 +761,12 @@ void dialogEvent(int item)
 			temp.hair=hairSel;
 			temp.clothes=clothesSel;
 			nc.send((unsigned char *)&temp,sizeof(nchr_msg),SEND_GUARANTEED);
-			resetStringInput();
+			Input::ResetString();
 		}
 		else if(item==4)
 		{
 			dialog=6;
-			resetStringInput();
+			Input::ResetString();
 		}
 		else if(item==5)
 		{
@@ -853,14 +822,13 @@ void dialogEvent(int item)
 				sprintf(dropn,"/drop %d %d",dropSlot+1,dropqty);
 				sendCmndMsg(dropn);
 			}
-			resetStringInput();
 			dialog=-1;
 		}
 		else if(item==1)
 		{
 			dialog=-1;
-			resetStringInput();
 		}
+		Input::ResetString();
 	}
 	else if(dialog==6)
 	{

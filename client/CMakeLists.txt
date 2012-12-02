@@ -1,6 +1,8 @@
 set(SRCS	SRC/client.cpp
 		SRC/net.cpp
 		SRC/Graphics/SDL_OGL.cpp
+		SRC/Input/SDL.cpp
+		SRC/Timing.cpp
 )
 #Don't have any of these yet
 

@@ -45,7 +45,7 @@ void ReadPage(const char* Host, const char* Page)
 		}
 	}
 	EndTime = SDL_GetTicks();
-	printf("%d milliseconds to read %d-byte page\n",EndTime-StartTime, Read);
+	printf("%lu milliseconds to read %d-byte page\n",EndTime-StartTime, Read);
 	SDLNet_TCP_Close(Socket);
 }
 

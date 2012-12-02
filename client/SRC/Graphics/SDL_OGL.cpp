@@ -10,6 +10,19 @@ namespace Renderer
 
 	void Init( int _width, int _height )
 	{
+		// The audio initialization should be moved to its own audio library file
+		// Haven't got that far yet.
+		SDL_Init( 0 );
+		SDL_InitSubSystem( SDL_INIT_TIMER );
+		SDL_InitSubSystem( SDL_INIT_AUDIO );
+		SDL_InitSubSystem( SDL_INIT_VIDEO );
+
+		SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
+		SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
+		SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
+		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 32 );
+		SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);// Enable Alpha Blending (disable alpha testing)
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
@@ -27,7 +40,10 @@ namespace Renderer
 		width = _width;
 		height = _height;
 	}
-
+	void Shutdown()
+	{
+		SDL_Quit();
+	}
 	void DrawTarget(int _x,int _y,int ttype)
 	{
 		glLoadIdentity();
@@ -91,6 +107,16 @@ namespace Renderer
 	{
 		screen = SDL_SetVideoMode(width, height, 32, SDL_SWSURFACE | SDL_OPENGL | (fs ? SDL_FULLSCREEN : 0));
 	}
+	void SetTitle(const char* Title)
+	{	
+		SDL_WM_SetCaption(Title, Title);
+	}
+	void Swap()
+	{
+		SDL_GL_SwapBuffers();
+	}
+
+	// Deprecated Functions below
 	void LoadIdentity()
 	{
 		glLoadIdentity();	 

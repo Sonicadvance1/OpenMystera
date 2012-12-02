@@ -121,9 +121,9 @@ void onReceive(unsigned char *data,unsigned long dataSize,unsigned char type)
 				strcpy(nameCheck,tradeWin[winFill+1].name);
 				if(strlen(tradeWin[winFill+1].name)>0 && nameCheck[0] == '^')
 				{
-					sprintf(tradeString,"%d %s",tradeWin[winFill].qty,tradeWin[winFill].name);
-					sprintf(costString,"%d %s",tradeWin[winFill+1].qty,tradeWin[winFill+1].name);
-					sprintf(vDialog[8].w[wCount].label,"%d %s^N for %d %s^N.",tradeWin[winFill].qty,tradeWin[winFill].name,tradeWin[winFill+1].qty,tradeWin[winFill+1].name);
+					sprintf(tradeString,"%ld %s",tradeWin[winFill].qty,tradeWin[winFill].name);
+					sprintf(costString,"%ld %s",tradeWin[winFill+1].qty,tradeWin[winFill+1].name);
+					sprintf(vDialog[8].w[wCount].label,"%ld %s^N for %ld %s^N.",tradeWin[winFill].qty,tradeWin[winFill].name,tradeWin[winFill+1].qty,tradeWin[winFill+1].name);
 					if(tradeWin[winFill].graphic != -1)
 					{
 						vDialog[8].w[iCount].setGraphic(tradeWin[winFill].graphic);
@@ -161,9 +161,9 @@ void onReceive(unsigned char *data,unsigned long dataSize,unsigned char type)
 			strcpy(vDialog[9].w[28].label,itos(msg->physical));
 			strcpy(vDialog[9].w[29].label,itos(msg->poison));
 			strcpy(vDialog[9].w[30].label,itos(msg->magic));
-			sprintf(vDialog[9].w[35].label,"%u",msg->exp);
+			sprintf(vDialog[9].w[35].label,"%lu",msg->exp);
 			if(msg->level != 255)
-				sprintf(vDialog[9].w[36].label,"%u",msg->tnl);
+				sprintf(vDialog[9].w[36].label,"%lu",msg->tnl);
 			else
 				strcpy(vDialog[9].w[36].label,"N/A");
 			if(msg->seren > 0)
@@ -680,7 +680,7 @@ void onReceive(unsigned char *data,unsigned long dataSize,unsigned char type)
 		unsigned long newlen = 100000;
 		uncompress ((unsigned char *)&buf, &newlen, data+sizeof(file_msg), (unsigned long)msg.size);
 		char temp[128];
-		sprintf(temp,"File %s downloaded: %d(%d) bytes.",msg.name,msg.size,newlen);
+		sprintf(temp,"File %s downloaded: %d(%ld) bytes.",msg.name,msg.size,newlen);
 		
 		term.newLine(temp);
 		

@@ -1,6 +1,7 @@
 #ifndef _DRAW_H_
 #define _DRAW_H
 #include "glfuncs.h"
+#include "Input.h"
 
 //Draw a frame
 
@@ -298,7 +299,7 @@ void doGameGraphics()
 		}
 		//targets
 		if(target>-1)
-			Renderer::DrawTarget(mX-16,mY-16,target);
+			Renderer::DrawTarget(Input::MouseX() - 16, Input::MouseY() - 16,target);
 		if(ptarget_id>-1)
 		{
 			int the_x=player[ptarget_id].p.x*32;
@@ -373,7 +374,7 @@ void doGameGraphics()
 		char tmp[64];
 		sprintf(tmp,"Online RPG Client! FPS:%.4f",FPS);
 		TEXTDRAWER.PrintText(10,10,tmp);
-		sprintf(tmp,"mX:%d mY:%d scroll:%d 1)%d 2)%d 3)%d 4)%d",mX,mY,chat_scroll,bottle.times[0],bottle.times[1],bottle.times[2],bottle.times[3]);
+		sprintf(tmp,"mX:%d mY:%d scroll:%d 1)%ld 2)%ld 3)%ld 4)%ld", Input::MouseX(), Input::MouseY(),chat_scroll,bottle.times[0],bottle.times[1],bottle.times[2],bottle.times[3]);
 		TEXTDRAWER.PrintText(10,30,tmp);
 	}
 	//stats
@@ -401,12 +402,12 @@ void doGameGraphics()
 		
 		Renderer::ColorFill(647,535,130,14,0.5f,0,0,1);
 		Renderer::ColorFill(647,535,((MYGUY.hp*130)/MYGUY.mhp),14,0,0.5f,0,1);
-		sprintf(temp,"^WHP %d/%d",MYGUY.hp,MYGUY.mhp);
+		sprintf(temp,"^WHP %ld/%ld",MYGUY.hp,MYGUY.mhp);
 		TEXTDRAWER.PrintText(647,535,temp);//hp
 
 		Renderer::ColorFill(647,550,130,14,0,0,0.3f,1);
 		Renderer::ColorFill(647,550,((MYGUY.mp*130)/MYGUY.mmp),14,0,0,0.65f,1);
-		sprintf(temp,"^WMP %d/%d",MYGUY.mp,MYGUY.mmp);
+		sprintf(temp,"^WMP %ld/%ld",MYGUY.mp,MYGUY.mmp);
 		TEXTDRAWER.PrintText(647,550,temp);//mp
 		TEXTDRAWER.setFont(0);
 		//map title
@@ -435,7 +436,7 @@ void doGameGraphics()
 					if(MYGUY.item[i].qty>0)
 					{
 						char desc[30];
-						sprintf(desc,"%s[%d]",MYGUY.item[i].name,MYGUY.item[i].qty);
+						sprintf(desc,"%s[%ld]",MYGUY.item[i].name,MYGUY.item[i].qty);
 						TEXTDRAWER.setColor(0.5,0.5,0.5,1);
 						TEXTDRAWER.PrintPlain(678,32*(i-inv_slot*14)+21, desc);
 						TEXTDRAWER.defaultColor();

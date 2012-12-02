@@ -186,7 +186,7 @@ struct glSurface
 		   
 			glGenTextures(1, &img);
 		   
-			printf("(loadTexture) width: %d height: %d\n", width, height);
+			printf("(loadTexture) width: %lu height: %lu\n", width, height);
 		   
 			/* create a new texture object
 			 * and bind it to texname (unsigned integer > 0)
@@ -203,7 +203,7 @@ struct glSurface
 		return img;
 	}
 
-	int Load(char *filename)
+	int Load(const char *filename)
 	{
 		if(img!=0)
 		{
@@ -287,6 +287,8 @@ namespace Renderer
 {
 	// This initializes the renderer
 	void Init( int width, int height );
+	// Shuts everything down
+	void Shutdown();
 	// This will draw a certain target
 	// TODO: Replace arg3 with a enum
 	void DrawTarget(int _x,int _y,int ttype);
@@ -298,7 +300,10 @@ namespace Renderer
 	void Clear();
 	// Change game to fullscreen or back
 	void SetFullscreen(bool fs);
-
+	// Sets the title to the window
+	void SetTitle(const char* title);
+	// Swap buffers
+	void Swap();
 
 	// Deprecated backend functions here
 	// These need to be removed very soon

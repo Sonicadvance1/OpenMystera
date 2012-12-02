@@ -6,7 +6,7 @@ int parse(char *str)
 	if(str[0]=='/')
 	{
 		char com[16],pm1[64],pm2[64],pm3[64],pm4[64];
-		sscanf(str,"/%s %s %s %s %s",&com,&pm1,&pm2,&pm3,&pm4);
+		sscanf(str,"/%s %s %s %s %s", com, pm1, pm2, pm3, pm4);
 		if(strcmp(com,"quit")==0)
 		{
 			MAKE_MSG(quit_msg,msg,QUIT_MSG);
@@ -54,7 +54,7 @@ int parse(char *str)
 		else if(strcmp(com,"t")==0)
 		{
 			char temp[256];
-			sscanf(str,"/t %s %[^\n]",&last_tell,&temp);
+			sscanf(str,"/t %s %[^\n]", last_tell, temp);
 			sendCmndMsg(str);
 			return 0;
 		}

@@ -15,7 +15,7 @@ void netClient::onReceive(unsigned char *data,int size)
 
 void doFrame()
 {
-	if(keyDown[SDLK_LCTRL] && keyPress[SDLK_q])
+	if(Input::IsPressed(SDLK_LCTRL) && Input::IsPressed(SDLK_q))
 	{
 			if(connected)
 			{
@@ -25,7 +25,7 @@ void doFrame()
 			else
 				done=1;
 	}
-	if ((keyDown[SDLK_LALT] || keyDown[SDLK_RALT]) && keyPress[SDLK_RETURN])
+	if ((Input::IsPressed(SDLK_LALT) || Input::IsPressed(SDLK_RALT)) && Input::IsPressed(SDLK_RETURN))
 	{
 		fullscreen = !fullscreen;
 		Renderer::SetFullscreen(fullscreen);
@@ -97,7 +97,7 @@ void doFrame()
 		//render images	 
 		doGameGraphics();
 	}
-	if(keyPress[SDLK_F5])//change skins
+	if(Input::IsPressed(SDLK_F5))//change skins
 	{
 		guiskin++;
 		char name[256];
@@ -116,7 +116,7 @@ void doFrame()
 			skin.Load(name);
 		}
 	}
-	if(keyPress[SDLK_ESCAPE])
+	if(Input::IsPressed(SDLK_ESCAPE))
 	{
 		target=-1;
 		mtarget_id=-1;
@@ -125,14 +125,13 @@ void doFrame()
 		nc.send((unsigned char *)&tr,sizeof(trgt_msg),SEND_GUARANTEED);
 		ptarget_id=-1;
 		chatting=0;
-		strcpy(inputStr,"");
-		curPos=0;
+		Input::ResetString();
 	}
-	if(connected && dialog==-1 && keyPress[SDLK_RETURN] && !keyDown[SDLK_LALT] && !keyDown[SDLK_RALT])
+	if(connected && dialog==-1 && Input::IsPressed(SDLK_RETURN) && !Input::IsPressed(SDLK_LALT) && !Input::IsPressed(SDLK_RALT))
 	{
 		if(chatting)
 		{
-			if(strlen(inputStr)==0)
+			if(strlen(Input::GetString())==0)
 				chatting=0;
 		}
 		else
@@ -140,13 +139,13 @@ void doFrame()
 	}
 	if(connected && me > -1 && MYGUY.access > 5)
 	{
-		if(keyPress[SDLK_F1])
+		if(Input::IsPressed(SDLK_F1))
 		{
 			target=-1;
 			if(mode==1) mode=0;
 			else mode=1;
 		}
-		if(keyPress[SDLK_F11]) //debug
+		if(Input::IsPressed(SDLK_F11)) //debug
 		{
 			
 			if(debug==1) debug=0;
@@ -157,21 +156,22 @@ void doFrame()
 		doGameInput();
 	else if((ptarget_id!=-1&&MYGUY.front()==player[ptarget_id].p)&& attackTimer.tick(50))
 		attack();
-	if(dialog==-1 && chatting && stringInput(240))
+	if(dialog==-1 && chatting && Input::StringInput(240))
 	{
-		if(parse(inputStr))
+		if(parse(Input::GetString()))
 		{
 			if(me > -1)
 			{
-				//sprintf(temp,"%s:%s",MYGUY.name,inputStr);
+				//sprintf(temp,"%s:%s",MYGUY.name, Input::GetString());
 				//term.newLine("Here is a very long sentence i am using to test with will you please split it up correctly at the spaces so it will wrap around, thank you very much sir...");
-				//term.newLine(inputStr);
-				//balloon.add(inputStr,me);
+				//term.newLine(Input::GetString());
+				//balloon.add(Input::GetString(),me);
 				MAKE_MSG(chat_msg,reply,CHAT_MSG);
-				reply.size=strlen(inputStr)+1;//+1 for null
+				reply.size=strlen(Input::GetString())+1;//+1 for null
 				char buf[256];
+				char *InputString = Input::GetString();
 				memcpy(&buf,(void *)&reply,sizeof(chat_msg));//store header
-				memcpy(buf+sizeof(chat_msg),(void *)&inputStr,reply.size);//store string
+				memcpy(buf+sizeof(chat_msg),(void *)&InputString,reply.size);//store string
 				nc.send((unsigned char *)&buf,sizeof(chat_msg)+reply.size,SEND_GUARANTEED);
 				chatting=0;
 			}
@@ -180,7 +180,7 @@ void doFrame()
 		{
 			chatting=0;
 		}
-		resetStringInput();
+		Input::ResetString();
 	}
 	updateFPS();
 	//render images
@@ -240,13 +240,13 @@ void doFrame()
 	{
 		if(me>-1 && strcmp(world[MYGUY.p.map].name,"_EMPTY_")==0)
 		{
-			loading.blitFast(150,150,float(mX)/640.0f,float(mY)/480.0f);
+			loading.blitFast(150,150,float(Input::MouseX())/640.0f,float(Input::MouseY())/480.0f);
 		}
 		if(chatting)
 		{
 			char temp[256];
 			int x=0,len;
-			sprintf(temp,"Send:%s_",inputStr);
+			sprintf(temp,"Send:%s_",Input::GetString());
 			len=pWidth(temp);
 			if(len>636)
 				x=636-len;
@@ -256,8 +256,8 @@ void doFrame()
 		}
 	}
 	//cursor
-	skin.blit(mX,mY,64,0,32,32,1,1);
-	SDL_GL_SwapBuffers();
+	skin.blit(Input::MouseX(),Input::MouseY(),64,0,32,32,1,1);
+	Renderer::Swap();
 }
 void callback()
 {
@@ -280,9 +280,9 @@ int main(int argc, char **argv)
 		if(strcmp(argv[j],"-full")==0)
 			fullscreen=1;
 		else if(strstr(argv[j],"-join")!=0)
-			sscanf(argv[j],"-join:%s",&autoip);
+			sscanf(argv[j],"-join:%s", autoip);
 		else if(strstr(argv[j],"-port")!=0)
-			sscanf(argv[j],"-port:%d",&SERVER_PORT);
+			sscanf(argv[j],"-port:%ld", &SERVER_PORT);
 	}
 	//strcpy(autoip,"127.0.0.1");//testing
 	
@@ -311,7 +311,7 @@ int main(int argc, char **argv)
 			 //sprintf(show,"--- Attempting to connect to %s",autoip);
 			 //term.newLine(show);
 			 //term.render(0,480,246);
-			 //SDL_GL_SwapBuffers();
+			 //Renderer::Swap();
 			if(!nc.connect(autoip,SERVER_PORT))
 				term.newLine("--- Error connecting. CTRL-Q to quit.");
 			else
@@ -342,7 +342,7 @@ int main(int argc, char **argv)
 	while(!done) 
 	{
 		
-		updateKeyboard();
+		Input::Update();
 		doFrame();
 		
 		if(time(0) == second + 1)
@@ -379,7 +379,7 @@ int main(int argc, char **argv)
 				servTimer.reset();
 				dialog=0;
 				
-				SDL_WM_SetCaption("Mystera Legends Beta", "ML");
+				Renderer::SetTitle("Mystera Legends Beta");
 				nc.shutdown();
 			}
 		}
@@ -390,8 +390,7 @@ int main(int argc, char **argv)
 	nc.shutdown();
 	Mix_CloseAudio();
 
-	SDL_Quit();
-	
+	Renderer::Shutdown();	
 	//if(restart)
 	//	doRestart();
 
