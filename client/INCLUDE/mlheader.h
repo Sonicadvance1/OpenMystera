@@ -31,7 +31,7 @@ void strlwr(char *t)
 
 #include <zlib.h>
 
-#include "list.h"
+#include "List.h"
 #include "signal.h"
 #include "DrawText.h"
 

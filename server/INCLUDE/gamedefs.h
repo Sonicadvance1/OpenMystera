@@ -2,7 +2,7 @@
 #define _MLGAMEDEFS_
 
 #include "utils.h"
-#include "list.h"
+#include "List.h"
 #include "script_system.h"
 #include "net.h"
 

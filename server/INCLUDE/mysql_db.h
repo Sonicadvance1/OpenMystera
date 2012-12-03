@@ -5,9 +5,7 @@
 
 #include <stdio.h>
 #include "sqlite3.h"
-
 #include "gamedefs.h"
-#include "list.h"
 
 class mysqlDB
 {

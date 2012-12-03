@@ -18,9 +18,10 @@ set(SRCS	SRC/mlserver.cpp
 
 include(FindOpenGL)
 include(FindPNG)
-include_directories(${OPENGL_INCLUDE_DIR}, ${PNG_INCLUDE_DIR}, "INCLUDE")
+include_directories(${OPENGL_INCLUDE_DIR}, ${PNG_INCLUDE_DIR}, "INCLUDE", "../common/Include")
 
 set(LIBS
+	common
 	SDL 
 	SDL_mixer
 	SDL_net	

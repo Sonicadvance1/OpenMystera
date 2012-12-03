@@ -1,7 +1,7 @@
 #ifndef _MLSCRIPTSYSTEM_
 #define _MLSCRIPTSYSTEM_
 
-#include "list.h"
+#include "List.h"
 
 class cScriptSystem
 {

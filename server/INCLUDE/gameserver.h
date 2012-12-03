@@ -3,7 +3,7 @@
 
 #include "mysql_db.h"
 #include "script_system.h"
-#include "list.h"
+#include "List.h"
 #include "utils.h"
 #include "net.h"
 #include <SDL/SDL_thread.h>
