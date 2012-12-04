@@ -44,7 +44,7 @@ void cScriptSystem::freeAll()
 
 void cScriptSystem::run(int id,int index)
 {
-    printf("***slot %d running script %d\n",id,index);
+//    printf("***slot %d running script %d\n",id,index);
     rPlayerID = index;
     curScript=id;
     runDll(id);
@@ -59,6 +59,9 @@ void cScriptSystem::free(int id)
 
 void cScriptSystem::loadAll()
 {
+    printf("Compiling of scripts not yet enabled\n");
+    return;
+
     char dirname[64];
     strcpy(dirname,"serverdata/scripts");
     DIRT *dirt;
@@ -123,6 +126,8 @@ int cScriptSystem::getScript()
 
 void cScriptSystem::compileAll()
 {
+    printf("Compiling of scripts not yet enabled\n");
+    return;
     freeAll();
     char dirname[64];
     strcpy(dirname,"serverdata/scripts");

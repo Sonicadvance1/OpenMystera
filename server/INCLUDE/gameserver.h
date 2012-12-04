@@ -6,6 +6,7 @@
 #include "List.h"
 #include "utils.h"
 #include "net.h"
+#include "Timing.h"
 #include <SDL/SDL_thread.h>
 
 #ifdef _WIN32
@@ -83,7 +84,7 @@ public:
     float version;
     float client_version;
 
-    timer ml_time,
+    cTimer ml_time,
           checkTimer,
           aiClock,
           checkClock,

@@ -60,7 +60,7 @@ int keyPress(void *unused)
     int *done=(int *)unused;
     while(!*done)
     {
-        c = std::cin.peek();
+        std::cin.get(c);
         if(c=='Q')//quit
             *done=1;
         else if(c=='P')
@@ -68,7 +68,7 @@ int keyPress(void *unused)
             newLine("Reposting.");
             //mlserver.postServer();  <-- more shity metaserver
         }
-        else if(c==13)
+        else if(c == 10 || c == 13) // Carriage returns
         {
             while(!*done)
             {
@@ -79,20 +79,20 @@ int keyPress(void *unused)
                     putc(' ',stdout);
                 putc('\r',stdout);
                 setrgb(0);
-                c = std::cin.peek();
-                if(c==13)
+                std::cin.get(c);
+                if(c == 13 || c == 10)
                 {
                     mlserver.consoleInput(input);
                     strcpy(input,"");
                     curpos=0;
                     break;
                 }
-                else if(c==10 && curpos>0)
+                /*else if(c==10 && curpos>0)
                 {
                     input[curpos]='\0';
                     curpos--;
                     input[curpos]='\0';
-                }
+                }*/
                 else
                 {
                     input[curpos]=c;

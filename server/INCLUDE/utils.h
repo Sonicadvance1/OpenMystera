@@ -3,48 +3,9 @@
 
 #include <time.h>
 #include <string.h>
-
-#include <SDL/SDL.h>
+#include <stdio.h>
 #include <SDL/SDL_net.h>
-#include <SDL/SDL_thread.h>
 #define UNUSED(x) (void)(x)
-//sdl timer
-struct timer
-{
-    long start;
-    bool started;
-    timer()
-    {
-        started=0;
-    }
-    void go()
-    {
-        started=1;
-        start=0;
-    }
-    bool tick(int len)
-    {
-        if(!started)
-        {
-            reset();
-            started=1;
-        }
-        if(int(SDL_GetTicks()-start)>=len)
-        {
-            reset();
-            return 1;
-        }
-        return 0;
-    }
-    void reset()
-    {
-        start=SDL_GetTicks();
-    }
-    long ticks()
-    {
-        return SDL_GetTicks()-start;
-    }
-};
 
 int transact(TCPsocket *sock,char *message,char *expect);
 

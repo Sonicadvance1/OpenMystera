@@ -5,7 +5,7 @@
 #include "List.h"
 #include "script_system.h"
 #include "net.h"
-
+#include "Timing.h"
 //RPG game definitions
 
 //Graphical
@@ -119,7 +119,7 @@ struct cItem
     signed short	bonus2;
     signed short	userdata;
     signed short	userdata2;
-    timer           cooldown;
+    cTimer           cooldown;
     unsigned short  total_cooldown;
     float           weight;
 
@@ -322,8 +322,8 @@ struct cPlayer
     PlayerID pid;
     int inventory[MAX_INV];
     int current_map;
-    timer mstl;
-    timer move_timer;
+    cTimer mstl;
+    cTimer move_timer;
     unsigned long packet_time;
     signed char npacket;
     char ignore[32];
@@ -552,7 +552,7 @@ struct cMap
 
 struct cEvent
 {
-    timer t;
+    cTimer t;
     long s;
     int script;
     int id;
