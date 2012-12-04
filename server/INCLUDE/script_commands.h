@@ -221,7 +221,7 @@ _MLF int getMP(int p0);
 _MLF int getMaxHP(int p0);
 _MLF int getMaxMP(int p0);
 _MLF int getDir(int p0);
-	
+
 
 
 _MLF int getImg(int p0);

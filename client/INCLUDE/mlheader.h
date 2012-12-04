@@ -8,12 +8,12 @@
 
 void strlwr(char *t)
 {
-	if(t==0)
-		return;
-	int i=0;
-	while(t[i]!='\0')
-		if(t[i]>=65 && t[i]<=91)
-			t[i]+=32;
+    if(t==0)
+        return;
+    int i=0;
+    while(t[i]!='\0')
+        if(t[i]>=65 && t[i]<=91)
+            t[i]+=32;
 }
 #endif
 

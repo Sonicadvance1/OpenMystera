@@ -24,13 +24,13 @@ If using PROTOTYPES, then PROTO_LIST returns the list, otherwise it
 #endif
 /* MD5 context. */
 typedef struct {
-  UINT4 state[4];                                   /* state (ABCD) */
-  UINT4 count[2];        /* number of bits, modulo 2^64 (lsb first) */
-  unsigned char buffer[64];                         /* input buffer */
+    UINT4 state[4];                                   /* state (ABCD) */
+    UINT4 count[2];        /* number of bits, modulo 2^64 (lsb first) */
+    unsigned char buffer[64];                         /* input buffer */
 } MD5_CTX;
 void MD5Init PROTO_LIST ((MD5_CTX *));
 void MD5Update PROTO_LIST
-  ((MD5_CTX *, unsigned char *, unsigned int));
+((MD5_CTX *, unsigned char *, unsigned int));
 void MD5Final PROTO_LIST ((unsigned char [16], MD5_CTX *));
 
 /* Constants for MD5Transform routine.
@@ -102,33 +102,33 @@ void MD5_memset (POINTER output,int value,unsigned int len);
 
 class cMD5
 {
-	char encryptString[128];
-	MD5_CTX md5;
-	unsigned char charize(unsigned char k)
-	{
-		if(k>9)return k+87;
-		return k+48;
-	}
-	void hexize(char *str)
-	{
-		unsigned char t;
-		for(int i=30,k=15;k>=0;i-=2,k--)
-		{
-			t=str[k];
-			str[i]	=charize(t/16);
-			str[i+1]=charize(t%16);
-		}
-	}
+    char encryptString[128];
+    MD5_CTX md5;
+    unsigned char charize(unsigned char k)
+    {
+        if(k>9)return k+87;
+        return k+48;
+    }
+    void hexize(char *str)
+    {
+        unsigned char t;
+        for(int i=30,k=15; k>=0; i-=2,k--)
+        {
+            t=str[k];
+            str[i]	=charize(t/16);
+            str[i+1]=charize(t%16);
+        }
+    }
 public:
-	char *crypt(char *datastr)
-	{
-		char pass[128];
-		strcpy(pass,datastr);
-		MD5Init(&md5);
-		MD5Update(&md5,(unsigned char *)pass,strlen(pass));
-		MD5Final((unsigned char *)encryptString,&md5);
-		hexize(encryptString);
-		return encryptString;
-	}
+    char *crypt(char *datastr)
+    {
+        char pass[128];
+        strcpy(pass,datastr);
+        MD5Init(&md5);
+        MD5Update(&md5,(unsigned char *)pass,strlen(pass));
+        MD5Final((unsigned char *)encryptString,&md5);
+        hexize(encryptString);
+        return encryptString;
+    }
 };
 extern cMD5 MD5;

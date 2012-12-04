@@ -15,16 +15,16 @@ struct timer
     bool started;
     timer()
     {
-		started=0;
+        started=0;
     }
-	void go()
-	{
-		started=1;
-		start=0;
-	}
+    void go()
+    {
+        started=1;
+        start=0;
+    }
     bool tick(int len)
     {
-		if(!started)
+        if(!started)
         {
             reset();
             started=1;
@@ -38,12 +38,12 @@ struct timer
     }
     void reset()
     {
-	    start=SDL_GetTicks();
+        start=SDL_GetTicks();
     }
-	long ticks()
-	{
-		return SDL_GetTicks()-start;
-	}
+    long ticks()
+    {
+        return SDL_GetTicks()-start;
+    }
 };
 
 int transact(TCPsocket *sock,char *message,char *expect);
@@ -65,7 +65,7 @@ int transact(TCPsocket *sock,char *message,char *expect);
 			return;
 	}
 	char message[1024];
-	
+
 	sprintf(message,"EHLO %s\r\n",host);
 	if(!transact(&sock,message,"220"))return;
 
@@ -109,127 +109,127 @@ bool fileExists(const char *filename);
 //flat file database
 struct gameDB
 {
-	FILE *f;
-	int size,nextRec;
-	char file[64];
-	gameDB()
-	{
-		size=0;
-	}
-	int connect(char *filename,int s)
-	{
-		strcpy(file,filename);
-		size=s;
-		if((f=fopen(filename,"r+b"))==NULL)
-		{
-			//make new db
-			f=fopen(filename,"wb");
-			unsigned long sz = 0;
-			fwrite(&sz,4,1,f);
-			int nr = 0;
-			fwrite(&nr,4,1,f);
-			fclose(f);
-			f=fopen(filename,"r+b");
-			return 2;
-		}
-		return 1;
-	}
-	void seek(long to)
-	{
-		fseek(f,to,SEEK_SET);
-	}
-	void close()
-	{
-		fclose(f);
-	}
-	int add(void *data)
-	{
-		int cursor=8+nextRecord()*size;
-		seek(cursor);
-		fwrite(data,size,1,f);
-		cursor+=size;
-		writeNumRecords(numRecords()+1);
-		seek(cursor);
-		while(1)//search for next available record
-		{
-			if(fgetc(f)==EOF)
-			{
-				writeNextAvailableRecord((cursor-8)/size);
-				return 1;
-			}
-			seek(cursor);
-			if(fgetc(f)=='!' && fgetc(f)=='M' && fgetc(f)=='T' && fgetc(f)=='!')
-			{
-				writeNextAvailableRecord((cursor-8)/size);
-				return 1;
-			}
-			seek(cursor);
-			fseek(f,size,SEEK_CUR);
-			cursor+=size;
-		}
-		return 1;
-	}
-	int get(int id,void *data)
-	{
-		seek(8+id*size);
-		if(fgetc(f)==EOF)
-			return -1;
-		seek(8+id*size);
-		if(fgetc(f)=='!' && fgetc(f)=='M' && fgetc(f)=='T' && fgetc(f)=='!')
-			return 0;
-		seek(8+id*size);
-		fread (data,size,1,f);
-		return 1;
-	}
-	int update(int id,void *data)
-	{
-		seek(8+id*size);
-		if(fgetc(f)=='!' && fgetc(f)=='M' && fgetc(f)=='T' && fgetc(f)=='!')
-			return 0;
-		seek(8+id*size);
-		fwrite(data,size,1,f);
-		return 1;
-	}
-	int remove(int id)
-	{
-		seek(8+id*size);
-		if(fgetc(f)==EOF)
-			return 0;
-		seek(8+id*size);
-		fputs("!MT!",f);
-		writeNumRecords(numRecords()-1);
-		if(nextRecord()>id)
-			writeNextAvailableRecord(id);
-		return 1;
-	}
-	void writeNextAvailableRecord(int id)
-	{	
-		seek(4);
-		int sz = id;
-		fwrite(&sz,4,1,f);
-	}
-	unsigned long numRecords()
-	{
-		if(size==0)
-			return 0;
-		fseek(f,0,SEEK_SET);
-		unsigned long sz;
-		fread (&sz,4,1,f);
-		return sz;
-	}
-	void writeNumRecords(unsigned long num)
-	{
-		seek(0);
-		unsigned long sz = num;
-		fwrite(&sz,4,1,f);
-	}
-	int nextRecord()
-	{
-		seek(4);
-		int sz;
-		fread (&sz,4,1,f);
-		return sz;
-	}
+    FILE *f;
+    int size,nextRec;
+    char file[64];
+    gameDB()
+    {
+        size=0;
+    }
+    int connect(char *filename,int s)
+    {
+        strcpy(file,filename);
+        size=s;
+        if((f=fopen(filename,"r+b"))==NULL)
+        {
+            //make new db
+            f=fopen(filename,"wb");
+            unsigned long sz = 0;
+            fwrite(&sz,4,1,f);
+            int nr = 0;
+            fwrite(&nr,4,1,f);
+            fclose(f);
+            f=fopen(filename,"r+b");
+            return 2;
+        }
+        return 1;
+    }
+    void seek(long to)
+    {
+        fseek(f,to,SEEK_SET);
+    }
+    void close()
+    {
+        fclose(f);
+    }
+    int add(void *data)
+    {
+        int cursor=8+nextRecord()*size;
+        seek(cursor);
+        fwrite(data,size,1,f);
+        cursor+=size;
+        writeNumRecords(numRecords()+1);
+        seek(cursor);
+        while(1)//search for next available record
+        {
+            if(fgetc(f)==EOF)
+            {
+                writeNextAvailableRecord((cursor-8)/size);
+                return 1;
+            }
+            seek(cursor);
+            if(fgetc(f)=='!' && fgetc(f)=='M' && fgetc(f)=='T' && fgetc(f)=='!')
+            {
+                writeNextAvailableRecord((cursor-8)/size);
+                return 1;
+            }
+            seek(cursor);
+            fseek(f,size,SEEK_CUR);
+            cursor+=size;
+        }
+        return 1;
+    }
+    int get(int id,void *data)
+    {
+        seek(8+id*size);
+        if(fgetc(f)==EOF)
+            return -1;
+        seek(8+id*size);
+        if(fgetc(f)=='!' && fgetc(f)=='M' && fgetc(f)=='T' && fgetc(f)=='!')
+            return 0;
+        seek(8+id*size);
+        fread (data,size,1,f);
+        return 1;
+    }
+    int update(int id,void *data)
+    {
+        seek(8+id*size);
+        if(fgetc(f)=='!' && fgetc(f)=='M' && fgetc(f)=='T' && fgetc(f)=='!')
+            return 0;
+        seek(8+id*size);
+        fwrite(data,size,1,f);
+        return 1;
+    }
+    int remove(int id)
+    {
+        seek(8+id*size);
+        if(fgetc(f)==EOF)
+            return 0;
+        seek(8+id*size);
+        fputs("!MT!",f);
+        writeNumRecords(numRecords()-1);
+        if(nextRecord()>id)
+            writeNextAvailableRecord(id);
+        return 1;
+    }
+    void writeNextAvailableRecord(int id)
+    {
+        seek(4);
+        int sz = id;
+        fwrite(&sz,4,1,f);
+    }
+    unsigned long numRecords()
+    {
+        if(size==0)
+            return 0;
+        fseek(f,0,SEEK_SET);
+        unsigned long sz;
+        fread (&sz,4,1,f);
+        return sz;
+    }
+    void writeNumRecords(unsigned long num)
+    {
+        seek(0);
+        unsigned long sz = num;
+        fwrite(&sz,4,1,f);
+    }
+    int nextRecord()
+    {
+        seek(4);
+        int sz;
+        fread (&sz,4,1,f);
+        return sz;
+    }
 };
 
 #endif

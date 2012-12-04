@@ -24,7 +24,7 @@ server.host(12000) //udp now claiming 12001
 #define SEND_GUARANTEED 1
 #define SEND_RAW_GUARANTEED 2 //not implemented
 
-#define ALL_CLIENTS -1 
+#define ALL_CLIENTS -1
 
 #define PlayerID signed long
 #include <SDL/SDL_net.h>
@@ -107,67 +107,67 @@ public:
 
 class netServer
 {
-	char myip[16];//text holding local ip address
-	char clip[16];//holds a client address temporarily
-	unsigned char buffer[MAX_PACKET];//buffer for receiving packets
-	unsigned char send_buffer[MAX_PACKET];//buffer for sending packets
-	IPaddress ip;
-	TCPsocket server;
-	TCPsocket client[MAX_CLIENT];
-	IPaddress clientip[MAX_CLIENT];
-	unsigned char num[MAX_CLIENT];
-	unsigned short key[MAX_CLIENT];
-	unsigned long count[MAX_CLIENT];
-	UDPsocket udpsock;
-	UDPpacket *packet;
-	UDPpacket *sendpacket;
-	SDLNet_SocketSet set;
+    char myip[16];//text holding local ip address
+    char clip[16];//holds a client address temporarily
+    unsigned char buffer[MAX_PACKET];//buffer for receiving packets
+    unsigned char send_buffer[MAX_PACKET];//buffer for sending packets
+    IPaddress ip;
+    TCPsocket server;
+    TCPsocket client[MAX_CLIENT];
+    IPaddress clientip[MAX_CLIENT];
+    unsigned char num[MAX_CLIENT];
+    unsigned short key[MAX_CLIENT];
+    unsigned long count[MAX_CLIENT];
+    UDPsocket udpsock;
+    UDPpacket *packet;
+    UDPpacket *sendpacket;
+    SDLNet_SocketSet set;
 
 public:
-	int numClients,port;
+    int numClients,port;
 
-	netServer();
-	~netServer();
-	int host(int thePort);
-	void shutdown();
-	int update();
-	void disconnect(signed long cid);
-	int send(unsigned char *data,int size,int guaranteed,signed long cid);
-	char *getip();
-	char *getip(signed long cid);
+    netServer();
+    ~netServer();
+    int host(int thePort);
+    void shutdown();
+    int update();
+    void disconnect(signed long cid);
+    int send(unsigned char *data,int size,int guaranteed,signed long cid);
+    char *getip();
+    char *getip(signed long cid);
 
-	virtual void onConnect(signed long cid,char *ip_address);
-	virtual void onDisconnect(signed long cid);
-	virtual void onReceive(unsigned char *data,int size,signed long cid);
+    virtual void onConnect(signed long cid,char *ip_address);
+    virtual void onDisconnect(signed long cid);
+    virtual void onReceive(unsigned char *data,int size,signed long cid);
 };
 
 class netClient
 {
-	unsigned char buffer[MAX_PACKET];//buffer for receiving packets
-	unsigned char send_buffer[MAX_PACKET];//buffer for sending packets
-	unsigned long marker,pheader;
-	unsigned char seed,num;
-	unsigned short key;
-	unsigned long count;
-	IPaddress ip;//server's ip/port data
-	TCPsocket sock;
-	UDPsocket udpsock;
-	UDPpacket *sendpacket;
-	UDPpacket *packet;
-	SDLNet_SocketSet set;
+    unsigned char buffer[MAX_PACKET];//buffer for receiving packets
+    unsigned char send_buffer[MAX_PACKET];//buffer for sending packets
+    unsigned long marker,pheader;
+    unsigned char seed,num;
+    unsigned short key;
+    unsigned long count;
+    IPaddress ip;//server's ip/port data
+    TCPsocket sock;
+    UDPsocket udpsock;
+    UDPpacket *sendpacket;
+    UDPpacket *packet;
+    SDLNet_SocketSet set;
 
 public:
-	int port;
+    int port;
 
-	netClient();
-	~netClient();
+    netClient();
+    ~netClient();
 
-	int connect(char *serverip,int thePort);
-	int update();
-	int send(unsigned char *data,int size,int guaranteed);
-	void shutdown();
+    int connect(char *serverip,int thePort);
+    int update();
+    int send(unsigned char *data,int size,int guaranteed);
+    void shutdown();
 
-	virtual void onReceive(unsigned char *data,int size);
+    virtual void onReceive(unsigned char *data,int size);
 };
 
 #endif
