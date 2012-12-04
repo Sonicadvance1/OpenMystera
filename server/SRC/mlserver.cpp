@@ -226,17 +226,11 @@ int main(int argc,char *argv[])
 
     fprintf(mlserver.chatLog,"*Running*\n");
     mlserver.mlscript.run(1000,-1);//run startup script
-
-    SDL_Thread *sthread = SDL_CreateThread(serverLoop,(void *)&mlserver.done);
-
-    //serverLoop((void *)&mlserver.done);
     //SDL_Thread *cthread = SDL_CreateThread(checkAlive,(void *)&mlserver.done);
 
-    while(!mlserver.done)
-        SDL_Delay(100);
+    serverLoop((void *)&mlserver.done);
     //Shutdown
     //SDL_KillThread(cthread);
-    SDL_KillThread(sthread);
     SDL_KillThread(thread);
     mlserver.shutdownServer();
     DEBUGLOG("exit program - return 0");
