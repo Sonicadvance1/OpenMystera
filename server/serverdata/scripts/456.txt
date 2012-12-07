@@ -12,7 +12,7 @@ struct SECURE_AREA
 	int y1;
 	int x2;
 	int y2;
-	char* pPlayerName;
+	const char* pPlayerName;
 };
 
 SECURE_AREA gpSecureArea[] = {
@@ -23,7 +23,7 @@ SECURE_AREA gpSecureArea[] = {
 
 const int NUM_SECURE_AREAS = sizeof(gpSecureArea) / sizeof(gpSecureArea[0]);
 
-void main()
+int main()
 {
 	// Search through secure area list:
 	// If player is not within an area, do nothing
@@ -40,7 +40,7 @@ void main()
 	pPlayer = playerStruct(PlayerID);
 
 	if (pPlayer->access > 1)	// Ignore admins
-		return;
+		return 0;
 
 	Kill = false;
 	for (i = 0; i < NUM_SECURE_AREAS; i++)
@@ -51,7 +51,7 @@ void main()
 			pPlayer->y >= pArea->y1 && pPlayer->y <= pArea->y2)
 			{
 			if (strcmp(pPlayer->name, pArea->pPlayerName) == 0)
-				return;	// Player is allowed in this area, do nothing
+				return 0;	// Player is allowed in this area, do nothing
 			else
 				Kill = true;	// Player is not allowed in this area so far, set kill flag
 			}

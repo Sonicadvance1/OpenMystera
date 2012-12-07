@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int target=getMTarget(id);

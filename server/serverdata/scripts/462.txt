@@ -2,19 +2,19 @@
 
 #define STEVE_RULES_ORIGIN 819, 6, 3
 
-void main()
+int main()
 {
 	int id=getPlayer();	
 	int map,x,y;
 		
 	if(getPlayerType(id)==1) //Make sure its not a NPC
-		return;
+		return 0;
 
 	getOrigin(id,map,x,y);
 	if(map==819)
 	{
 		sendChat("^YYou are already a citizen of STEVE RULES!",id);
-		return;
+		return 0;
 	}
 
 	setOrigin(id,STEVE_RULES_ORIGIN);

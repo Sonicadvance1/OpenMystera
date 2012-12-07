@@ -37,7 +37,7 @@ long facePlayer(long map, unsigned char x, unsigned char y, unsigned char dir)
 	return -1;
 }
 
-void main()
+int main()
 {
 	long id = getPlayer();
 	cPlayer *player=playerStruct(id);

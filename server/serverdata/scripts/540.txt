@@ -1,6 +1,6 @@
 //Warp to lower levels/upper levels
 #include"mapping.h"
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer *player=playerStruct(id);

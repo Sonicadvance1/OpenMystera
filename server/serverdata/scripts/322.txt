@@ -13,7 +13,7 @@ const int CHAOS_DAMAGE = 0;
 //const int MAP_WIDTH = 20;
 //const int MAP_HEIGHT = 15;
 
-void main()
+int main()
 {
 	int PlayerID;
 	int CurrMapID;

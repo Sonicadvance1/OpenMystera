@@ -1,6 +1,6 @@
 //Farming Script
 
-checkmap(int map)
+void checkmap(int map)
 {
 	int x,y;
 	cMap *tile = mapStruct(map);
@@ -55,7 +55,7 @@ checkmap(int map)
 	}
 }
 
-void main()
+int main()
 {
 	checkmap(1246);
 	checkmap(928);
@@ -68,7 +68,7 @@ void main()
 
 /*
 #include <time.h>
-void main()
+int main()
 {
 	int i,runflag=0;
 	char name[16];

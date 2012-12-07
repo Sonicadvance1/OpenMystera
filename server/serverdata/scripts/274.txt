@@ -1,16 +1,16 @@
 //barber say script
-void main()
+int main()
 {
 	int id=getPlayer();
 	int dir=getDir(id);
 	
 	if(strcmp(getName(id),"Barber")==0)//barber shouldnt execute script
-		return;
+		return 0;
 
 	if(getY(id)<5)//if in top area of shop
 	{
 		sendMapChatf(754,"Barber:A new hair style will cost 1000 gold. Please tell me what number you would like.");
-		return;
+		return 0;
 	}
 
 	if(dir==0) //if facing down

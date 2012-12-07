@@ -1,17 +1,17 @@
 //Dr Newbody say script
-void main()
+int main()
 {
 	int id=getPlayer();
 	int dir=getDir(id);
 	
 	if(strcmp(getName(id),"Dr Newbody")==0)//Dr Newbody shouldn't execute script
-		return;
+		return 0;
 
 	if(getX(id)!=9)//if entering dressing room
 	{
 		if(dir==0) //if facing down
 			sendMapChatf(757,"Dr Newbody:A new body will cost 5000 gold. Please tell me what body number you would like.");
-		return;
+		return 0;
 	}
 
 	if(dir==0) //if facing down

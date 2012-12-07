@@ -1,6 +1,6 @@
 //Personal area spark spell
 
-void main()
+int main()
 {
 	int id  = getPlayer();
 	cPlayer *player = playerStruct(id);

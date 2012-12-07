@@ -1,5 +1,5 @@
 //Arrows 
-void main() 
+int main() 
 { 
 	int id =getPlayer(); 
 	cPlayer *player = playerStruct(id);
@@ -52,7 +52,7 @@ void main()
 			{ 
 				makeEffect(map,x,y,0); 
 				setHP(target,getHP(target)-abs(player->dex*dmg+player->str-getRand(dex*2+1))); 
-				return;
+				return 0;
 			}
 			else 
 			{

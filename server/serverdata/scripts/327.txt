@@ -1,6 +1,6 @@
 // Meat Cooking
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int meat=itemSlot(id,3);

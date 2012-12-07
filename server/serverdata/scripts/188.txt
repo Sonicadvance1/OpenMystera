@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int target=getMTarget(id);
@@ -16,7 +16,7 @@ void main()
 		if(amount >getMP(id))
 		{
 			sendChat("^wYou lack the focus.",id);
-			return;
+			return 0;
 		}
 		setMP(id,getMP(id)-amount);
 		
@@ -47,7 +47,7 @@ void main()
 				{
 					setQty(target,i,Quantity-amount);
 					giveItem(id,1,amount);
-					return;
+					return 0;
 				}
 				else
 				{

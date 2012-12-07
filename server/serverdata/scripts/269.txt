@@ -1,6 +1,6 @@
 // targeted spell
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int cost=0;

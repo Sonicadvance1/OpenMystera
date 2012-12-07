@@ -75,7 +75,7 @@ void reset()
 		setLight(getRand(5),getRand(5));
 }
 
-void main()
+int main()
 {
 	int id=getPlayer();
 

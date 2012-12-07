@@ -1,6 +1,6 @@
 // Rock Explosion Trick
 
-void main()
+int main()
 {
 	makeEffect(1106,10,9,10);
 	setTileType(1106,10,9,1);

@@ -1,6 +1,6 @@
 // Rarshanka's Orb
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int cost=7;

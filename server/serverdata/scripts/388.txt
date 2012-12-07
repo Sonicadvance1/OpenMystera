@@ -1,5 +1,5 @@
 //get IP of targetted player
-void main()
+int main()
 {
 	int vc=getMTarget(getPlayer());
 	if(vc>-1)

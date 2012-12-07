@@ -40,7 +40,7 @@ int getNewMap()
 	return mapid;
 }
 
-void main()
+int main()
 {
 	int i;
 	srand(time(0));

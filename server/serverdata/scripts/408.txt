@@ -1,6 +1,6 @@
 // Chance
 
-void main()
+int main()
 {
 	int PlayerID=getPlayer();
 	int MapID=getMap(PlayerID);

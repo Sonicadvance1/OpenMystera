@@ -1,6 +1,6 @@
 // Recall to Wellington
 
-void main()
+int main()
 {
 	int map = getMap(getPlayer()); 
 	if(map != 22 && map != 48 && map != 55 && map != 136)//quest reward maps

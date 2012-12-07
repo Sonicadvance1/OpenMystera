@@ -15,7 +15,7 @@ int SPELL_COST = 10;
 int FLAME_LENGTH = 4;
 int SPELL_EFFECT = 10;
 
-void main()
+int main()
 {
 	int PlayerID;
 	int PlayerMP;
@@ -34,7 +34,7 @@ void main()
 	if (PlayerMP < SPELL_COST)
 		{
 		sendChat("^RNot enough mana.", PlayerID);
-		return;
+		return 0;
 		}
 
 	DirID = getDir(PlayerID);

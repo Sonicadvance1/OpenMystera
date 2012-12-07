@@ -54,7 +54,7 @@ int takeGold(int amount,int TargetID)
 	return 0;
 }
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int player=getChatPlayer();
@@ -70,19 +70,19 @@ void main()
 		if(newsprite <0 || newsprite > 127)
 		{
 			sendMapChatf(755,"Costume Guy:I don't have that costume.");
-			return;
+			return 0;
 		}
 
 		if (newsprite == 0)
 		{
 			sendMapChatf(755,"Costume Guy:Ok, I will remove your costume. Thank you.");	
 			setImg(player,newsprite);
-			return;
+			return 0;
 		}
 
 		if(takeGold(2000,player))
 		{	
-			sendMapChatf(755,"Costume Guy:Ok, I will change your costume from %d to %s. Thank you.",getImg(player),chat);	
+			sendMapChatf(755,"Costume Guy:Ok, I will change your costume from %d to %s. Thank you.",getImg(player),chat.c_str());	
 			setImg(player,newsprite);
 		}
 		else

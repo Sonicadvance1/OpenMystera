@@ -9,7 +9,7 @@
 	Description: Slides player one square ahead in the direction they are facing
 */
 
-void main()
+int main()
 {
 	int PlayerID;
 	int PlayerMapID;
@@ -42,11 +42,11 @@ void main()
 
 	// Make sure coordinates are in bounds
 	if (!inBounds(PlayerX, PlayerY))
-		return;
+		return 0;
 
 	// Make sure coordinates are not on a wall
 	if (getTileType(PlayerMapID, PlayerX, PlayerY) == TILE_TYPE_WALL)
-		return;
+		return 0;
 
 	// Set player's position
 	setPos(PlayerID, PlayerMapID, PlayerX, PlayerY);

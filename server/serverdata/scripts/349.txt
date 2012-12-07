@@ -1,7 +1,7 @@
 // Concentration Game Reset Switch
 
 
-void main()
+int main()
 	{
 	int PlayerID;
 	int PlayerMapID;

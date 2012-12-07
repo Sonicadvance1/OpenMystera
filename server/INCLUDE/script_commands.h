@@ -57,29 +57,29 @@ _MLF int qtyAt(int p0,int p1);
 _MLF void setQty(int p0,int p1,int p2);
 
 //globals
-_MLF void setGlobalInt(char *p0,int p1);
+_MLF void setGlobalInt(const char *p0,int p1);
 
-_MLF void setGlobalStr(char * p0,char * p1);
+_MLF void setGlobalStr(const char * p0,char * p1);
 
-_MLF int isGlobal(char * p0);
+_MLF int isGlobal(const char * p0);
 
-_MLF int globalInt(char * p0);
+_MLF int globalInt(const char * p0);
 
-_MLF char *globalStr(char * p0);
+_MLF char *globalStr(const char * p0);
 
-_MLF void freeGlobal(char *p0);
+_MLF void freeGlobal(const char *p0);
 
-_MLF void DBupdateGlobal(char *name,char *value);
+_MLF void DBupdateGlobal(const char *name, const char *value);
 
-_MLF void DBinsertGlobal(char *name,char *value);
+_MLF void DBinsertGlobal(const char *name, const char *value);
 
-_MLF void DBdeleteGlobal(char *name);
+_MLF void DBdeleteGlobal(const char *name);
 
-_MLF char *DBselectGlobal(char *name);
+_MLF char *DBselectGlobal(const char *name);
 
-_MLF bool DBisGlobal(char *name);
+_MLF bool DBisGlobal(const char *name);
 
-_MLF int DBsendQuery(char *query);
+_MLF int DBsendQuery(const char *query);
 
 //server data accessors
 _MLF int playerLen();
@@ -146,18 +146,18 @@ _MLF void sendHPbar(int map,unsigned short id);
 _MLF void sendAddMapItem(int graphic,int map,int x,int y);
 _MLF void sendRemoveMapItem(int map,int x,int y);
 _MLF void sendInventoryQty(int id,signed short index,signed long quantity);
-_MLF void sendInventoryAdd(int id,unsigned short graphic,char *name,unsigned char index,unsigned long quantity);
+_MLF void sendInventoryAdd(int id,unsigned short graphic, const char *name,unsigned char index,unsigned long quantity);
 
 _MLF void sendPlayerList(int index);
 _MLF void sendItemList(int index);
 
-_MLF void sendChatf(int p0,char *p1,...);
+_MLF void sendChatf(int p0, const char *p1,...);
 
-_MLF void sendChat(char *p0,int p1);
+_MLF void sendChat(const char *p0,int p1);
 
-_MLF void sendMapChat(char *p0,int p1);
+_MLF void sendMapChat(const char *p0,int p1);
 
-_MLF void sendMapChatf(int p0,char *p1,...);
+_MLF void sendMapChatf(int p0, const char *p1,...);
 
 _MLF int levelUpExp(int lvl);
 
@@ -245,9 +245,9 @@ _MLF int magicDamage(int p0);
 _MLF int getRand(int p0);
 
 
-_MLF char *strCat(char *p0,char *p1);
+_MLF char *strCat(const char *p0, const char *p1);
 
-_MLF int strCon(char * p0,char * p1);
+_MLF int strCon(const char * p0, const char * p1);
 
 _MLF void setOrigin(int p0,int p1,int p2,int p3);
 

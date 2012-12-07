@@ -1,23 +1,23 @@
 //Poison start script
 #include <stdio.h>
-void main()
+int main()
 {
 	int id=getPlayer();
 	int cost=30;
 	int victim=getMTarget(id);
 	if(victim==-1)
-		return;
+		return 0;
 	if(getMP(id)<cost)
 	{
 		sendChat("Not enough mana.",id);
-		return;
+		return 0;
 	}
 	
 	char psn[256];
 	sprintf(psn,"poison%d",id);
 
 	if(isGlobal(psn))
-		return;
+		return 0;
 
 	setMP(id,getMP(id)-cost);
 	makeEffect(getMap(victim),getX(victim),getY(victim),11);
@@ -25,7 +25,7 @@ void main()
 	setHP(victim,0);
 	
 	if(sethp<=0)//gotta be alive
-		return;
+		return 0;
 
 	setGlobalInt(psn,victim);
 	sendMapChatf(getMap(victim),"^C%s ^Rcasts poison on ^C%s^R!!",getName(id),getName(victim));

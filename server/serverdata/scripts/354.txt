@@ -33,7 +33,7 @@ const int MONSTER_NPC_ID = 56;	// Turkey
 #define GLOBAL_TIMER_ID "MonsterHuntTimerID"
 #define GLOBAL_ADMIN_ID "MonsterHuntAdminID"
 
-void main()
+int main()
 {
 	int MapID;
 	int TimerID;

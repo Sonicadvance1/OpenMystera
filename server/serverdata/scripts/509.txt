@@ -1,10 +1,9 @@
 //heal according to stats
    
-   void main()
-
-        int id=getPlayer();
-
-   {
-        setHP(id,getHP(id)+(player->con*2+player->str+player->dex/2));
-        setMP(id,getMP(id)+(player->int*3+player->wis));
-   }
+int main()
+{
+    int id=getPlayer();
+    cPlayer *player = playerStruct(id);
+    setHP(id,getHP(id)+(player->con*2+player->str+player->dex/2));
+    setMP(id,getMP(id)+(player->itl*3+player->wis));
+}

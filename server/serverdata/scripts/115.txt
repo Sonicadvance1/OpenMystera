@@ -5,7 +5,7 @@
 	December 3, 2003
 */
 
-void main()
+int main()
 {
 	int PlayerID;
 	int TargetID;
@@ -23,7 +23,7 @@ void main()
 	if (TargetID == -1)
 		{
 		sendChat("^RError: No target selected", PlayerID);
-		return;
+		return 0;
 		}
 
 	TargetName = getName(TargetID);

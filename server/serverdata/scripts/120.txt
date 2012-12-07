@@ -1,12 +1,12 @@
 // Fishing Rod Script
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int vc=getMTarget(id);
 
 	if(vc<0)
-		return;
+		return 0;
 
 	cPlayer *target = playerStruct(vc);
 	cPlayer *player = playerStruct(id);
@@ -18,7 +18,7 @@ void main()
 		if(bait<0)
 		{
 			sendChat("^YThey don't seem to be interested in just the hook...",id);
-			return;
+			return 0;
 		}
 
 		setQty(id,bait,qtyAt(id,bait)-1);

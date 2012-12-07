@@ -1,6 +1,6 @@
 //Test Script
 
 
-void main()
+int main()
 {
 }

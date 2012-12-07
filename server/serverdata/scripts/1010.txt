@@ -1,6 +1,6 @@
 #include "combat.h"
 
-void main()
+int main()
 {
 	long id = getPlayer();
 	long victim;

@@ -2,7 +2,7 @@
 #include"skills.h"
 #include"items.h"
 #include"mapping.h"
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer *player=playerStruct(id);

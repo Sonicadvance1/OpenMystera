@@ -61,7 +61,7 @@ struct DOOR
 	int MapID;
 	int X;
 	int Y;
-	char* pPlayerName;
+	const char* pPlayerName;
 	int DoorType;
 	int Layer;
 	int TileClosed;
@@ -83,7 +83,7 @@ DOOR gDoors[] = {
 
 const int NUM_DOORS = sizeof(gDoors) / sizeof(DOOR);
 
-void main()
+int main()
 {
 	int PlayerID;
 	string PlayerName;
@@ -126,7 +126,7 @@ void main()
 
 		// Exit if no door was found
 		if (DoorIndex >= NUM_DOORS)
-			return;
+			return 0;
 
 		if (pDoor->DoorType == DOOR_TYPE_WARP_AUTO)
 			setPos(PlayerID, pDoor->WarpMapID, pDoor->WarpX, pDoor->WarpY);
@@ -177,7 +177,7 @@ void main()
 
 		// Exit if no door was found
 		if (DoorIndex >= NUM_DOORS)
-			return;
+			return 0;
 		}
 
 	// Test whether door is closed

@@ -5,7 +5,7 @@
 	November 30, 2003
 */
 
-void main()
+int main()
 {
 	int PlayerID;
 	int MapID;

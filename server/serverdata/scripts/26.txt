@@ -1,7 +1,7 @@
 //Personal area spark spell
 
 #include"mapping.h"
-void main()
+int main()
 {
 	for(int mapid = STARTMAP; mapid < ENDMAP; mapid++)
 	{

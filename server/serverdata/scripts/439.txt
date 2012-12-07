@@ -1,6 +1,6 @@
 // pit fire 2
 #include <stdio.h>
-void main()
+int main()
 {
 	int id=getPlayer();
 	char rcf[256];
@@ -27,7 +27,7 @@ void main()
 			freeGlobal(runrcf);
 			freeGlobal(rcfx);
 			freeGlobal(rcfy);
-			return;
+			return 0;
 		}
 		switch(getDir(id))
 		{

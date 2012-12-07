@@ -40,7 +40,7 @@ PUZZLES:
 */
 
 //Empty Script
-void main()
+int main()
 {
 
 }

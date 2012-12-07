@@ -1,6 +1,6 @@
 // Water Well
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int slot=itemSlot(id,443);

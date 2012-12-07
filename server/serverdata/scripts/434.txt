@@ -1,6 +1,6 @@
 // Garden Picking
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int num=getRand(8);

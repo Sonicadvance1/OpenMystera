@@ -5,7 +5,7 @@
 	SteveNorthamer@yahoo.com
 */
 
-void main()
+int main()
 {
 	int PlayerID;
 	cPlayer* pPlayer;
@@ -15,7 +15,7 @@ void main()
 
 	char pGlobalName[128];
 	char* pGlobalValue;
-	sprintf(pGlobalName, "Stationary%d", pPlayer->id);
+	sprintf(pGlobalName, "Stationary%ld", pPlayer->id);
 
 	int DestMapID;
 	int DestX;

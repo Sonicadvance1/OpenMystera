@@ -1,6 +1,6 @@
 // Sunn's Transmutate
 
-void main()
+int main()
 {
 
 	int id=getPlayer();

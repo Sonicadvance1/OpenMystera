@@ -1,13 +1,6 @@
-#pragma comment(lib,"MLServer.lib")
-extern "C" __declspec( dllexport ) void main();
-#define _MLF extern "C" __declspec( dllimport )
-
-
-
-// Case-insensitive string functions added by Steve
-#define __STDC__ 1
+#ifndef _MLSCRIPT_H_
+#define _MLSCRIPT_H_
 #include <string.h>
-#undef __STDC__
 
 
 void strlwr(char* xpString)
@@ -32,7 +25,7 @@ void strupr(char* xpString)
 		}
 }
 
-int stricmp(char* xpString1, char* xpString2)
+int stricmp(const char* xpString1, const char* xpString2)
 {
 	char Char1, Char2;
 
@@ -59,7 +52,7 @@ int stricmp(char* xpString1, char* xpString2)
 	return 0;
 }
 
-int strnicmp(char* xpString1, char* xpString2, size_t xCount)
+int strnicmp(const char* xpString1, const char* xpString2, size_t xCount)
 {
 	char Char1, Char2;
 	int i;
@@ -102,12 +95,12 @@ public:
 		mpString = new char[1];
 		*mpString = '\0';
 	}
-	string(char *xpString)
+	string(const char *xpString)
 	{
 		mpString = new char[strlen(xpString) + 1];
 		strcpy(mpString, xpString);
 	}
-	string(string& xString)
+	string(const string& xString)
 	{
 		mpString = new char[strlen(xString.mpString) + 1];
 		strcpy(mpString, xString.mpString);
@@ -117,19 +110,22 @@ public:
 		delete [] mpString;
 	}
 	
-	operator char*()
-	{
-		return mpString;
-	}
-	
-	void operator=(char* xpString)
+    operator char*()
+    {
+        return mpString;
+    }
+    const char *c_str()
+    {
+        return mpString;
+    }
+	void operator=(const char* xpString)
 	{
 		delete [] mpString;
 		mpString = new char[strlen(xpString) + 1];
 		strcpy(mpString, xpString);
 	}
 	
-	void operator+=(char* xpString)
+	void operator+=(const char* xpString)
 	{
 		char* pNewString;
 		pNewString = new char[strlen(mpString) + strlen(xpString) + 1];
@@ -139,25 +135,30 @@ public:
 		mpString = pNewString;
 	}
 	
-	bool operator==(char* xpString)
+	bool operator==(const char* xpString)
 	{
 		return (strcmp(mpString, xpString) == 0);
 	}
-
-	bool operator!=(char* xpString)
+    bool operator==(char* xpString)
+	{
+		return (strcmp(mpString, xpString) == 0);
+	}
+	bool operator!=(const char* xpString)
 	{
 		return (strcmp(mpString, xpString) != 0);
 	}
 	
-	string operator+(char* xpString)
+	string operator+(const char* xpString)
 	{
 		string Temp;
 		Temp += *this;
 		Temp += xpString;
 		return Temp;
 	}
-	 
-	friend string;
+    char operator[](long int num)
+    {
+        return mpString[num];
+    }
 };
 
 // Constants added by Steve
@@ -214,6 +215,7 @@ struct timer
     bool started;
 };
 
+#if 0 // For reference only
 struct pos
 {
 	unsigned char x,y;
@@ -345,7 +347,6 @@ struct cMap
 	cNPCRef npc[5];
 };
 
-
 //server data
 _MLF int getPlayer();
 _MLF int getChatPlayer();
@@ -433,7 +434,7 @@ _MLF void sendHPbar(int map,unsigned short id);
 _MLF void sendAddMapItem(int graphic,int map,int x,int y);
 _MLF void sendRemoveMapItem(int map,int x,int y);
 _MLF void sendInventoryQty(int id,signed short index,signed long quantity);
-_MLF void sendInventoryAdd(int id,unsigned short graphic,char *name,unsigned char index,unsigned long quantity);
+_MLF void sendInventoryAdd(int id,unsigned short graphic, const char *name,unsigned char index,unsigned long quantity);
 
 _MLF void sendPlayerList(int index);
 _MLF void sendItemList(int index);
@@ -551,6 +552,7 @@ _MLF char *intToString(int);
 _MLF int stringToInt(char *);
 _MLF char *getWord(char *,int);
 
+#endif
 //player utility functions
 
 int itemDefense(int id)
@@ -994,7 +996,7 @@ int magicalDamage(int damage, int victim)
 }
 
 
-#define DISABLE_SCRIPT sendChat("^RSorry... this item is disabled for now", getPlayer()); return;
+#define DISABLE_SCRIPT sendChat("^RSorry... this item is disabled for now", getPlayer()); return 0;
 
 
 // Fatal signal handling - Added by Steve
@@ -1053,3 +1055,4 @@ void main()
 }
 
 #define main SafeMain*/
+#endif

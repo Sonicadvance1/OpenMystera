@@ -1,6 +1,6 @@
 //Questmaster script
 #include <time.h>
-void main()
+int main()
 {
 	int mid=getPlayer();
 	cPlayer *master=playerStruct(mid);
@@ -25,7 +25,7 @@ void main()
 			else if(isGlobal(q))
 			{
 				sendMapChatf(master->map,"%s:You are already on a quest! Ask me again in %d seconds if you want something else..",master->name,60-(time(0)-globalInt(t)));
-				return;
+				return 0;
 			}
 		}
 		int len = playerLen();
@@ -39,7 +39,7 @@ void main()
 				break;
 		}
 		cMap *map = mapStruct(target->map);
-		sprintf(response,"I'll pay you %d gold to seek out a certain %s and destroy it! I hear it can be found in the place they call '%s'.",target->worth,target->name,map->name);
+		sprintf(response,"I'll pay you %ld gold to seek out a certain %s and destroy it! I hear it can be found in the place they call '%s'.",target->worth,target->name,map->name);
 		sendMapChatf(master->map,"%s:%s",master->name,response);
 		
 		setGlobalInt(q,tid);

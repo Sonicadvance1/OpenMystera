@@ -1,5 +1,5 @@
 //server debugging script - James Hamer
-void main()
+int main()
 {
 	int id=getPlayer();
 	cItem *item;

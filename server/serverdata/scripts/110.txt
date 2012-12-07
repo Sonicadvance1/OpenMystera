@@ -39,10 +39,10 @@ float TraverseCost(int xMapID, int xPosX, int xPosY)
 	return 1.0;
 }
 
-void main()
+int main()
 {
 	// Disabled for now...
-	return;
+	return 0;
 
 	// Find start and goal positions
 	POINT StartPos;
@@ -268,7 +268,7 @@ void main()
 	if (!PathFound)
 		{
 		//puts("Path cannot be found");
-		return;
+		return 0;
 		}
 
 	// Make first movement in path

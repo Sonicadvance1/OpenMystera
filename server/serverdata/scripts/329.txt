@@ -1,6 +1,6 @@
 //Free stuck guard
 #include <stdio.h>
-void main()
+int main()
 {
 	int id=getPlayer();
 	int map=getMap(id);

@@ -4,7 +4,7 @@ const int ITEM_WATER = 436;
 const int ITEM_FLOUR = 435;
 const int ITEM_DOUGH = 437;
  
-void main()
+int main()
 {
  
 	int PlayerID;
@@ -31,7 +31,7 @@ void main()
 	if (FlourSlotID == inventoryLen())
 		{
 		sendChat("^RNo flour!", PlayerID);
-		return;
+		return 0;
 		}
 
 	// Search player's inventory for water
@@ -47,7 +47,7 @@ void main()
 	if (WaterSlotID == inventoryLen())
 		{
 		sendChat("^RNo water!", PlayerID);
-		return;
+		return 0;
 		}
 
 	// Take away water

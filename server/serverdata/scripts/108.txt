@@ -2,10 +2,10 @@
 
 #include <math.h>
 
-void main()
+int main()
 {
 	//Change these for a unique door
-	string door="TTHouse1";
+	string door("TTHouse1");
 	int dMap=241;
 	int dX  =12;
 	int dY  =4;

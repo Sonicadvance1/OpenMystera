@@ -265,7 +265,7 @@ void reset()
 	savemap(1402);
 }
 
-void main()
+int main()
 {
 	int id = getPlayer();
 	cPlayer *player = playerStruct(id);

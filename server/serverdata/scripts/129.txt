@@ -2,7 +2,7 @@
 
 const int SPELL_COST = 15;
 
-void main()
+int main()
 {
 	int PlayerID;
 	int TargetID;
@@ -28,7 +28,7 @@ void main()
 	
 	// Make sure we didn't go off screen
 	if (!inBounds(TargetX, TargetY))
-		return;
+		return 0;
 
 	cMap *map=mapStruct(player->map);
 	
@@ -37,7 +37,7 @@ void main()
 	if(TargetID<0)//no one there
 	{
 		sendChat("^RThere is noone in front of you", PlayerID);
-		return;
+		return 0;
 	}
 	cPlayer *target=playerStruct(TargetID);
 
@@ -45,7 +45,7 @@ void main()
 	if (player->mp < SPELL_COST)
 	{
 		sendChat("^RNot enough mana.", PlayerID);
-		return;
+		return 0;
 	}
 
 	player->mp-=SPELL_COST;

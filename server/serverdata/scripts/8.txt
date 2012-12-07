@@ -1,6 +1,6 @@
 //Bolt
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int cost=5;

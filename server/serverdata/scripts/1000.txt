@@ -1,6 +1,6 @@
 //game script
 #include <time.h>
-void main()
+int main()
 {
 	// No PK Maps
 	//runScript(343, 1000);

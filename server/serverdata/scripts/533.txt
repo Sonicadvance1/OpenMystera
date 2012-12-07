@@ -3,7 +3,7 @@
 int iteration=0;
 int mapid=STARTMAP;
 int mapy=0;
-void main()
+int main()
 {
 
 	for(int mapx=0;mapx<NUMMAPS;mapx++)

@@ -1,5 +1,5 @@
 //death quest game script
-void main()
+int main()
 {
 	setPos(getPlayer(),616,10,14);
 	makeItem(251,1,617,4,4);

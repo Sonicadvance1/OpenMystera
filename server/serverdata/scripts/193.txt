@@ -7,7 +7,7 @@
 
 const int MAP_ID = 563;
 
-void main()
+int main()
 {
 	int LightIndex;
 	int MusicIndex;

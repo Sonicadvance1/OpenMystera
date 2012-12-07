@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-void main()
+int main()
 {
 	int id=getPlayer();
 	int map=getMap(id);

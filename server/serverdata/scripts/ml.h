@@ -150,7 +150,7 @@ const MLenum ML_DATA // Don't understand
 
 // ML player range constants
 const MLint ML_MIN_PLAYER_ID		= -1;
-const MLint ML_MAX_PLAYER_ID		= (1 << 31) - 1;
+const MLint ML_MAX_PLAYER_ID		= (1 << 30) - 1;
 const MLint ML_MIN_X				= 0;
 const MLint ML_MAX_X				= 19;
 const MLint ML_MIN_Y				= 0;
@@ -174,7 +174,7 @@ const MLint ML_MAX_HAIR_ID			= (1 << 15) - 1;
 const MLint ML_MIN_CLOTHES_ID		= 0;
 const MLint ML_MAX_CLOTHES_ID		= (1 << 15) - 1;
 const MLint ML_MIN_BOUNTY			= 0;
-const MLint ML_MAX_BOUNTY			= (1 << 31) - 1;
+const MLint ML_MAX_BOUNTY			= (1 << 30) - 1;
 const MLint ML_MIN_BASE_ATTACK		= 0;
 const MLint ML_MAX_BASE_ATTACK		= (1 << 15) - 1;
 const MLint ML_MIN_BASE_DEFENSE		= 0;
@@ -182,17 +182,17 @@ const MLint ML_MAX_BASE_DEFENSE		= (1 << 15) - 1;
 const MLint ML_MIN_TRAINING_POINTS	= 0;
 const MLint ML_MAX_TRAINING_POINTS	= (1 << 16) - 1;
 const MLint ML_MIN_CURRENT_HP		= 0;
-const MLint ML_MAX_CURRENT_HP		= (1 << 31) - 1;
+const MLint ML_MAX_CURRENT_HP		= (1 << 30) - 1;
 const MLint ML_MIN_MAXIMUM_HP		= 0;
-const MLint ML_MAX_MAXIMUM_HP		= (1 << 31) - 1;
+const MLint ML_MAX_MAXIMUM_HP		= (1 << 30) - 1;
 const MLint ML_MIN_CURRENT_MP		= 0;
-const MLint ML_MAX_CURRENT_MP		= (1 << 31) - 1;
+const MLint ML_MAX_CURRENT_MP		= (1 << 30) - 1;
 const MLint ML_MIN_MAXIMUM_MP		= 0;
-const MLint ML_MAX_MAXIMUM_MP		= (1 << 31) - 1;
+const MLint ML_MAX_MAXIMUM_MP		= (1 << 30) - 1;
 const MLint ML_MIN_SCRIPT_ID		= -1;
 const MLint ML_MAX_SCRIPT_ID		= (1 << 15) - 1;
 const MLint ML_MIN_EXPERIENCE		= 0;
-const MLint ML_MAX_EXPERIENCE		= (1 << 31) - 1;
+const MLint ML_MAX_EXPERIENCE		= (1 << 30) - 1;
 const MLint ML_PLAYER_NAME_LENGTH	= 32;
 const MLint ML_TITLE_LENGTH			= 64;
 const MLint ML_IP_ADDRESS_LENGTH	= 16;
@@ -200,15 +200,15 @@ const MLint ML_CREATE_DATE_LENGTH	= 64;
 const MLint ML_LOG_IN_DATE_LENGTH	= 64;
 const MLint ML_LOG_OUT_DATE_LENGTH	= 64;
 const MLint ML_MIN_SERENITY			= 0;
-const MLint ML_MAX_SERENITY			= (1 << 32) - 1;
+const MLint ML_MAX_SERENITY			= (1 << 30) - 1;
 const MLint ML_ACCOUNT_NAME_LENGTH	= 8;
 
 
 // ML item range constants
 const MLint ML_MIN_ITEM_ID			= -1;
-const MLint ML_MAX_ITEM_ID			= (1 << 31) - 1;
+const MLint ML_MAX_ITEM_ID			= (1 << 30) - 1;
 const MLint ML_MIN_QUANTITY			= -1;
-const MLint ML_MAX_QUANTITY			= (1 << 31) - 1;
+const MLint ML_MAX_QUANTITY			= (1 << 30) - 1;
 const MLint ML_MIN_IMAGE_ID			= 0;
 const MLint ML_MAX_IMAGE_ID			= (1 << 15) - 1;
 const MLint ML_ITEM_NAME_LENGTH		= 32;

@@ -6,7 +6,7 @@
 
 #define TOTAL_SPEED    700
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer *player = playerStruct(id);

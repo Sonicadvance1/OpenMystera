@@ -8,7 +8,7 @@
 const int SERENITY_COST = 50;	// 50 gold
 const int SERENITY_TIME = 4 * 60 * 60;	// 1 hour
 
-void main()
+int main()
 {
 	int NPCID;
 	cPlayer* pNPC;
@@ -43,7 +43,7 @@ void main()
 		if (SlotID == InvLen || pItem->qty < 50)
 			{
 			sendMapChatf(MapID, "%s:You are not worthy of ^Gserenity^W! Come back with more ^Ygold^W!", pNPC->name);
-			return;
+			return 0;
 			}
 		
 		pItem->qty -= 50;
@@ -66,7 +66,7 @@ void main()
 
 		sendMapChatf(MapID, "%s:You have been blessed with one hour of ^Gserenity^W!", pNPC->name);
 
-		return;
+		return 0;
 		}
 
 	sendMapChatf(MapID, "%s:Speak the word ^Gserenity ^Wto be at peace with the world. Only ^Y50 gold^W!", pNPC->name);

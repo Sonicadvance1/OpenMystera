@@ -1,5 +1,5 @@
 //fiend
-void main()
+int main()
 {
 	int id = getPlayer();
 	
@@ -18,7 +18,7 @@ void main()
 		{
 			player->target_at=-1;
 			npc_move(id,rand()%4);
-			return;
+			return 0;
 		}
 
 		if(res==0)

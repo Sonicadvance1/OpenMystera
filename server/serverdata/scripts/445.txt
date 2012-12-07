@@ -1,6 +1,6 @@
 // Sourleaf - MINI RPG
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	setMP(id,getMP(id)+15);

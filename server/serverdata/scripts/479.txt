@@ -2,19 +2,19 @@
 
 #define Underworld_ORIGIN 714, 6, 6, 
 
-void main()
+int main()
 {
 	int id=getPlayer();	
 	int map,x,y;
 		
 	if(getPlayerType(id)==1) //Make sure its not a NPC
-		return;
+		return 0;
 
 	getOrigin(id,map,x,y);
 	if(map==714)
 	{
 		sendChat("^YYou are already a denizen of the Underworld!",id);
-		return;
+		return 0;
 	}
 
 	setOrigin(id,714,6,6);

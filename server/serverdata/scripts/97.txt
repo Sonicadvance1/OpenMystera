@@ -8,7 +8,7 @@
 
 int SPELL_EFFECT = 1;
 
-void main()
+int main()
 {
 	int PlayerID;
 

@@ -15,7 +15,7 @@ long nextExp(long lvl)
 	return 100*(lvl*lvl);
 }
 
-void main()
+int main()
 {
 	long id = getPlayer();
 	cPlayer *player = playerStruct(id);

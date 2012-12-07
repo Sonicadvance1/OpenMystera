@@ -54,7 +54,7 @@ int takeGold(int amount,int TargetID)
 	return 0;
 }
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int player=getChatPlayer();
@@ -66,19 +66,19 @@ void main()
 		if(getImg(player)!=0)
 		{
 			sendMapChatf(757,"Dr Newbody:I can't operate on you while you're wearing a costume!");
-			return;
+			return 0;
 		}
 		chat=TempGetWord(chat, 0);
 		sscanf(chat,"%d",&newbody);
 		if(newbody <0 || newbody > 19) 
 		{
 			sendMapChatf(757,"Dr Newbody:I can not do THAT surgery!");
-			return;
+			return 0;
 		}
 
 		if(takeGold(5000,player))
 		{	
-			sendMapChatf(757,"Dr Newbody:Ok, I will change your body from %d to %s. Thank you.",getBody(player),chat);	
+			sendMapChatf(757,"Dr Newbody:Ok, I will change your body from %d to %s. Thank you.",getBody(player), chat.c_str());	
 			setBody(player,newbody);
 		}
 		else

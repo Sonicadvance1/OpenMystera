@@ -1,6 +1,6 @@
 //game death script
 #include <string.h>
-void main()
+int main()
 {
 	//do bounty and announce death
 	
@@ -11,7 +11,7 @@ void main()
 	
 	if(killer == -1)
 	{
-		return;
+		return 0;
 	}
 	
 	cPlayer *player=playerStruct(killer);
@@ -23,14 +23,14 @@ void main()
 		setPos(id,28,2,13);
 		makeEffect(28,2,13,3);
 		sendMapChatf(28,"^Y%s gets PKed by %s!",died->name,player->name);
-		return;
+		return 0;
 	}
 	
 	if(died->access>1 || (player->access > 1 && died->type == PLAYER_TYPE_PC) || (died->map == 1404 && died->type == PLAYER_TYPE_PC))
 	{
 		died->hp=died->mhp;
 		sendHP(id);
-		return;
+		return 0;
 	}
 
 	if(getPlayerType(id)==0 && strcmp(getName(id),getName(killer))!=0 )

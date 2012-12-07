@@ -3,7 +3,7 @@
 
 static int gCounter = 0;
 
-void main()
+int main()
 {
 	sendChatf(getPlayer(), "Counter = %d", gCounter++);
 }

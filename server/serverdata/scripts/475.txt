@@ -4,7 +4,7 @@
 
 
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int dir;
@@ -13,7 +13,7 @@ void main()
 	if(master->access<1 || player->target==player->target_at)
 	{
 		player->move_script=-1;
-		return;
+		return 0;
 	}
 	if(master->map!=player->map)
 	{
@@ -29,7 +29,7 @@ void main()
 		else
 		{
 			player->move_script=-1;
-			return;
+			return 0;
 		}
 		int oldx=player->x;
 		int oldy=player->y;
@@ -38,28 +38,28 @@ void main()
 			player->map=master->map;
 			player->y=14;
 			map->map[oldy][oldx].space=-1;
-			return;
+			return 0;
 		}
 		if(dir==0&&player->y==14)
 		{
 			player->map=master->map;
 			player->y=0;
 			map->map[oldy][oldx].space=-1;
-			return;
+			return 0;
 		}
 		if(dir==3&&player->x==19)
 		{
 			player->map=master->map;
 			player->x=0;
 			map->map[oldy][oldx].space=-1;
-			return;
+			return 0;
 		}
 		if(dir==2&&player->x==0)
 		{
 			player->map=master->map;
 			player->x=19;
 			map->map[oldy][oldx].space=-1;
-			return;
+			return 0;
 		}
 		npcMove(id,dir);
 		if(player->x==oldx && player->y==oldy)
@@ -75,7 +75,7 @@ void main()
 				dir=getRand(2);	
 			npcMove(id,dir);
 		}	
-		return;
+		return 0;
 	}
 	int dx=-1,dy;
 	cPlayer *target;
@@ -147,7 +147,7 @@ void main()
 		sendHPbar(player->map,tgt);
 		if(target->type==0)
 			sendHP(tgt);
-		return;
+		return 0;
 	}
 	
 

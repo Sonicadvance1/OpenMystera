@@ -1,6 +1,6 @@
 // kill
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	setHP(id,getHP(id)-getHP(id));

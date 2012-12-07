@@ -128,7 +128,7 @@ treecheck tree[]={
 
 const int treeamount = sizeof(tree) / sizeof(treecheck);
 
-void main()
+int main()
 {
 	int i;
 	for (i = 0; i < treeamount; i+=getRand(5)+1)

@@ -68,7 +68,7 @@ struct entrant
 	int amount;
 };
 
-void main()
+int main()
 {
 	int num_gold       = 0;
 	int time_remaining = 0;
@@ -112,7 +112,7 @@ void main()
 					sprintf(num_global_name,"%s %d", global_name, i);
 					if(DBisGlobal(num_global_name))
 					{
-						sscanf(DBselectGlobal(num_global_name), "%s %d", &player_name, &temp_gold);
+						sscanf(DBselectGlobal(num_global_name), "%s %d", player_name, &temp_gold);
 						entrants[i].id = nameToId(player_name);
 						entrants[i].amount = temp_gold;
 						if(entrants[i].id > -1)

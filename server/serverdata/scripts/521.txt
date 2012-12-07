@@ -1,6 +1,6 @@
 //Sewer Maze Prize
 
-void main()
+int main()
 
 {
 	int RandomNumber;

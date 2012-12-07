@@ -1,6 +1,6 @@
 // house of wonders chest control
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	switch(getX(id))

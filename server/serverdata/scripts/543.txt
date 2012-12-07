@@ -1,7 +1,7 @@
 
 // Wishing well script
 
-void main()
+int main()
 {
 	int id =getPlayer();
 	int num_gold       = 0;
@@ -46,7 +46,7 @@ void main()
 			sprintf(num_global_name,"%s %d",global_name,num_global);
 			if(DBisGlobal(num_global_name))
 			{
-				sscanf(DBselectGlobal(num_global_name), "%s %d", &player_name, &temp_gold);
+				sscanf(DBselectGlobal(num_global_name), "%s %d", player_name, &temp_gold);
 				if(strcmp(player_name, player->name) == 0)
 				{
 					temp_gold += num_gold;

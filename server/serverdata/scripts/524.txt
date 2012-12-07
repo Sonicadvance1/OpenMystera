@@ -98,7 +98,7 @@ void make_maze(int map_id,int sx,int sy,int fx,int fy,int rmap,int rx,int ry,int
 
 }
 
-void main()
+int main()
 {
 	make_maze(47,0,6,16,0,47,0,6,1);
 }

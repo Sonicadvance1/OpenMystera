@@ -1,5 +1,5 @@
 //Fortune teller script
-void main()
+int main()
 {
 	int id=getPlayer();
 	int fortune=getRand(4);

@@ -1,6 +1,6 @@
 //galebrook underground code access
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	switch(getX(id))

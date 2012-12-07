@@ -7,7 +7,7 @@
 
 const int TURKEY_SPAWN_SCRIPT_ID = 100;
 
-void main()
+int main()
 {
 	int PlayerID;
 	int TimerID;

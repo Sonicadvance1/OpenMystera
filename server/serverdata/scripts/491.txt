@@ -1,4 +1,4 @@
- void main()
+ int main()
  {
  sendChat("^cIn remembrance of Degenero", getPlayer());
  sendChat("^cR.I.P. October, 2003 - ~", getPlayer());

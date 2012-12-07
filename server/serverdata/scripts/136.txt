@@ -1,6 +1,6 @@
 // Skeletor Mansion kill tile
 
-void main()
+int main()
 {
 	int PlayerID;
 	string PlayerName;
@@ -9,7 +9,7 @@ void main()
 	PlayerName = getName(PlayerID);
 
 	if (getAccess(PlayerID) != 1 || PlayerName == "Skitari" || PlayerName == "INTEGRATION")
-		return;
+		return 0;
 
 	string Msg;
 	Msg = getName(getPlayer());

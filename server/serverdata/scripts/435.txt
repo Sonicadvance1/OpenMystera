@@ -7,7 +7,7 @@
 
 const int RESPONSE_SCRIPT_ID = 436;
 
-void main()
+int main()
 {
 	int NPCID;
 	int PlayerID;
@@ -17,7 +17,7 @@ void main()
 	NPCID = getPlayer();
 	PlayerID = getChatPlayer();
 	pRequest = getChat();
-	_strlwr(pRequest);
+	strlwr(pRequest);
 	pResponse[0] = '\0';
 
 	if (strstr(pRequest, "hello") || strstr(pRequest, "hey") || strstr(pRequest, "james"))

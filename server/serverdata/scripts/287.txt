@@ -54,7 +54,7 @@ int takeGold(int amount,int TargetID)
 	return 0;
 }
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int player=getChatPlayer();
@@ -66,19 +66,19 @@ void main()
 		if(getImg(player)!=0)
 		{
 			sendMapChatf(756,"Seamstress:I can't sell you clothes with your costume on!");
-			return;
+			return 0;
 		}
 		chat=TempGetWord(chat, 0);
 		sscanf(chat,"%d",&newclothes);
 		if(newclothes <0 || newclothes > 77) 
 		{
 			sendMapChatf(756,"Seamstress:I do not know how to make those clothes.");
-			return;
+			return 0;
 		}
 
 		if(takeGold(1000,player))
 		{	
-			sendMapChatf(756,"Seamstress:Ok, I will change your outfit from %d to %s. Thank you.",getClothes(player),chat);	
+			sendMapChatf(756,"Seamstress:Ok, I will change your outfit from %d to %s. Thank you.",getClothes(player), chat.c_str());	
 			setClothes(player,newclothes);
 		}
 		else

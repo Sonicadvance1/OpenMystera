@@ -1,7 +1,7 @@
 //Makes maps pretty
 #include"mapping.h"
 int i=STARTMAP;
-void main()
+int main()
 {
 	int i = STARTMAP;
 	while(i<ENDMAP)

@@ -1,6 +1,6 @@
 // Lesser Mana Leech Spell Part 1
 #include "dir.h"
-void main()
+int main()
 {
 	int id = getPlayer();
 	cPlayer *player = playerStruct(id);

@@ -1,6 +1,6 @@
 //Spell to heal players and npcs
 
-void main()
+int main()
 {
 if (getAccess(getPlayer()) == 1)
      {
@@ -8,7 +8,7 @@ if (getAccess(getPlayer()) == 1)
      Msg = getName(getPlayer());
      Msg += " ^RIS CHEATING BY USING AN ADMIN DELETE ITEM.";
      sendChat(Msg, -1);
-     return;
+     return 0;
      }
 	int PlayerID;
 

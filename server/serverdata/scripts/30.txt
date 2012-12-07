@@ -1,6 +1,6 @@
 //Shovel
 #include"mapping.h"
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer *player=playerStruct(id);
@@ -21,7 +21,7 @@ void main()
 		x++;
 		
 	if(!inBounds(x,y) || x == 19 || y == 14 || y ==0 || x==0 || mapid < STARTMAP || mapid >= ENDMAP)
-		return;
+		return 0;
 		
 	cMap *undermap=mapStruct(mapid+TOTALMAPS);
 	bool wateround=tilearound(map,x,y,WATER_TILE);

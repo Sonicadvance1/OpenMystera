@@ -1,6 +1,6 @@
 // Mana Potion Creation
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int pot=itemSlot(id,595);

@@ -16,7 +16,7 @@ int findshovel(int id)
 	}
 	return 0;	
 }
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer *player=playerStruct(id);
@@ -26,7 +26,7 @@ void main()
 	
 	if(mapid < STARTMAP || mapid >= ENDMAP)
 	{
-		return;
+		return 0;
 	}
 	int dir=player->dir;
 	cMap *map=mapStruct(mapid);
@@ -71,7 +71,7 @@ void main()
 		x++;
 		
 	if(!inBounds(x,y))
-		return;
+		return 0;
 		
 	if(getRand(100) < basechance)
 	{

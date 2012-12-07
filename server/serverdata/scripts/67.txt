@@ -1,5 +1,5 @@
 //guild sign
-void main()
+int main()
 {
 	int id=getPlayer();
 	sendChat("^y-=Triad Clan Hall=- upkeep:10k",id);

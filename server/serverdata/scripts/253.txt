@@ -21,9 +21,9 @@ void Glitter(int xMapID)
 	makeEffect(xMapID, CurrX, CurrY, GLITTER_EFFECT);
 }
 
-void main()
+int main()
 {
-	return;
+	return 0;
 	int CurrMapID;
 	int TimerID;
 

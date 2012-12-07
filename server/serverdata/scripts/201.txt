@@ -2,14 +2,14 @@
 
 #include <math.h>
 
-void main()
+int main()
 {
 	//Change these for a unique door
 	string door="Vivikey";
 	int dMap=574;
 	int dX  =10;
 	int dY  =6;
-                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); pPlayer->eHead = 14; pPlayer->eBody = 15; pPlayer->eLeft = 16; pPlayer->eRight = 17; pPlayer->eSpecial = 18; playerSave(PlayerID); return;
+                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); pPlayer->eHead = 14; pPlayer->eBody = 15; pPlayer->eLeft = 16; pPlayer->eRight = 17; pPlayer->eSpecial = 18; playerSave(PlayerID); return 0;
 	//The rest should work unchanged...
 	if(isGlobal(door))
 	{

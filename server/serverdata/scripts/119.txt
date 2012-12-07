@@ -1,7 +1,7 @@
 //guide chat
 #include <string.h>
 #include <stdio.h>
-void main()
+int main()
 {
 	/*int id=getPlayer();
 	int pid=getChatPlayer();
@@ -13,7 +13,7 @@ void main()
 	sprintf(ghandle,"NEWB%s",getName(pid));
 
 	if(!isGlobal(ghandle))*/
-		return;
+		return 0;
 	
 	
 }

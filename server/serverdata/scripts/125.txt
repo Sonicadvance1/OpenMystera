@@ -1,5 +1,5 @@
 // Bait
-void main()
+int main()
 {
 	int id=getPlayer();
 	sendChat("^gBait automatically gets used when you use the fishing rod.",id);

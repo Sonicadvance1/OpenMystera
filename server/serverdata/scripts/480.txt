@@ -8,7 +8,7 @@
 
 const int MAX_STRING_SIZE = 256;
 
-void main()
+int main()
 {
 	int MerchantID;
 	int MapID;
@@ -83,17 +83,17 @@ void main()
 		if (i < 0 || i > InvSize)
 			{
 			sendMapChatf(MapID, "%s:%s, I don't understand what you're asking for...", getName(MerchantID), getName(PlayerID));
-			return;
+			return 0;
 			}
 
 		SellItemID = inventoryItem(MerchantID, i);
 		if(SellItemID == -1)
-			return;
+			return 0;
 		pItem = itemStruct(SellItemID);
 		SellQuantity = pItem->qty;
 		BuyItemID = inventoryItem(MerchantID, i+1);
 		if(BuyItemID == -1)
-			return;
+			return 0;
 		pPrice = itemStruct(BuyItemID);
 		BuyQuantity = pPrice->qty;
 
@@ -101,7 +101,7 @@ void main()
 		if (SellQuantity == 0)
 			{
 			sendMapChatf(MapID, "%s:%s, I don't understand what you're asking for...", getName(MerchantID), getName(PlayerID));
-			return;
+			return 0;
 			}
 
 		// Find item that merchant is buying from player in player's inventory
@@ -115,7 +115,7 @@ void main()
 		if (i == InvSize)
 			{
 			sendMapChatf(MapID, "%s:%s, you don't have %s", getName(MerchantID), getName(PlayerID), pPrice->name);
-			return;
+			return 0;
 			}
 		int invItem = pPlayer->inventory[i];
 		cItem *costed = itemStruct(invItem);
@@ -124,14 +124,14 @@ void main()
 		if (BuyQuantity > costed->qty)
 			{
 			sendMapChatf(MapID, "%s:%s, you don't have enough %s", getName(MerchantID), getName(PlayerID), pPrice->name);
-			return;
+			return 0;
 			}
 
 		// Make sure player has room in their inventory
 		if (!giveItem(PlayerID, pItem->item_template, (SellQuantity < 0 ? -1 : SellQuantity)))
 			{
 			sendMapChatf(MapID, "%s:%s, you can't carry %s", getName(MerchantID), getName(PlayerID), pItem->name);
-			return;
+			return 0;
 			}
 
 		if(BuyQuantity<0)

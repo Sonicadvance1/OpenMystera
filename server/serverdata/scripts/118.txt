@@ -1,5 +1,5 @@
 //guide movement
-void main()
+int main()
 {
 
 }

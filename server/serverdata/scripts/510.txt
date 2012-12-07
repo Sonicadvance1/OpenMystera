@@ -1,6 +1,6 @@
 // Random Skeleton Script (under construction) 
       
-    void main()  
+    int main()  
     {  
          int id =getPlayer();  
          int map=getMap(id);  

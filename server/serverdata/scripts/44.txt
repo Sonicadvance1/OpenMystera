@@ -1,7 +1,7 @@
-void main()
+int main()
 {
 	cMap *map = mapStruct(1403);
-	pos warpto = {10,10,1403};
+	pos warpto(10,10,1403);
 	if(map->map[6][8].type == TILE_TYPE_WARP)
 	{
 		map->map[6][7].type = map->map[6][8].type = TILE_TYPE_SWITCH;

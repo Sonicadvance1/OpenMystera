@@ -54,7 +54,7 @@ void Pulse(int map, int x, int y, int px, int py, bool Grid[15][20])
 	return;
 }
 
-void main()
+int main()
 {
 	int PlayerID = getPlayer();
 	cPlayer* Player = playerStruct(PlayerID);
@@ -76,5 +76,5 @@ void main()
 	Pulse(map, x+1, y, x, y, Grid[1]);
 	Pulse(map, x, y+1, x, y, Grid[2]);
 	Pulse(map, x-1, y, x, y, Grid[2]);
-	return;
+	return 0;
 }

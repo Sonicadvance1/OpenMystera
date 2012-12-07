@@ -54,7 +54,7 @@ int takeGold(int amount,int TargetID)
 	return 0;
 }
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int player=getChatPlayer();
@@ -66,19 +66,19 @@ void main()
 		if(getImg(player)!=0)
 		{
 			sendMapChatf(754,"Barber:I cant cut your hair with your costume on!");
-			return;
+			return 0;
 		}
 		chat=TempGetWord(chat, 0);
 		sscanf(chat,"%d",&newhair);
 		if(newhair <0 || newhair > 89) 
 		{
 			sendMapChatf(754,"Barber:I do not know that hair style.");
-			return;
+			return 0;
 		}
 
 		if(takeGold(1000,player))
 		{	
-			sendMapChatf(754,"Barber:Ok, I will change your hair from %d to %s. Thank you.",getHair(player),chat);	
+			sendMapChatf(754,"Barber:Ok, I will change your hair from %d to %s. Thank you.",getHair(player),(char*)chat.c_str());	
 			setHair(player,newhair);
 		}
 		else

@@ -1,6 +1,6 @@
 //lightning spell, attacks players in a straight line
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int wis=getWis(id);

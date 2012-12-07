@@ -4,7 +4,7 @@ Written by Steve Northamer
 July 8, 2004
 */
 
-void main()
+int main()
 {
 int PlayerID;
 int MateID;
@@ -28,7 +28,7 @@ if (!isGlobal("MateDelay"))
  if (PlayerID == NumPlayers)
   {
   sendChatf(getPlayer(), "^RNo mate selected");
-  return;
+  return 0;
   }
 
  for (MateID = 0; MateID < NumPlayers; MateID++)
@@ -40,7 +40,7 @@ if (!isGlobal("MateDelay"))
  if (MateID == NumPlayers)
   {
   sendChatf(getPlayer(), "^RNo mate selected");
-  return;
+  return 0;
   }
 
  setGlobalInt("MateDelay", 1000);
@@ -69,7 +69,7 @@ if (!isGlobal("MateDelay"))
 
  runScript(myScript(), 1);
 
- return;
+ return 0;
  }
 
 MateDelay = globalInt("MateDelay");
@@ -106,7 +106,7 @@ if (MateDelay == 0)
  freeGlobal("MateClothes2");
  freeGlobal("MateMusicID");
 
- return;
+ return 0;
  }
 
 pPlayer->dir = getRand(4);

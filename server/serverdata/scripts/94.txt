@@ -6,7 +6,7 @@
 	November 23, 2003
 */
 
-void main()
+int main()
 {
 	// Paralyzed - Do nothing
 }

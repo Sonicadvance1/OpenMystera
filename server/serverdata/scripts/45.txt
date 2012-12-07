@@ -1,5 +1,5 @@
 #include "dir.h"
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer *player = playerStruct(id);

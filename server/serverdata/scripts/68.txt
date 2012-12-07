@@ -1,6 +1,6 @@
 //minor heal targeted spell to heal players and npcs
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int map=getMap(id);

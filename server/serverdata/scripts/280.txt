@@ -9,12 +9,7 @@
 	Description: This script consolidates all sign scripts by looking up
 	which sign text to display using the sign's world coordinates
 */
-
-const int DIR_DOWN = 0;
-const int DIR_UP = 1;
-const int DIR_LEFT = 2;
-const int DIR_RIGHT = 3;
-
+/*
 struct SWITCH_TEXT
 {
 	int MapID;
@@ -90,7 +85,7 @@ SWITCH_TEXT gSwitch[] = {
 
 const int NUM_SIGNS = sizeof(gSigns) / sizeof(SWITCH_TEXT);
 
-void main()
+int main()
 {
 	int PlayerID;
 	int PlayerMapID;
@@ -137,9 +132,13 @@ void main()
 			continue;
 		
 		sendChat(gSigns[i].pText, PlayerID);
-		return;
+		return 0;
 		}
 
 	// If script 156 was invoked, but there is no corresponding sign in list, there is a problem
 	sendChat("^RError in script 156: No sign text defined at specified coordinates", PlayerID);
+}*/
+int main()
+{
+    return 0;
 }

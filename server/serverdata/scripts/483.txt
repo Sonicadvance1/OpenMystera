@@ -1,8 +1,8 @@
 //Blue Potion Mixing
 
-void main()
+int main()
 {
-	int id=getPlayer();
+/*	int id=getPlayer();
 	int meat=itemSlot(id,577);
 	if(potion>-1)
 	{
@@ -20,5 +20,5 @@ void main()
 	else
 	{
 		sendChat("^RNo potions to mix!",id);
-	}
+	}*/
 }

@@ -1,6 +1,6 @@
 // Hair Removal
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	setHair(id,0);

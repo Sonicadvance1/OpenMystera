@@ -63,6 +63,12 @@ struct pos
         x=c;
         y=r;
     }
+    pos(unsigned char r, unsigned char c, signed short p)
+    {
+        x = c;
+        y = r;
+        map = p;
+    }
     void randomize()
     {
         x=rand()%MAP_COLS;

@@ -1,6 +1,6 @@
 // Board Game Dice (1-3)
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int vc=getMTarget(id);

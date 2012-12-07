@@ -21,7 +21,7 @@ const int BLACK_KING = 190;
 const int BLACK_QUEEN = 191;
 
 
-void main()
+int main()
 {
 	/*makeNPC(84, 558, BOARD_OFFSET_X + 3, BOARD_OFFSET_Y + 0);
 	makeNPC(85, 558, BOARD_OFFSET_X + 4, BOARD_OFFSET_Y + 7);*/

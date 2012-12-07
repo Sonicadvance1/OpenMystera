@@ -1,5 +1,5 @@
 //game script
-void main()
+int main()
 {
 	char* pNull;
 	pNull = NULL;

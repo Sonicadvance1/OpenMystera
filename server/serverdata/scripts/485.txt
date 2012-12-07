@@ -5,7 +5,7 @@
 	Based off of Steve Northamer's "Uberfy Scipt"
 */
 
-void main()
+int main()
 {
 	int PlayerID;
 	cPlayer* pPlayer;
@@ -14,7 +14,7 @@ void main()
 	pPlayer = playerStruct(PlayerID);
 
 	if (!isAdmin(PlayerID))
-		return;
+		return 0;
 
 	pPlayer->lvl = 1;
 	pPlayer->exp = 0;

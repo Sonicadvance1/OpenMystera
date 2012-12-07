@@ -5,7 +5,7 @@
 	SteveNorthamer@yahoo.com
 */
 
-void main()
+int main()
 {
 	int PlayerID;
 	cPlayer* pPlayer;

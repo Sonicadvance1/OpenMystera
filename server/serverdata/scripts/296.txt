@@ -1,4 +1,4 @@
 //game script
-void main()
+int main()
 {
 }

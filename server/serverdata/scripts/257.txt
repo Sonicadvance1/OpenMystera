@@ -1,6 +1,6 @@
 //Send to start location (CC).
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int map=0;

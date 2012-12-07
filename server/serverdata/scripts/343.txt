@@ -14,22 +14,16 @@ const int NO_PK_MAPS[] = {
 	
 	/*0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 118, 122, 129, 130, 189,
 	440, 463, 466, 540, 558, 605, 803, 829*/ 
-	1217, 1218,
+	440, 1217, 1218,
 	};
-
-const int NO_PK_MAPS[] = { 440 };
 
 const int NUM_NO_PK_MAPS = sizeof(NO_PK_MAPS) / sizeof(NO_PK_MAPS[0]);
 
 const int NO_PK_INTERVAL = 10000;
 
-const int PLAYER_TYPE_PC = 0;
-const int PLAYER_TYPE_NPC = 1;
-
-
-void main()
+int main()
 {
-	return;
+	return 0;
 
 	int MapIndex;
 	int MapID;

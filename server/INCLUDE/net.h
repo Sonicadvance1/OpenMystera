@@ -25,8 +25,7 @@ server.host(12000) //udp now claiming 12001
 #define SEND_RAW_GUARANTEED 2 //not implemented
 
 #define ALL_CLIENTS -1
-
-#define PlayerID signed long
+typedef signed long PlayerID;
 #include <SDL/SDL_net.h>
 /* Dont forget to implement these functions:
 

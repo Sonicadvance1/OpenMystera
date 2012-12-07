@@ -1,5 +1,5 @@
 //game script
-void main()
+int main()
 {
 	sendChatf(getPlayer(), "PlayerType = %d", getPlayerType(getMTarget(getPlayer())));
 }

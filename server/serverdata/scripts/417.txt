@@ -1,6 +1,6 @@
 // remote control fire
 #include <stdio.h>
-void main()
+int main()
 {
 	int id=getPlayer();
 	char rcf[256];

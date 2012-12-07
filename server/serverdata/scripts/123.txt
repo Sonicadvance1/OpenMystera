@@ -1,6 +1,6 @@
 // Dice Script
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int vc=getMTarget(id);

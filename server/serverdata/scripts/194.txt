@@ -10,9 +10,9 @@ const int GLITTER_EFFECT = 3;
 const int GLITTER_INTERVAL = 2000;
 const int GLITTER_SCRIPT_ID = 194;
 
-void main()
+int main()
 {
-	return;
+	return 0;
 
 	int PlayerID;
 	int MapID;

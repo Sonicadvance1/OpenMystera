@@ -1,6 +1,6 @@
 // Fishing Rod Script Part 2 (without bait)
 
-void main()
+int main()
 {
 	string rod="fishingrod";
 	int id=getPlayer();

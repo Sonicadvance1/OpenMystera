@@ -1,6 +1,6 @@
 // Galebrook House of Wonders Kick Out
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int victim=getMTarget(id);

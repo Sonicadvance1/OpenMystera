@@ -13,7 +13,7 @@ const int KEY_SCRIPT_ID = 294;
 //const int TILE_TYPE_NONE = 1;
 //const int TILE_TYPE_WALL = 2;
 
-void main()
+int main()
 {
 	int PlayerID;
 	int PlayerMapID;
@@ -26,7 +26,7 @@ void main()
 		if (PlayerMapID != DOOR_MAP_ID)
 			{
 			sendChat("^RYou must be close to the door to use this key.", PlayerID);
-			return;
+			return 0;
 			}
 
 		// Hide door

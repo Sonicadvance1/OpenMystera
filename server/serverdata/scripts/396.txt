@@ -1,6 +1,6 @@
 // Water Well
 
-void main()
+int main()
 {
 
 	int PlayerID;
@@ -24,7 +24,7 @@ void main()
 	if (SlotID == inventoryLen())
 		{
 		sendChat("^RYou need something to put the water in!", PlayerID);
-		return;
+		return 0;
 		}
 
 	// Turn empty bottle into water

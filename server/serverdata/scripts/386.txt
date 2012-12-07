@@ -1,15 +1,5 @@
 //game script
 
-int attackOf(int id)
-{
-	return 0;
-}
-
-int defenseOf(int id)
-{
-	return 0;
-}
-
 int nextExp(int lvl)
 {
 	return int(10*(lvl*lvl));
@@ -24,7 +14,7 @@ int totalExpOf(int index)
 	return exp;
 }
 
-char* classOf(int index)
+const char* classOf(int index)
 {
 	cPlayer *player=playerStruct(index);
 	int s[5];
@@ -43,7 +33,7 @@ char* classOf(int index)
 		}
 	}
 	r=1;
-	for(i=0;i<5;i++)
+	for(int i=0;i<5;i++)
 	{
 		if(i!=m && s[i]>r)
 		{
@@ -78,7 +68,7 @@ char* classOf(int index)
 	return "Multi-Class";
 }
 
-void main()
+int main()
 {
 	//stats
 	int id = getPlayer();

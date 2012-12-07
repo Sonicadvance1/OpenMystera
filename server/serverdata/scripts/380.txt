@@ -12,17 +12,6 @@ typedef char INT8;
 typedef short INT16;
 typedef int INT32;
 
-const int MAP_WIDTH = 20;
-const int MAP_HEIGHT = 15;
-
-const int TILE_TYPE_NONE = 1;
-const int TILE_TYPE_WALL = 2;
-const int TILE_TYPE_WARP = 3;
-const int TILE_TYPE_NPC = 4;
-const int TILE_TYPE_SCRIPT = 5;
-const int TILE_TYPE_SWITCH = 6;
-const int TILE_TYPE_KEEP = 7;
-
 const int NUM_TILE_LAYERS = 4;
 
 struct TILE

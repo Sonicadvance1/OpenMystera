@@ -1,6 +1,6 @@
 // Serenity Wipe
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer* pPlayer=playerStruct(id);

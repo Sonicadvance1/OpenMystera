@@ -9,7 +9,7 @@ const int MONSTER_SPAWN_SCRIPT_ID = 354;
 #define GLOBAL_TIMER_ID "MonsterHuntTimerID"
 #define GLOBAL_ADMIN_ID "MonsterHuntAdminID"
 
-void main()
+int main()
 {
 	int PlayerID;
 	int TimerID;
@@ -25,7 +25,7 @@ void main()
 		freeGlobal(GLOBAL_TIMER_ID);
 		freeGlobal(GLOBAL_ADMIN_ID);
 		haltScript(TimerID);
-		return;
+		return 0;
 		}
 
 	// Start monster hunt

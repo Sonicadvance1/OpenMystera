@@ -1,8 +1,8 @@
 //logout script
 
-void main()
+int main()
 {
-	return;
+	return 0;
 	// Logout notification
 	//int id = getPlayer();
 	//cPlayer *player = playerStruct(id);
@@ -13,7 +13,7 @@ void main()
 /*#include <stdio.h>
 #include <string.h>
 
-void main()
+int main()
 {
 	// Logout notification
 	int id = getPlayer();
@@ -31,7 +31,7 @@ void main()
 
 	//if (strcmp(pPlayer->name, "Robin") != 0 && strcmp(pPlayer->name, "Sonicadvancell") != 0)
 	//if (strcmp(pPlayer->name, "Robin") != 0)
-	return;	
+	return 0;	
 
 	
 	// Create a temporary inventory file for this player

@@ -1,17 +1,17 @@
 //Seamstress say script
-void main()
+int main()
 {
 	int id=getPlayer();
 	int dir=getDir(id);
 	
 	if(strcmp(getName(id),"Seamstress")==0)//Seamstress shouldn't execute script
-		return;
+		return 0;
 
 	if(getX(id)!=9)//if entering dressing room
 	{
 		if(dir==0) //if facing down
 			sendMapChatf(756,"Seamstress:A new outfit will cost 1000 gold. Please tell me what clothing number you would like.");
-		return;
+		return 0;
 	}
 
 	if(dir==0) //if facing down

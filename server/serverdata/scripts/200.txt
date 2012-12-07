@@ -17,7 +17,7 @@ void recurseMap(long mapid, short x, short y, short dist, short path_map[15][20]
    }
 }
 
-void main()
+int main()
 {
    int id=getPlayer();
    cPlayer *player = playerStruct(id);

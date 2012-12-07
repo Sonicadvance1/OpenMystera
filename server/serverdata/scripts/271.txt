@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-void main()
+int main()
 {
 	//Change these for a unique door
 	string door="slywilly";

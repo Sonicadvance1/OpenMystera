@@ -43,7 +43,7 @@ TRASH_TILE gpTrashTiles[] = {
 
 const int NUM_TRASH_TILES = sizeof(gpTrashTiles) / sizeof(TRASH_TILE);
 
-void main()
+int main()
 {
 	int ItemID;
 	int TrashID;

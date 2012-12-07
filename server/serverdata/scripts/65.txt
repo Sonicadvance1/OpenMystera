@@ -1,5 +1,5 @@
 //block destroyer
-void main()
+int main()
 {
 	int id=getPlayer();
 	int map=getMap(id);

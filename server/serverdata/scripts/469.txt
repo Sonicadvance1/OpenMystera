@@ -1,6 +1,6 @@
 //farming script part 1
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer *player=playerStruct(id);
@@ -23,7 +23,7 @@ void main()
 /*
 #include <time.h>
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer *player=playerStruct(id);

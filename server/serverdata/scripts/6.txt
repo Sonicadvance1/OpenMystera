@@ -1,6 +1,6 @@
 // Torch on wall
 
-void main()
+int main()
 {
 DISABLE_SCRIPT
 

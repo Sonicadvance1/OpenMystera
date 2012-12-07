@@ -1,6 +1,6 @@
 //build script
 #include"items.h"
-void main()
+int main()
 {
 	int id=getPlayer();
 	cPlayer *player=playerStruct(id);

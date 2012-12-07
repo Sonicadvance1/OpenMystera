@@ -9,7 +9,7 @@ July 13, 2004
 const int SPELL_COST = 30;
 const int SPELL_EFFECT = 10;
 
-void main()
+int main()
 {
 
 int PlayerID;
@@ -47,7 +47,7 @@ if (pPlayer->mp < SPELL_COST)
 sendChatf(PlayerID, "^RNot enough mana.");
 
 
-return;
+return 0;
 
 
 }
@@ -122,7 +122,7 @@ break;
 }
 
 if(x<0 || x>19 || y<0 || y>14)
-	return;
+	return 0;
 
 makeEffect(MapID, x, y, SPELL_EFFECT);
 
@@ -132,7 +132,7 @@ VictimID = getID(MapID, x, y);
 if (VictimID == -1)
 
 
-return;
+return 0;
 
 
 SpellDamage = magicDamage(PlayerID) * 2;

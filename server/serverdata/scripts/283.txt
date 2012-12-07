@@ -8,7 +8,7 @@
  //const int DIR_RIGHT = 3;
 
 
-void main()
+int main()
  {
  
 int PlayerID;

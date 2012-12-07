@@ -2,13 +2,13 @@
 
 #include <string.h>
 #include <time.h>
-#include "safeMaps.h"
+#include "safemaps.h"
 #include "houses.h"
 #include "ignore.h"
 
 struct WARP_LOCATION
 {
-	char* pName;
+    const char* pName;
 	int MapID;
 	int x;
 	int y;
@@ -22,8 +22,8 @@ const int gNumWarpLocations = sizeof(gpWarpLocations) / sizeof(WARP_LOCATION);
 
 struct GUILD_MEMBER
 {
-	char* pGuildName;
-	char* pPlayerName;
+	const char* pGuildName;
+	const char* pPlayerName;
 };
 
 GUILD_MEMBER gpGuildMembers[] = {
@@ -60,7 +60,7 @@ int totalExpOf(int index)
 	return exp;
 }
 
-char* classOf(int index)
+const char* classOf(int index)
 {
 	cPlayer *player=playerStruct(index);
 	int s[5];
@@ -79,7 +79,7 @@ char* classOf(int index)
 		}
 	}
 	r=1;
-	for(i=0;i<5;i++)
+	for(int i=0;i<5;i++)
 	{
 		if(i!=m && s[i]>r)
 		{
@@ -114,7 +114,7 @@ char* classOf(int index)
 	return "Multi-Class";
 }
 
-void main()
+int main()
 {
 	int PlayerID;
 	cPlayer* pPlayer;
@@ -128,17 +128,17 @@ void main()
 
 	// Player commands
 
-	if(sscanf(pCommand, "use %d", &nums[0]) == 1)
+	if(sscanf(pCommand, "use %ld", &nums[0]) == 1)
 	{
 		//int slot=atoi(pm1);
 		pPlayer = playerStruct(PlayerID);
 		if(isSafe(pPlayer->map))
 		{
-			return;
+			return 0;
 		}
 		cItem *item;
 		if(nums[0] < 0 || nums[0] >= inventoryLen())
-			return;
+			return 0;
 
 		long itemid = pPlayer->inventory[nums[0]];
 		if(itemid>-1)
@@ -342,12 +342,12 @@ void main()
 		unIgnoreAll(PlayerID);
 		sendChatf(PlayerID,"^GYou are now ignoring no one.");
 	}
-	else if(sscanf(pCommand, "ignore %s" , &strs[0]) == 1)
+	else if(sscanf(pCommand, "ignore %s" , strs[0]) == 1)
 	{
 		if(nameToId(strs[0]) != -1)
 			ignore(PlayerID, strs[0]);
 	}
-	else if(sscanf(pCommand, "unignore %s" , &strs[0]) == 1)
+	else if(sscanf(pCommand, "unignore %s" , strs[0]) == 1)
 	{
 		unIgnore(PlayerID, strs[0]);
 	}
@@ -390,8 +390,8 @@ void main()
 		char thename[128];
 		strcpy(thename,pPlayer->name);
 		char pm1[128];
-		if(sscanf(pCommand,"t %s",&playerName)!=1)
-			return;
+		if(sscanf(pCommand,"t %s",playerName)!=1)
+			return 0;
 		strcpy(playerName,stringLower(playerName));
 		for(int i=0;i<playerLen();i++)
 		{
@@ -399,17 +399,17 @@ void main()
 			if(pPlayer->access>0 && pPlayer->type==0 && strcmp(stringLower(pPlayer->name),playerName)==0)
 			{
 				if(isIgnored(i, thename))
-					return;
+					return 0;
 
 				char chat[256];
-				if(strlen(pCommand)>(unsigned int(3)+unsigned int(strlen(pPlayer->name))))
+				if(strlen(pCommand) > (strlen(pPlayer->name) + 3))
 				{
 					strcpy(chat,pCommand+3+strlen(pPlayer->name));
 					sendChatf(i,"^G%s:%s",thename,chat);
 					sendChatf(PlayerID,"^G%s:%s",thename,chat);
 					printf("[%s-%s]%s\n",thename,pPlayer->name,chat);
 				}
-				return;
+				return 0;
 			}
 		}
 		sendChatf(PlayerID,"^wNo such player online...");
@@ -446,7 +446,7 @@ void main()
 					char chat[128];
 					char temps[128];
 					int temp;
-					sscanf(value,"hs`%[^`]`%d`%s`Owner:%s",&temps,&temp,&strs[0],&chat);
+					sscanf(value,"hs`%[^`]`%d`%s`Owner:%s",temps,&temp,strs[0],chat);
 					if(strcmp(temps,player->name)==0)
 					{
 						//cancel ownership
@@ -458,7 +458,7 @@ void main()
 		}
 		
 	}
-	else if (sscanf(pCommand, "d %s", &strs[0]) == 1)
+	else if (sscanf(pCommand, "d %s", strs[0]) == 1)
 	{
 		int id=getPlayer();
 		cPlayer *player=playerStruct(id);
@@ -491,7 +491,7 @@ void main()
 					char owner[128];
 					int timeleft;
 					int keycode;
-					sscanf(value,"hs`%[^`]`%d`%[^`]`Owner:%s",&owner,&timeleft,&strs[1],&chat);
+					sscanf(value,"hs`%[^`]`%d`%[^`]`Owner:%s",owner,&timeleft,strs[1],chat);
 					if(strcmp(strs[0],strs[1]) == 0)
 					{
 						//send inside house
@@ -510,7 +510,7 @@ void main()
 		}
 		
 	}
-	else if (sscanf(pCommand, "keycode %s", &strs[0]) == 1)
+	else if (sscanf(pCommand, "keycode %s", strs[0]) == 1)
 	{
 		srand(time(0));
 		int id=getPlayer();
@@ -542,11 +542,11 @@ void main()
 					char chat[128];
 					char owner[128];
 					int timeleft;
-					sscanf(value,"hs`%[^`]`%d`%[^`]`Owner:%s",&owner,&timeleft,&strs[1],&chat);
+					sscanf(value,"hs`%[^`]`%d`%[^`]`Owner:%s",owner,&timeleft,strs[1],chat);
 					if(strcmp(owner,player->name)==0)
 					{
 						//update keycode
-						sprintf(value,"hs`%s`%d`%s`Owner:%s",owner,timeleft,&strs[0],chat);
+						sprintf(value,"hs`%s`%d`%s`Owner:%s",owner,timeleft,strs[0],chat);
 						DBupdateGlobal(name,value);
 						sendChatf(id,"New house key created:%s",strs[0]);
 					}
@@ -577,7 +577,7 @@ void main()
 			
 		}
 		char query[256];
-		sprintf(query,"UPDATE ACCOUNTS SET pass=MD5('%s') WHERE char1=%d OR char2=%d OR char3=%d OR char4=%d",chat,pPlayer->id,pPlayer->id,pPlayer->id,pPlayer->id);
+		sprintf(query,"UPDATE ACCOUNTS SET pass=MD5('%s') WHERE char1=%ld OR char2=%ld OR char3=%ld OR char4=%ld",chat,pPlayer->id,pPlayer->id,pPlayer->id,pPlayer->id);
 		DBsendQuery(query);
 		sendChatf(PlayerID,"^wPassword changed.");		
 		
@@ -871,14 +871,14 @@ void main()
 
 			
 		}
-		else if (sscanf(pCommand, "id %s", &playerName) == 1)
+		else if (sscanf(pCommand, "id %s", playerName) == 1)
 		{
 			
 			int index=nameToId(playerName);
 			if(index==-1)
 			{
 				sendChatf(PlayerID,"No such player!");
-				return;
+				return 0;
 			}
 			pPlayer=playerStruct(index);
 			cMap *pMap = mapStruct(pPlayer->map);
@@ -893,7 +893,7 @@ void main()
 				pPlayer->ip);
 			
 		}
-		else if (sscanf(pCommand, "mapword %s", &playerName) == 1)
+		else if (sscanf(pCommand, "mapword %s", playerName) == 1)
 		{
 			cMap *pMap;
 			strcpy(playerName,stringLower(playerName));
@@ -920,7 +920,7 @@ void main()
 			x=x/x;
 			
 		}
-		else if(sscanf(pCommand,"item %d",&nums[0]) == 1)
+		else if(sscanf(pCommand,"item %ld",&nums[0]) == 1)
 		{
 			cItem *item = itemTemplateStruct(nums[0]);
 			if(!item)
@@ -931,7 +931,7 @@ void main()
 			sendChatf(PlayerID,"That's %s^W. use_script:%d",item->name,item->use_script);
 			
 		}
-		else if(sscanf(pCommand,"itemword %s",&playerName) == 1)
+		else if(sscanf(pCommand,"itemword %s",playerName) == 1)
 		{
 			cItem *item;
 			strcpy(playerName,stringLower(playerName));
@@ -943,7 +943,7 @@ void main()
 			}
 			
 		}
-		else if(sscanf(pCommand,"npc %d",&nums[0]) == 1)
+		else if(sscanf(pCommand,"npc %ld",&nums[0]) == 1)
 		{
 			pPlayer = playerTemplateStruct(nums[0]);
 			if(!pPlayer)
@@ -954,7 +954,7 @@ void main()
 			sendChatf(PlayerID,"That's the %s.",pPlayer->name);
 			
 		}
-		else if(sscanf(pCommand,"npcword %s",&playerName) == 1)
+		else if(sscanf(pCommand,"npcword %s",playerName) == 1)
 		{
 			strcpy(playerName,stringLower(playerName));
 			for(int i=0;i<playerTemplateLen();i++)
@@ -965,7 +965,7 @@ void main()
 			}
 			
 		}
-		else if(sscanf(pCommand,"makemore %d %d",&nums[0],&nums[1]) == 2)
+		else if(sscanf(pCommand,"makemore %ld %ld",&nums[0],&nums[1]) == 2)
 		{
 			int i=0;
 			cItem *item;
@@ -983,7 +983,7 @@ void main()
 			}
 			pPlayer = playerStruct(PlayerID);
 			if(nums[0]<0 || nums[0]>=itemTemplateLen())
-				return;
+				return 0;
 			*item = *itemTemplateStruct(nums[0]);
 			if(item->stack==1)
 				item->qty=nums[1];
@@ -997,7 +997,7 @@ void main()
 			sendAddMapItem(item->graphic,item->map,item->x,item->y);
 			
 		}
-		else if(sscanf(pCommand,"make %d",&nums[0]) == 1)
+		else if(sscanf(pCommand,"make %ld",&nums[0]) == 1)
 		{
 			int i=0;
 			cItem *item;
@@ -1010,12 +1010,12 @@ void main()
 				if(i==itemLen())
 				{
 					sendChatf(PlayerID,"Sorry...item list has no open slots, try again soon.");
-					return;
+					return 0;
 				}
 			}
 			pPlayer = playerStruct(PlayerID);
 			if(nums[0]<0 || nums[0]>=itemTemplateLen())
-				return;
+				return 0;
 			*item = *itemTemplateStruct(nums[0]);
 			if(item->stack==1)
 				item->qty=1;
@@ -1065,7 +1065,7 @@ void main()
 			}
 			
 		}
-		else if (sscanf(pCommand, "showinvof %d",&nums[0]) == 1)
+		else if (sscanf(pCommand, "showinvof %ld",&nums[0]) == 1)
 		{
 			pPlayer = playerStruct(PlayerID);
 			
@@ -1097,11 +1097,11 @@ void main()
 			}
 			
 		}
-		else if (sscanf(pCommand, "itemat %d %d", &nums[0], &nums[1]) == 2)
+		else if (sscanf(pCommand, "itemat %ld %ld", &nums[0], &nums[1]) == 2)
 		{
 			sendChatf(PlayerID, "%d", ((nums[0] - (nums[0] % 32))/32) + (((nums[1] - (nums[1] % 32))/32) * 16));
 		}
-		else if (sscanf(pCommand, "getidat %d %d %d", &nums[0], &nums[1], &nums[2]) == 3)
+		else if (sscanf(pCommand, "getidat %ld %ld %ld", &nums[0], &nums[1], &nums[2]) == 3)
 		{
 			sendChatf(PlayerID,"%d is there.", getID(nums[0],nums[1],nums[2]));
 		}

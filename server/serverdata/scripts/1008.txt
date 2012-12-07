@@ -161,7 +161,7 @@ int nextInventorySlot(int id)
 	return -1;
 }
 
-void main()
+int main()
 {
 	long id = getPlayer();
 	cPlayer *player = playerStruct(id);
@@ -170,11 +170,11 @@ void main()
 	cItem *item;
 	char *command = getCommand();
 	
-	if (sscanf(command, "drop %d %d", &slot, &qty) == 2)
+	if (sscanf(command, "drop %ld %ld", &slot, &qty) == 2)
 	{
-		if(qty ==0) return;
+		if(qty ==0) return 0;
 		if(slot < 0 || slot >= inventoryLen())
-			return;
+			return 0;
 		item = itemStruct(player->inventory[slot]);
 		sendChatf(id, "^wYou dropped %s", item->name);
 		if (player->map == 1387 && player->y == 5 && (player->x == 9 || player->x == 10))
@@ -190,7 +190,7 @@ void main()
 	
 	
 	if(strcmp(player->name,"Mark") != 0)
-		return;
+		return 0;
 	/*long slot,qty;
 	cItem *slotitem;
 	cItem *item;
@@ -201,7 +201,7 @@ void main()
 	{
 		slot--;
 		if(slot < 0 || slot >= inventoryLen())
-			return;
+			return 0;
 		item = itemStruct(player->inventory[slot]);
 		if(item->qty > -1)
 		{
@@ -215,7 +215,7 @@ void main()
 		//sendMapChatf(player->map, "%d is the item, i see it.", itemLen());
 		//return if no items
 		if(slot == -1)
-			return;
+			return 0;
 			
 		cItem *item = itemStruct(slot);
 
@@ -241,7 +241,7 @@ void main()
 
 		//if past inventory limit then exit
 		if(invSlot==-1)
-			return;
+			return 0;
 		
 		//if not combined and removed then move item into inventory from map
 		if(item->qty!=0)

@@ -5,12 +5,12 @@
 	December 24, 2003
 */
 
-void main()
+int main()
 {
 	int TimerID;
 
 	if (!isGlobal("GlitterTimerID"))
-		return;
+		return 0;
 
 	TimerID = globalInt("GlitterTimerID");
 	haltScript(TimerID);

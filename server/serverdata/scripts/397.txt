@@ -1,6 +1,6 @@
 // Grain Mill
 
-void main()
+int main()
 {
 
 	int PlayerID;
@@ -24,7 +24,7 @@ void main()
 	if (SlotID == inventoryLen())
 		{
 		sendChat("^RNo grain to process!", PlayerID);
-		return;
+		return 0;
 		}
 
 	// Turn grain into flour

@@ -8,7 +8,7 @@
 
 int SPELL_EFFECT = 3;
 
-void main()
+int main()
 {
 	int PlayerID;
 	int TargetID;
@@ -20,7 +20,7 @@ void main()
 	GlobalVarName += itos(PlayerID);
 
 	if (!isGlobal(GlobalVarName))
-		return;
+		return 0;
 
 	TargetID = globalInt(GlobalVarName);
 

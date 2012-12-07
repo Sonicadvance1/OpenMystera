@@ -1,17 +1,17 @@
 //Costume Guy say script
-void main()
+int main()
 {
 	int id=getPlayer();
 	int dir=getDir(id);
 	
 	if(strcmp(getName(id),"Costume Guy")==0)//Costume Guy shouldn't execute script
-		return;
+		return 0;
 
 	if(getX(id)!=9)//if entering dressing room
 	{
 		if(dir==0) //if facing down
 			sendMapChatf(755,"Costume Guy:A new costume will cost 2000 gold. Please tell me what sprite number you would like. If you wish to remove your costume for free, type 0.");
-		return;
+		return 0;
 	}
 
 	if(dir==0) //if facing down

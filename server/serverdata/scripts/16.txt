@@ -2,7 +2,7 @@
 
 #include "maze.h"
 
-void main()
+int main()
 {
 	setPos(getPlayer(),55,18,1);
 

@@ -1,13 +1,13 @@
 // Recall to Town Center
 
-void main()
+int main()
 {
 	int id = getPlayer();
 	cPlayer *player = playerStruct(id);
 	if(player->origin_map==748)//criminal restriction - added by James
 	{
 		sendChatf(id,"^RThe recall scroll glows for a moment then crumbles to dust.");
-		return;
+		return 0;
 	}
 	/*if(	player->map != 22 && //quest reward maps
 		player->map != 48 && 

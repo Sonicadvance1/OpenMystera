@@ -32,7 +32,7 @@ void Transform()
 		}
 }
 
-void main()
+int main()
 {
 	int MonsterID = getPlayer();
 	int MapID = getMap(MonsterID);
@@ -61,22 +61,22 @@ void main()
 		if (MonsterX < PlayerX)
 			{
 			npcMove(MonsterID, DIR_RIGHT);
-			return;
+			return 0;
 			}
 		if (MonsterX > PlayerX)
 			{
 			npcMove(MonsterID, DIR_LEFT);
-			return;
+			return 0;
 			}
 		if (MonsterY < PlayerY)
 			{
 			npcMove(MonsterID, DIR_DOWN);
-			return;
+			return 0;
 			}
 		if (MonsterY > PlayerY)
 			{
 			npcMove(MonsterID, DIR_UP);
-			return;
+			return 0;
 			}
 		}
 }

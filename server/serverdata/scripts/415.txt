@@ -1,6 +1,6 @@
 // Challenge Ring Controls 2
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int x=getX(id);

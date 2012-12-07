@@ -1,5 +1,5 @@
 // ogre-non ogre
-void main()
+int main()
 {
 	int id=getPlayer();
 	if(getImg(id)==64)

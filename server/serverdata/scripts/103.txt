@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-void main()
+int main()
 {
 	/*char msg[256];
 
@@ -24,7 +24,7 @@ void main()
 	if (TargetID == -1)
 		{
 		sendChat("No target selected.", PlayerID);
-		return;
+		return 0;
 		}
 
 	TargetMap = getMap(TargetID);

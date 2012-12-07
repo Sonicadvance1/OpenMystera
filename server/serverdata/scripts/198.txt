@@ -1,6 +1,6 @@
 // Fart (hey, I got bored!)
 
-void main()
+int main()
 {
 
 	int id=getPlayer();

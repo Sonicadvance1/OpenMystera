@@ -1,6 +1,6 @@
 // Rock Contents
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	switch(getRand(150))

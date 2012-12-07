@@ -1,6 +1,6 @@
 #include"mapping.h"
 //DIRT script
-void main()
+int main()
 {
 
 	int id=getPlayer();

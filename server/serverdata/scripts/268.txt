@@ -1,6 +1,6 @@
 // chocolate heal
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	setHP(id,getHP(id)+40);

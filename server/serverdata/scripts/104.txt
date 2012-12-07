@@ -11,7 +11,7 @@ const int CHAOS_EFFECT_COUNT = sizeof(CHAOS_EFFECTS) / sizeof(CHAOS_EFFECTS[0]);
 const int CHAOS_NUM_STRIKES = 300;
 const int CHAOS_DAMAGE = 200;
 
-void main()
+int main()
 {
 	int PlayerID;
 	int CurrMapID;

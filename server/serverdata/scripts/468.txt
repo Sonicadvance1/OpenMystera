@@ -25,7 +25,7 @@ int getItemAt(int x,int y,int map)
 	return -1;
 }
 
-void main()
+int main()
 {	
 	srand(time(0));
 	int id=getPlayer();
@@ -61,7 +61,7 @@ void main()
 				int temp;
 				int timeleft;
 				int keycode;
-				sscanf(value,"hs`%[^`]`%d`%d`Owner:%s",&owner,&timeleft,&keycode,&chat);
+				sscanf(value,"hs`%[^`]`%d`%d`Owner:%s",owner,&timeleft,&keycode,chat);
 				if(((720000-(time(0)-timeleft))/3600)<1)
 				{
 					DBdeleteGlobal(name);
@@ -75,7 +75,7 @@ void main()
 					map = mapStruct(player->map);
 					map->map[player->y][player->x].space=id;
 					sendPosition(id);
-					return;
+					return 0;
 				}
 				//is paying rent?
 				int item=getItemAt(player->x,player->y,player->map);
@@ -89,14 +89,14 @@ void main()
 						if(left>198)
 						{
 							sendChatf(id,"^CHours filled up!");
-							return;
+							return 0;
 						}
 						if(left+hours>200)
 							hours-= (left+hours-200);
 						if(hours<1)
 						{
 							sendChatf(id,"^CNot enough for an hour.");
-							return;
+							return 0;
 						}
 						gold->qty-=hours*(house[i].price/3000);
 						if(gold->qty<=0)
@@ -109,7 +109,7 @@ void main()
 						sendChatf(id,"^C%d hours purchased. Thank you!",hours);
 						sprintf(value,"hs`%s`%d`%d`Owner:%s",owner,timeleft,keycode,owner);
 						DBupdateGlobal(name,value);
-						return;
+						return 0;
 					}
 				}
 				if(strcmp(owner,player->name)==0)
@@ -124,10 +124,10 @@ void main()
 					map->map[player->y][player->x].space=id;
 					sendPosition(id);
 					sendChatf(id,"%d hours left.",(720000-(time(0)-timeleft))/3600);
-					return;
+					return 0;
 				}
 				sendChatf(id,"^COwner:%s",chat);
-				return;
+				return 0;
 			}
 			int item=getItemAt(player->x,player->y,player->map);
 			if(item!=-1)
@@ -150,9 +150,9 @@ void main()
 					DBsendQuery(query);
 
 					sendChatf(id,"^CThank you for your purchase! Your initial keycode is %d. From this spot: To enter press space or type '/d %d'. '/keycode' to generate another keycode. '/moveout' to cancel ownership.",keycode,keycode);
-					sprintf(value,"hs`%s`%d`%d`Owner:%s",player->name,time(0),keycode,player->name);
+					sprintf(value,"hs`%s`%ld`%d`Owner:%s",player->name,time(0),keycode,player->name);
 					DBinsertGlobal(name,value);
-					return;
+					return 0;
 				}
 			}
 			
@@ -167,7 +167,7 @@ void main()
 			map = mapStruct(player->map);
 			map->map[player->y][player->x].space=id;
 			sendPosition(id);
-			return;
+			return 0;
 		}
 	}
 			

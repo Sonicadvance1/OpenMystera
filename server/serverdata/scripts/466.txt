@@ -1,6 +1,6 @@
 //teh beast
 
-void main()
+int main()
 {
 	int id = getPlayer();
 	

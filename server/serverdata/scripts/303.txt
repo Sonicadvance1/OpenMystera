@@ -208,7 +208,7 @@ static ROCK_CONTENTS gSigns[] = {
 
 const int NUM_SIGNS = sizeof(gSigns) / sizeof(ROCK_CONTENTS);
 
-void main()
+int main()
 {
 	int PlayerID;
 	int PlayerMapID;
@@ -259,12 +259,12 @@ void main()
 			gSigns[rand()%NUM_SIGNS].Ore++;
 			gSigns[i].Ore--;
 			runScript(gSigns[i].Script,1);
-			return;
+			return 0;
 		}
 		else
 		{
 			sendChat("^rYou can't seem to find anything else here...", PlayerID);
-			return;
+			return 0;
 		}
 	}
 

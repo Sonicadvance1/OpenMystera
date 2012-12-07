@@ -2,7 +2,7 @@
 
 const int SPELL_COST = 25;
 
-void main()
+int main()
 {
 	int PlayerID;
 	int TargetID;
@@ -17,13 +17,13 @@ void main()
 	cMap *map=mapStruct(player->map);
 
 	if(player->map == 1386)
-		return;
+		return 0;
 
 	// Subtract mana cost
 	if (player->mp < SPELL_COST)
 	{
 		sendChat("^RNot enough mana.", PlayerID);
-		return;
+		return 0;
 	}
 
 	player->mp-=SPELL_COST;
@@ -33,7 +33,7 @@ void main()
 	TargetY = player->y;
 	int distance = player->str/5;
 	if(distance < 1)
-		return;
+		return 0;
 
 	int count=0,frontX,frontY;
 	while(count < distance)
@@ -56,7 +56,7 @@ void main()
 	
 		// Make sure we didn't go off screen
 		if (!inBounds(TargetX, TargetY) || map->map[TargetY][TargetX].type == 2 || map->map[TargetY][TargetX].type == 6)
-			return;
+			return 0;
 	
 		if(map->map[TargetY][TargetX].type == 3)
 			miss = 1;
@@ -71,7 +71,7 @@ void main()
 			if(miss || (npc && target->type==1))
 			{
 				makeEffect(player->map, target->x, target->y, 4);
-				return;
+				return 0;
 			}
 			sendMapChatf(player->map, "%s:^GGet over here!", player->name);
 			
@@ -83,7 +83,7 @@ void main()
 			setHP(TargetID,target->hp-(player->str / 2));
 			if(target->type==0) 
 				sendPosition(TargetID);
-			return;
+			return 0;
 		}
 
 		makeEffect(player->map, TargetX, TargetY, 18);

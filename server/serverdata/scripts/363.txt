@@ -30,7 +30,7 @@ shroomcheck shroom[]={
 
 const int shroomamount = sizeof(shroom) / sizeof(shroomcheck);
 
-void main()
+int main()
 {
 	int i;
 	for (i = 0; i < shroomamount; i+=getRand(5)+1)

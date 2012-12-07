@@ -1,5 +1,5 @@
 //Snowman Boneyard Sign
-void main()
+int main()
 {
 	int id=getPlayer();
 	if(getPlayerType(id)==0)

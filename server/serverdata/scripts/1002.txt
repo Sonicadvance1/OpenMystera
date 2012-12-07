@@ -23,7 +23,7 @@ unsigned int ParseIPAddress(char* xpIPAddress)
 	return (IP4 << 24) | (IP3 << 16) | (IP2 << 8) | IP1;
 }
 
-void main()
+int main()
 {
 	// Check IP Ban list - added by Steve
 	int i;
@@ -48,7 +48,7 @@ void main()
 			{
 			// Disconnect
 			runScript(452, 1000);
-			return;
+			return 0;
 			}
 		}      
 	if(pPlayer->map == 820 && pPlayer->x == 8 && pPlayer->y == 7)
@@ -65,7 +65,7 @@ void main()
 	April 15, 2004
 */
 
-/*void main()
+/*int main()
 {
 	int PlayerID;
 	int ItemID;
@@ -124,7 +124,7 @@ void main()
 /*#include <stdio.h>
 #include <string.h>
 
-void main()
+int main()
 {
 	// Get player information
 	int PlayerID;
@@ -135,7 +135,7 @@ void main()
 
 	//if (strcmp(pPlayer->name, "Robin") != 0 && strcmp(pPlayer->name, "Sonicadvancell") != 0)
 	//if (strcmp(pPlayer->name, "Robin") != 0)
-		return;
+		return 0;
 
 
 	// Open player's inventory file
@@ -147,7 +147,7 @@ void main()
 
 	// If this file doesn't exist, don't modify player's inventory
 	if (pInvFile == NULL)
-		return;
+		return 0;
 
 
 	// Load items into ML from file

@@ -1,6 +1,6 @@
 // Long Bow  
     #include   <math.h>
-    void main()  
+    int main()  
     {  
          int id =getPlayer();  
          int map=getMap(id);  

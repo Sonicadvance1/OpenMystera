@@ -1,6 +1,6 @@
 // remote control fire start
 #include <stdio.h>
-void main()
+int main()
 {
 	int id=getPlayer();
 	int map=getMap(id);
@@ -10,7 +10,7 @@ void main()
 	if(getMP(id)<cost)
 	{
 		sendChat("Not enough mana.",id);
-		return;
+		return 0;
 	}
 	switch(getDir(id))
 	{
@@ -32,7 +32,7 @@ void main()
 		char rcf[256];
 		sprintf(rcf,"rcfire%d",id);
 		if(isGlobal(rcf))
-			return;
+			return 0;
 		setMP(id,getMP(id)-cost);
 		setGlobalInt(rcf,0);
 		setGlobalInt(strCat("run",rcf),getWis(id));

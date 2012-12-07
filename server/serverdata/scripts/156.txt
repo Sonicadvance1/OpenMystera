@@ -17,7 +17,7 @@ struct SIGN_TEXT
 	int MapID;
 	int X;
 	int Y;
-	char* pText;
+    const char* pText;
 };
 
 // ADD NEW SIGNS TO THE LIST BELOW!
@@ -366,7 +366,7 @@ SIGN_TEXT gSigns[] = {
 
 const int NUM_SIGNS = sizeof(gSigns) / sizeof(SIGN_TEXT);
 
-void main()
+int main()
 {
 	int PlayerID;
 	int PlayerMapID;
@@ -420,7 +420,7 @@ void main()
 			sendChatf(PlayerID,"^GYou passed the first test! Funny .. eh. Here's a dagger. It's under yer feet, press Shift to pick it up.");
 			makeItem(0,1,821,7,6);
 		}
-		return;
+		return 0;
 		}
 
 	// If script 156 was invoked, but there is no corresponding sign in list, there is a problem

@@ -1,6 +1,6 @@
 // Torch on wall
 
-void main()
+int main()
 {
 	if (getTile(2,5,1,1)==0)   // change from wall to torch
 	{

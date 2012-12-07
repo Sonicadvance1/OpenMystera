@@ -1,6 +1,6 @@
 // sword slash
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int cost=10;

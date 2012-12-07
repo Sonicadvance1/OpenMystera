@@ -16,7 +16,7 @@ int SPELL_EFFECT = 3;
 int MOVEMENT_SCRIPT_ID = 94;
 int RELEASE_SCRIPT_ID = 95;
 
-void main()
+int main()
 {
 	if (getAccess(getPlayer()) == 1)
 		{
@@ -24,7 +24,7 @@ void main()
 		Msg = getName(getPlayer());
 		Msg += " ^RIS CHEATING BY USING AN ADMIN PARALYZE ITEM.";
 		sendChat(Msg, -1);
-		return;
+		return 0;
 		}
 
 	int PlayerID;
@@ -38,7 +38,7 @@ void main()
 	if (PlayerMP < SPELL_COST)
 		{
 		sendChat("^RNot enough mana.", PlayerID);
-		return;
+		return 0;
 		}
 
 	TargetID = getMTarget(PlayerID);
@@ -46,7 +46,7 @@ void main()
 	if (TargetID == -1)
 		{
 		sendChat("^RNo target selected.", PlayerID);
-		return;
+		return 0;
 		}
 
 	PlayerMP -= SPELL_COST;

@@ -8,7 +8,7 @@
 #include "ml.h"
 
 
-void main()
+int main()
 {
 	int PlayerID;
 	int TargetID;
@@ -18,7 +18,7 @@ void main()
 	if (TargetID == ML_PLAYER_ID_NONE)
 		{
 		sendChat("^RNo target selected", PlayerID);
-		return;
+		return 0;
 		}
 
 	char pName[ML_PLAYER_NAME_LENGTH];

@@ -70,7 +70,7 @@ void explode_bomb(cMap *map,int r, int c,int dr,int dc,int range)
 	explode_bomb(map,r,c,dr,dc,range-1);
 }
 
-void main()
+int main()
 {
 	cMap *map = mapStruct(1386);
 	
@@ -95,14 +95,14 @@ void main()
 					sendMapUpdate(1386);
 					arena[r][c].id = -1;
 				}
-				return;
+				return 0;
 			}
 
 	cPlayer *player = playerStruct(id);
 
 	//lay bomb
 	if (player->map != 1386 || player->x < 4 || player->y > 10)
-		return;
+		return 0;
 
 	arena[player->y][player->x].count = 0;
 	map->map[player->y][player->x].tile[1] = 971;

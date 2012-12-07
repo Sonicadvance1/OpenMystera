@@ -1,6 +1,6 @@
 // Herbal Meat
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int item1=itemSlot(id,3);

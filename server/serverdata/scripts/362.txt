@@ -1,6 +1,6 @@
 // Stop and Go
 
-void main()
+int main()
 {
 	if(getTile(863,17,2,0)==142)
 	{

@@ -7,7 +7,7 @@ long manaBonus(long itl)
 {
 	return (itl-1) * 6;
 }
-void main()
+int main()
 {
 	long id = getPlayer();
 	cPlayer *player = playerStruct(id);

@@ -1,6 +1,6 @@
 //lightning snake spell, attacks players in a straight line and along walls
 
-void main()
+int main()
 {
 	DISABLE_SCRIPT
 

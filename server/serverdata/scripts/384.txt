@@ -4,7 +4,7 @@ const int SPELL_COST = 12;
 const float SPELL_DAMAGE_FACTOR = 0.75;
 const int SPELL_EFFECT = 19;
 
-void main()
+int main()
 {
 	int PlayerID;
 	int TargetID;
@@ -15,13 +15,13 @@ void main()
 	if (TargetID == -1)
 		{
 		sendChat("^RNo target selected", PlayerID);
-		return;
+		return 0;
 		}
 	
 	if (getMP(PlayerID) < SPELL_COST)
 		{
 		sendChat("^RNot enough mana", PlayerID);
-		return;
+		return 0;
 		}
 
 	setMP(PlayerID, getMP(PlayerID) - SPELL_COST);

@@ -1,5 +1,5 @@
 //trading script
-void main()
+int main()
 {
 	int len=itemLen();
 	cItem *item;

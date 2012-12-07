@@ -70,7 +70,7 @@ int Snake(int x)
 	
 }
 
-void main()
+int main()
 {
 	int PlayerID;
 	int PlayerMapID;
@@ -96,7 +96,7 @@ void main()
 	if (PlayerMP < SPELL_COST)
 		{
 		sendChat("^RNot enough mana.", PlayerID);
-		return;
+		return 0;
 		}
 
 	PlayerMP -= SPELL_COST;
@@ -129,7 +129,7 @@ void main()
 		FireY += PlayerY;
 
 		if (!inBounds(FireX, FireY))
-			return;
+			return 0;
 
 		makeEffect(PlayerMapID, FireX, FireY, FireEffect);
 

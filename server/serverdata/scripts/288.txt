@@ -1,6 +1,6 @@
 //Tidal Wave Spell
 
-void main()
+int main()
 {
 	int pc=getPlayer();
 	int pcMP=getMP(pc);

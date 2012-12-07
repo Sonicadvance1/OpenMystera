@@ -4,7 +4,7 @@ Written by Timothy Chandler
 January 2 2004
 */
 
-void main()
+int main()
 {
 	int pc=getPlayer();
 	int pcMP=getMP(pc);

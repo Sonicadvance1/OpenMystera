@@ -1,6 +1,6 @@
 // retrieve ID
 
-void main()
+int main()
 {
 	int id=getPlayer();
 	int victim=getMTarget(id);

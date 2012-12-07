@@ -1,7 +1,7 @@
 //guard script
 #include <stdio.h>
 #include <math.h>
-void main()
+int main()
 {
 	/*int GuardID = getPlayer();
 	int MapID = getMap(GuardID);
@@ -25,7 +25,7 @@ void main()
 	if (NumCriminals == 0)
 		{
 		npcMove(GuardID, getRand(4));
-		return;
+		return 0;
 		}
 
 	pCriminalIDs = new int[NumCriminals];
@@ -219,7 +219,7 @@ void main()
 							break;
 					}
 					setGlobalInt(mpatrol,spc);
-					return;
+					return 0;
 				}
 					
 			}
@@ -259,7 +259,7 @@ void main()
 						break;
 				}
 				setGlobalInt(mpatrol,spc);
-				return;
+				return 0;
 			}
 		}
 	
