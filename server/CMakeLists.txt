@@ -7,7 +7,6 @@ set(SRCS	SRC/mlserver.cpp
 		SRC/script_commands.cpp 
 		SRC/script_system.cpp 
 		SRC/mysql_db.cpp 
-		SRC/net.cpp 
 		SRC/md5.cpp 
 		SRC/utils.cpp
 		SRC/consoleport.cpp

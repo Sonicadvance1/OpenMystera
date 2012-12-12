@@ -39,7 +39,7 @@ void strlwr(char *t)
 #include "sdlgameinput.h"
 #include "gamedefs.h"
 #include "NetworkStructures.h"
-#include "net.h"
+#include "Net.h"
 #include "metaserv.h"
 #include "gui.h"
 #include "wave.h"

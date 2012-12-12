@@ -5,7 +5,7 @@
 #include "script_system.h"
 #include "List.h"
 #include "utils.h"
-#include "net.h"
+#include "Net.h"
 #include "Timing.h"
 #include <SDL/SDL_thread.h>
 

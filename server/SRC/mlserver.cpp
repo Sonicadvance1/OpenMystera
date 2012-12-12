@@ -3,7 +3,7 @@
 #include <SDL/SDL_thread.h>
 
 #include "script_commands.h"
-#include "net.h"
+#include "Net.h"
 
 #include "console.h"
 #include "gameserver.h"

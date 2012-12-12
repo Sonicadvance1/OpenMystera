@@ -2,7 +2,7 @@
 #include "censor.h"
 #include "console.h"
 #include "gameserver.h"
-#include "net.h"
+#include "Net.h"
 
 int cGameServer::parse( const char *str,signed short index)
 {

@@ -22,7 +22,7 @@ server.host(12000) //udp now claiming 12001
 
 #define ALL_CLIENTS -1
 
-#define PlayerID unsigned long
+typedef signed long PlayerID;
 /* Dont forget to implement these functions:
 
 //for server

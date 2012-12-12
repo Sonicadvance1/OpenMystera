@@ -1,4 +1,5 @@
-SET(SRCS	Src/Timing.cpp
+SET(SRCS Src/Net.cpp	
+		Src/Timing.cpp
 	)
 
 include_directories("Include")

@@ -3,7 +3,6 @@
 #include "zlib.h"
 #include "console.h"
 #include "gameserver.h"
-#include "net.h"
 #include "md5.h"
 #include "netstructs.h"
 

@@ -448,6 +448,8 @@ void debugMsg(const char *fmt,...)
     }
     fprintf(f,"%s\n",text);
     fclose(f);
+#else
+	UNUSED(fmt);
 #endif
 }
 

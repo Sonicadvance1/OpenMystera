@@ -1,6 +1,6 @@
 
 #include "gameserver.h"
-#include "net.h"
+#include "Net.h"
 #include "console.h"
 #include "netstructs.h"
 #include "censor.h"

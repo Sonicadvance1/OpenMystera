@@ -1,7 +1,7 @@
 
 #include "netstructs.h"
 #include "gameserver.h"
-#include "net.h"
+#include "Net.h"
 #include "zlib.h"
 
 

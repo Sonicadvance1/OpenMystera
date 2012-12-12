@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "List.h"
 #include "script_system.h"
-#include "net.h"
+#include "Net.h"
 #include "Timing.h"
 //RPG game definitions
 
